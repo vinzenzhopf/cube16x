@@ -1,0 +1,49 @@
+LED-Cube TODOs & Notes:
+    hardware:
+        PSU board:
+            ☐ define Interface/Controller
+            ☐ program Controller
+        teensy controller:
+            ☐ IO überprüfen
+            ☐ design interface pcb
+
+    software:
+        main-controller-board:
+            ☐ define interface to the cube-updater and the upater-board
+            ☐ check IO pin controlling
+            ☐ write IO pin manager
+            ☐ define animation frame and timing
+            ☐ check for pwm capabilities
+            ☐ sill stick with the ATMEGA32? or switch controller completely to a teensy 4.1?
+
+        cube-updater:
+        Program on the controller of the Cube to play certain animations or receive
+        live streamed images to show on the Cube.
+            ☐ c# app? with the new netcore5-stack it could run on raspberry on linux...
+            ☐ define animation network package
+            ☐ define animation save package
+            ☐ check writing to shift registers
+            ☐ writing tests for cube controlling
+
+        cube-animator:
+        Program to create new animations frame by frame or with advanced selection and
+        animation features.
+            ☐ c# app? with the new netcore5-stack
+            ☐ selection-stack
+            ☐ 2d selection
+            ☐ 3d selection
+            ☐ timeline (frame selection)
+            ☐ reconfigurable for different cube sizes
+
+        cube-player:
+        Program for Testing and Playing animation with streaming functionality.
+        Can also use modules like audio-equalizer to send live data to the Cube.
+            ☐ 3d view
+            ☐ replay created animations
+            pluginability:
+                ☐ add module loading
+                ☐ procedural animations
+                ☐ audio-equalizer module
+                ☐ 3d model viewer
+                ☐ 3d snake
+                ☐ 3d tetris
