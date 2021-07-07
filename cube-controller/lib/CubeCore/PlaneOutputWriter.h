@@ -6,48 +6,65 @@
 */
 
 
-#ifndef __PLANEDATAOUTPUTWRITER_H__
-#define __PLANEDATAOUTPUTWRITER_H__
+#ifndef __PLANEOUTPUTWRITER_H__
+#define __PLANEOUTPUTWRITER_H__
 
-#include "FrameBuffer.h"
+#include "LedCube16x.h"
 
-#define BUFFER_COUNT 3
+enum EPlaneOutputWriterState : uint8_t{ 
+    eIdle = 0,
+    eSetDataHigh,
+    eWaitDataHigh,
+    eSetDataLow,
+    eWaitDataLow,
+    eDataWritten,
+    eSetStoHigh,
+    eWaitStoHigh,
+    eSetStoLow,
+    eWaitStoLow,
+    eFinished
+};
 
-//Number of LED per Shift-Register Stack
-#define SHIFT_REGISTER_WIDTH 32
-#define SHIFT_REGISTER_BYTES (SHIFT_REGISTER_WIDTH / 8)
-#define SHIFT_REGISTER_ROW_COUNT (BUFFER_SHORT_SIZE / SHIFT_REGISTER_WIDTH)
-
-class PlaneDataOutputWriter
+class PlaneOutputWriter
 {
 //variables
 public:
 protected:
-    plane_t *plane;
-
-    uint8_t nPlaneIndex;
-
-    const uint8_t *PORT_CONTROL_OUT;
+    uint8_t * const PORT_CONTROL_OUT;
     const uint8_t CONTROL_CLOCK_PIN;
     const uint8_t CONTROL_OE_PIN;
     const uint8_t CONTROL_STO_PIN;
     const uint8_t CONTROL_DATA_PIN;
+    const uint8_t HIGH_CYCLE_COUNT;
 
-    uint8_t nState;
+    uint8_t nPlaneIndex;
+    uint8_t nNextPlaneIndex;
+    bool bLatchData;
+    uint8_t nCycleDelay;
+    uint8_t nShiftBitCount;
+
+    EPlaneOutputWriterState eState;
 private:
 
 //functions
 public:
-	PlaneDataOutputWriter(uint8_t *PORT_CONTROL_OUT, const uint8_t CONTROL_CLOCK_PIN, 
-    const uint8_t CONTROL_OE_PIN, const uint8_t CONTROL_STO_PIN, const uint8_t CONTROL_DATA_PIN);
-	~PlaneDataOutputWriter();
+	PlaneOutputWriter(uint8_t *PORT_CONTROL_OUT, uint8_t CONTROL_CLOCK_PIN, 
+        uint8_t CONTROL_OE_PIN, uint8_t CONTROL_STO_PIN, uint8_t CONTROL_DATA_PIN, 
+        uint8_t HIGH_CYCLE_COUNT);
+	~PlaneOutputWriter();
 
-    void setPlane(plane_t *plane);
-    bool planeDataWritten();
+    void setPlaneNumber(uint8_t nPlaneIndex);
+    void latchData();
+
+    bool isReadyForNextPlane();
+    bool isReadyToLatch();
 
     void cyclicWritePlaneData();
+    void reset();
 protected:
+
+    bool waitCycleTimeout();
 private:
 };
 
-#endif //__PLANEDATAOUTPUTWRITER_H__
+#endif //__PLANEOUTPUTWRITER_H__

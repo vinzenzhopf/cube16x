@@ -9,44 +9,70 @@
 #ifndef __PLANEDATAOUTPUTWRITER_H__
 #define __PLANEDATAOUTPUTWRITER_H__
 
-#include "FrameBuffer.h"
+#include "LedCube16x.h"
 
 #define BUFFER_COUNT 3
 
 //Number of LED per Shift-Register Stack
-#define SHIFT_REGISTER_WIDTH 32
-#define SHIFT_REGISTER_BYTES (SHIFT_REGISTER_WIDTH / 8)
-#define SHIFT_REGISTER_ROW_COUNT (BUFFER_SHORT_SIZE / SHIFT_REGISTER_WIDTH)
+#define SHIFT_REGISTER_DEPTH 32
+#define SHIFT_REGISTER_DEPTH_BYTES (SHIFT_REGISTER_DEPTH / 8)
+#define SHIFT_REGISTER_ROW_COUNT (BUFFER_SHORT_SIZE / SHIFT_REGISTER_DEPTH)
+
+enum EPlaneDataOutputWriterState : uint8_t{ 
+    eIdle = 0,
+    eSetDataHigh,
+    eWaitDataHigh,
+    eSetDataLow,
+    eWaitDataLow,
+    eDataWritten,
+    eSetStoHigh,
+    eWaitStoHigh,
+    eSetStoLow,
+    eWaitStoLow,
+    eFinished
+};
 
 class PlaneDataOutputWriter
 {
 //variables
 public:
 protected:
-    plane_t *plane;
-
-    uint8_t nRowIndex;
-
-    const uint8_t *PORT_DATA_OUT;
-    const uint8_t *PORT_CONTROL_OUT;
+    uint8_t* const PORT_DATA_OUT;
+    uint8_t* const PORT_CONTROL_OUT;
     const uint8_t CONTROL_CLOCK_PIN;
     const uint8_t CONTROL_OE_PIN;
     const uint8_t CONTROL_STO_PIN;
+    const uint8_t HIGH_CYCLE_COUNT;
 
-    uint8_t nState;
+    plane_t *pPlane;
+    plane_t *pNextPlane;
+    bool bLatchData;
+
+    uint8_t nCycleDelay;
+    uint8_t nRowIndex;
+    EPlaneDataOutputWriterState eState;
 private:
 
 //functions
 public:
-	PlaneDataOutputWriter(const uint8_t *PORT_DATA_OUT, const uint8_t *PORT_CONTROL_OUT, 
-        const uint8_t CONTROL_CLOCK_PIN, const uint8_t CONTROL_OE_PIN, const uint8_t CONTROL_STO_PIN);
+	PlaneDataOutputWriter(uint8_t *PORT_DATA_OUT, uint8_t *PORT_CONTROL_OUT, 
+        uint8_t CONTROL_CLOCK_PIN, uint8_t CONTROL_OE_PIN, 
+        uint8_t CONTROL_STO_PIN, uint8_t HIGH_CYCLE_COUNT);
 	~PlaneDataOutputWriter();
 
-    void setPlaneNumber(uint8_t nRowIndex);
+    void setPlane(plane_t *plane);
     void latchData();
 
+    bool isReadyForNextPlane();
+    bool isReadyToLatch();
+
     void cyclicWritePlaneData();
+    void reset();
+
 protected:
+    bool waitCycleTimeout();
+    uint8_t getRowData();
+
 private:
 };
 
