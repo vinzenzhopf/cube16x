@@ -1,0 +1,102 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Ressourcendateien">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="SharedResources">
+      <UniqueIdentifier>{05cb9dbc-e8a7-4cce-8428-d8d4c8bec8d3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="SharedResources\Header">
+      <UniqueIdentifier>{60a18b97-c04b-4925-939d-39df63ed1a5c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="SharedResources\Sources">
+      <UniqueIdentifier>{636bbb00-2288-4f37-bbad-3e0b6280c86d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="TestResources">
+      <UniqueIdentifier>{e9a03579-af6f-4f98-9cfb-353125fc7261}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="TestResources\Header">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="TestResources\Sources">
+      <UniqueIdentifier>{1b287a62-a063-49cb-bbb7-35e588eed973}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="UnitTests">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\MainControllerAVR\MainController\lib\CubeFrameBuffer.h">
+      <Filter>SharedResources\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\MainControllerAVR\MainController\lib\CubeIO.h">
+      <Filter>SharedResources\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\MainControllerAVR\MainController\lib\CubeLogic.h">
+      <Filter>SharedResources\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="TestConfig.h">
+      <Filter>TestResources\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\MainControllerSharedResources\MockupFunctions.h">
+      <Filter>TestResources\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\MainControllerSharedResources\TestDeviceDefines.h">
+      <Filter>TestResources\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="MockupWrapper.h">
+      <Filter>TestResources\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="CubeDataInterpreter.h">
+      <Filter>TestResources\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="CubeFrame.h">
+      <Filter>TestResources\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="BitSetGenerator.h">
+      <Filter>TestResources\Header</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="PlaneLoadingUnitTest.cpp">
+      <Filter>UnitTests</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\MainControllerAVR\MainController\lib\CubeFrameBuffer.cpp">
+      <Filter>SharedResources\Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\MainControllerAVR\MainController\lib\CubeLogic.cpp">
+      <Filter>SharedResources\Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="TestConfig.cpp">
+      <Filter>TestResources\Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="PlaneDriverUnitTest.cpp">
+      <Filter>UnitTests</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\MainControllerAVR\MainController\lib\CubeIO.cpp">
+      <Filter>SharedResources\Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="MockupWrapper.cpp">
+      <Filter>TestResources\Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="MockupBackend.cpp">
+      <Filter>TestResources\Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="PlaneDataUnitTest.cpp">
+      <Filter>UnitTests</Filter>
+    </ClCompile>
+    <ClCompile Include="CubeDataInterpreter.cpp">
+      <Filter>TestResources\Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="CubeFrame.cpp">
+      <Filter>TestResources\Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="TestCubeFrameUnitTest.cpp">
+      <Filter>UnitTests</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

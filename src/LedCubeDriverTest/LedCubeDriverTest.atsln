@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Atmel Studio Solution File, Format Version 11.00
+Project("{54F91283-7BC4-4236-8FF9-10F437C3AD48}") = "LedCubeDriverTest", "LedCubeDriverTest\LedCubeDriverTest.cproj", "{4A8308BB-EF6F-4998-9F1B-631341536FEF}"
+EndProject
+Project("{54F91283-7BC4-4236-8FF9-10F437C3AD48}") = "BasicTest", "BasicTest\BasicTest.cproj", "{613B7412-FA3E-4DAD-80FB-644F69A27DCF}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|AVR = Debug|AVR
+		Release|AVR = Release|AVR
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{4A8308BB-EF6F-4998-9F1B-631341536FEF}.Debug|AVR.ActiveCfg = Debug|AVR
+		{4A8308BB-EF6F-4998-9F1B-631341536FEF}.Debug|AVR.Build.0 = Debug|AVR
+		{4A8308BB-EF6F-4998-9F1B-631341536FEF}.Release|AVR.ActiveCfg = Release|AVR
+		{4A8308BB-EF6F-4998-9F1B-631341536FEF}.Release|AVR.Build.0 = Release|AVR
+		{613B7412-FA3E-4DAD-80FB-644F69A27DCF}.Debug|AVR.ActiveCfg = Debug|AVR
+		{613B7412-FA3E-4DAD-80FB-644F69A27DCF}.Debug|AVR.Build.0 = Debug|AVR
+		{613B7412-FA3E-4DAD-80FB-644F69A27DCF}.Release|AVR.ActiveCfg = Release|AVR
+		{613B7412-FA3E-4DAD-80FB-644F69A27DCF}.Release|AVR.Build.0 = Release|AVR
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
