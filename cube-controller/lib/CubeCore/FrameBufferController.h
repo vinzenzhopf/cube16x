@@ -10,21 +10,21 @@
 #define __FRAMEBUFFERCONTROLLER_H__
 
 #include "FrameBuffer.h"
+#include "Base/CyclicModule.h"
 
-#define BUFFER_COUNT 3
+#define BUFFER_COUNT 2
 
-class FrameBufferController
+class FrameBufferController : public CyclicModule
 {
 //variables
 public:
 protected:
-    FrameBuffer frameBuffers[BUFFER_COUNT];
-    buffer_t *inputBuffer;
-	buffer_t *outputBuffer;
+    FrameBuffer arrFrameBuffers[BUFFER_COUNT];
+    uint8_t nFrontBufferIdx;
+    uint8_t nBackBufferIdx;
 
-    uint8_t inputBufferIdx;
-    uint8_t outputBufferIdx;
-
+    bool bBackBufferReady;
+    bool bFrontBufferReady;
 private:
 
 //functions
@@ -34,9 +34,14 @@ public:
 
     void switchBuffers();
     bool isFrontBufferReady();
+    void setFrontBufferReady(bool value);
     bool isBackBufferReady();
+    void setBackBufferReady(bool value);
     buffer_t* getFrontBuffer();
     buffer_t* getBackBuffer();
+
+    bool initialize() override;
+    void cyclic() override;
 protected:
 private:
 };

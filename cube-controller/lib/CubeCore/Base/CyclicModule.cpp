@@ -17,7 +17,7 @@ CyclicModule::~CyclicModule(){
 /**
  * Method for Module initialization, if the module is depending on other stuff to be initialized. 
  * Once all initialize calls are finished (returning true) then cyclic starts to get called.
- * @returns bool When the initialize method is finished.
+ * @returns bool true, when the initialize method is finished.
  */
 bool CyclicModule::initialize(){
     return true;

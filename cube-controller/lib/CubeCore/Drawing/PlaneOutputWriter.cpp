@@ -53,6 +53,8 @@ void PlaneOutputWriter::reset(){
 }
 
 void PlaneOutputWriter::cyclic(){
+    CyclicModule::cyclic();
+
     switch (eState)
     {
     case EPlaneOutputWriterState::eIdle:

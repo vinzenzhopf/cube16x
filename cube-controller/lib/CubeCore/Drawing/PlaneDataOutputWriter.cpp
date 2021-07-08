@@ -68,6 +68,8 @@ uint8_t PlaneDataOutputWriter::getRowData(){
 }
 
 void PlaneDataOutputWriter::cyclic(){
+    CyclicModule::cyclic();
+
     switch (eState)
     {
     case EPlaneDataOutputWriterState::eIdle:

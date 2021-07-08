@@ -32,6 +32,8 @@ void DrawController::reset(){
 }
 
 void DrawController::cyclic(){
+    CyclicModule::cyclic();
+
     switch (eState)
     {
     case EDrawControllerState::eIdle:
@@ -70,6 +72,7 @@ void DrawController::cyclic(){
             nPlaneIndex++;
             if(nPlaneIndex >= CUBE_EDGE_SIZE){
                 eState = EDrawControllerState::eCheckBackBufferReady;
+                pFrameBufferController->setFrontBufferReady(true);
             }else{
                 eState = EDrawControllerState::eLoadPlane;
             }

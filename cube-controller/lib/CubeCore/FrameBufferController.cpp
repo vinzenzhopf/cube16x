@@ -11,10 +11,8 @@
 
 FrameBufferController::FrameBufferController()
 {
-    inputBufferIdx = 0;
-    outputBufferIdx = 1;
-    inputBuffer = frameBuffers[inputBufferIdx].getBuffer();
-    outputBuffer = frameBuffers[outputBufferIdx].getBuffer();
+    nFrontBufferIdx = 0;
+    nBackBufferIdx = 1;
 }
 
 FrameBufferController::~FrameBufferController()
@@ -22,10 +20,46 @@ FrameBufferController::~FrameBufferController()
 }
 
 void FrameBufferController::switchBuffers(){
-    uint8_t tmp = inputBufferIdx;
-    outputBufferIdx = inputBufferIdx;
-    inputBufferIdx = tmp;
-    inputBuffer = frameBuffers[inputBufferIdx].getBuffer();
-    outputBuffer = frameBuffers[outputBufferIdx].getBuffer();
+    uint8_t tmp = nBackBufferIdx;
+    nBackBufferIdx = nFrontBufferIdx;
+    nFrontBufferIdx = tmp;
+    bBackBufferReady = false;
+    bFrontBufferReady = false;
 }
 
+bool FrameBufferController::initialize(){
+    bool tmp = CyclicModule::initialize();
+    arrFrameBuffers[0].clearBuffer();
+    arrFrameBuffers[1].clearBuffer();
+    bBackBufferReady = true;
+    bFrontBufferReady = false;
+    return tmp;
+}
+
+void FrameBufferController::cyclic(){
+    CyclicModule::cyclic();
+}
+
+bool FrameBufferController::isFrontBufferReady(){
+    return bFrontBufferReady;
+}
+
+void FrameBufferController::setFrontBufferReady(bool value){
+    bFrontBufferReady = value;
+}
+
+bool FrameBufferController::isBackBufferReady(){
+    return bBackBufferReady;
+}
+
+void FrameBufferController::setBackBufferReady(bool value){
+    bBackBufferReady = value;
+}
+    
+buffer_t* FrameBufferController::getFrontBuffer(){
+    return arrFrameBuffers[nFrontBufferIdx].getBuffer();
+}
+
+buffer_t* FrameBufferController::getBackBuffer(){
+    return arrFrameBuffers[nBackBufferIdx].getBuffer();
+}
