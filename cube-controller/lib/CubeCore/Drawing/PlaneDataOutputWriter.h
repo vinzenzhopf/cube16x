@@ -10,6 +10,7 @@
 #define __PLANEDATAOUTPUTWRITER_H__
 
 #include "LedCube16x.h"
+#include "Base/CyclicModule.h"
 
 #define BUFFER_COUNT 3
 
@@ -32,7 +33,7 @@ enum EPlaneDataOutputWriterState : uint8_t{
     eFinished
 };
 
-class PlaneDataOutputWriter
+class PlaneDataOutputWriter : public CyclicModule
 {
 //variables
 public:
@@ -66,11 +67,10 @@ public:
     bool isReadyForNextPlane();
     bool isReadyToLatch();
 
-    void cyclicWritePlaneData();
+    void cyclic();
     void reset();
 
 protected:
-    bool waitCycleTimeout();
     uint8_t getRowData();
 
 private:

@@ -33,6 +33,10 @@ public:
 	~FrameBufferController();
 
     void switchBuffers();
+    bool isFrontBufferReady();
+    bool isBackBufferReady();
+    buffer_t* getFrontBuffer();
+    buffer_t* getBackBuffer();
 protected:
 private:
 };

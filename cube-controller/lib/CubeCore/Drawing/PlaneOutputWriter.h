@@ -10,6 +10,7 @@
 #define __PLANEOUTPUTWRITER_H__
 
 #include "LedCube16x.h"
+#include "Base/CyclicModule.h"
 
 enum EPlaneOutputWriterState : uint8_t{ 
     eIdle = 0,
@@ -25,7 +26,7 @@ enum EPlaneOutputWriterState : uint8_t{
     eFinished
 };
 
-class PlaneOutputWriter
+class PlaneOutputWriter : public CyclicModule
 {
 //variables
 public:
@@ -59,12 +60,8 @@ public:
     bool isReadyForNextPlane();
     bool isReadyToLatch();
 
-    void cyclicWritePlaneData();
+    void cyclic();
     void reset();
-protected:
-
-    bool waitCycleTimeout();
-private:
 };
 
 #endif //__PLANEOUTPUTWRITER_H__

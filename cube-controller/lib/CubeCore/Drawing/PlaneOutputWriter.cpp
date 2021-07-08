@@ -52,16 +52,7 @@ void PlaneOutputWriter::reset(){
     bLatchData = false;
 }
 
-bool PlaneOutputWriter::waitCycleTimeout(){
-    nCycleDelay++;
-    if(nCycleDelay >= HIGH_CYCLE_COUNT){
-        nCycleDelay = 0;
-        return true;
-    }
-    return false;
-}
-
-void PlaneOutputWriter::cyclicWritePlaneData(){
+void PlaneOutputWriter::cyclic(){
     switch (eState)
     {
     case EPlaneOutputWriterState::eIdle:
@@ -84,7 +75,7 @@ void PlaneOutputWriter::cyclicWritePlaneData(){
         break;
 
     case EPlaneOutputWriterState::eWaitDataHigh:
-        if(waitCycleTimeout())
+        if(waitCycleTimeout(HIGH_CYCLE_COUNT))
             eState = EPlaneOutputWriterState::eSetDataLow;
         break;
 
@@ -93,7 +84,7 @@ void PlaneOutputWriter::cyclicWritePlaneData(){
         eState = EPlaneOutputWriterState::eWaitDataLow;
 
     case EPlaneOutputWriterState::eWaitDataLow:
-        if(waitCycleTimeout()){
+        if(waitCycleTimeout(HIGH_CYCLE_COUNT)){
             nShiftBitCount++;
             if(nShiftBitCount >= CUBE_EDGE_SIZE){
                 eState = EPlaneOutputWriterState::eDataWritten;
@@ -116,7 +107,7 @@ void PlaneOutputWriter::cyclicWritePlaneData(){
         break;
 
     case EPlaneOutputWriterState::eWaitStoHigh:
-        if(waitCycleTimeout())
+        if(waitCycleTimeout(HIGH_CYCLE_COUNT))
             eState = EPlaneOutputWriterState::eSetStoLow;
         break;
 
@@ -126,7 +117,7 @@ void PlaneOutputWriter::cyclicWritePlaneData(){
         break;
 
     case EPlaneOutputWriterState::eWaitStoLow:
-        if(waitCycleTimeout())
+        if(waitCycleTimeout(HIGH_CYCLE_COUNT))
             eState = EPlaneOutputWriterState::eIdle;
         break;
 

@@ -54,15 +54,6 @@ void PlaneDataOutputWriter::reset(){
     bLatchData = false;
 }
 
-bool PlaneDataOutputWriter::waitCycleTimeout(){
-    nCycleDelay++;
-    if(nCycleDelay >= HIGH_CYCLE_COUNT){
-        nCycleDelay = 0;
-        return true;
-    }
-    return false;
-}
-
 uint8_t PlaneDataOutputWriter::getRowData(){
     //Build the Data-Byte together from all 32 bits of data in the plane.
     const uint8_t byteOffset = (nRowIndex/8);
@@ -76,7 +67,7 @@ uint8_t PlaneDataOutputWriter::getRowData(){
     return tmp;
 }
 
-void PlaneDataOutputWriter::cyclicWritePlaneData(){
+void PlaneDataOutputWriter::cyclic(){
     switch (eState)
     {
     case EPlaneDataOutputWriterState::eIdle:
@@ -95,7 +86,7 @@ void PlaneDataOutputWriter::cyclicWritePlaneData(){
         break;
 
     case EPlaneDataOutputWriterState::eWaitDataHigh:
-        if(waitCycleTimeout())
+        if(waitCycleTimeout(HIGH_CYCLE_COUNT))
             eState = EPlaneDataOutputWriterState::eSetDataLow;
         break;
 
@@ -104,7 +95,7 @@ void PlaneDataOutputWriter::cyclicWritePlaneData(){
         eState = EPlaneDataOutputWriterState::eWaitDataLow;
 
     case EPlaneDataOutputWriterState::eWaitDataLow:
-        if(waitCycleTimeout()){
+        if(waitCycleTimeout(HIGH_CYCLE_COUNT)){
             nRowIndex++;
             if(nRowIndex >= SHIFT_REGISTER_DEPTH){
                 eState = EPlaneDataOutputWriterState::eDataWritten;
@@ -127,7 +118,7 @@ void PlaneDataOutputWriter::cyclicWritePlaneData(){
         break;
 
     case EPlaneDataOutputWriterState::eWaitStoHigh:
-        if(waitCycleTimeout())
+        if(waitCycleTimeout(HIGH_CYCLE_COUNT))
             eState = EPlaneDataOutputWriterState::eSetStoLow;
         break;
 
@@ -137,7 +128,7 @@ void PlaneDataOutputWriter::cyclicWritePlaneData(){
         break;
 
     case EPlaneDataOutputWriterState::eWaitStoLow:
-        if(waitCycleTimeout())
+        if(waitCycleTimeout(HIGH_CYCLE_COUNT))
             eState = EPlaneDataOutputWriterState::eIdle;
         break;
 
