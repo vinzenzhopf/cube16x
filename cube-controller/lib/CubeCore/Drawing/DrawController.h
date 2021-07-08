@@ -16,7 +16,7 @@
 #include "../FrameBufferController.h"
 
 enum EDrawControllerState{ 
-    eIdle = 0,
+    eIdle,
     eCheckBackBufferReady,
     eInitCubeDrawing,
     eLoadPlane,
@@ -49,7 +49,7 @@ public:
         uint8_t PLANE_DELAY_COUNT);
 	~DrawController();
 
-    void cyclic();  
+    void cyclic() override;  
     void reset();
 };
 

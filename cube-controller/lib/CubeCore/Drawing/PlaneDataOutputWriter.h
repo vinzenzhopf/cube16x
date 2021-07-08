@@ -12,15 +12,13 @@
 #include "LedCube16x.h"
 #include "Base/CyclicModule.h"
 
-#define BUFFER_COUNT 3
-
 //Number of LED per Shift-Register Stack
 #define SHIFT_REGISTER_DEPTH 32
 #define SHIFT_REGISTER_DEPTH_BYTES (SHIFT_REGISTER_DEPTH / 8)
 #define SHIFT_REGISTER_ROW_COUNT (BUFFER_SHORT_SIZE / SHIFT_REGISTER_DEPTH)
 
-enum EPlaneDataOutputWriterState : uint8_t{ 
-    eIdle = 0,
+enum class EPlaneDataOutputWriterState{ 
+    eIdle,
     eSetDataHigh,
     eWaitDataHigh,
     eSetDataLow,
@@ -38,8 +36,8 @@ class PlaneDataOutputWriter : public CyclicModule
 //variables
 public:
 protected:
-    uint8_t* const PORT_DATA_OUT;
-    uint8_t* const PORT_CONTROL_OUT;
+    volatile uint8_t* const PORT_DATA_OUT;
+    volatile uint8_t* const PORT_CTRL_OUT;
     const uint8_t CONTROL_CLOCK_PIN;
     const uint8_t CONTROL_OE_PIN;
     const uint8_t CONTROL_STO_PIN;
@@ -56,7 +54,9 @@ private:
 
 //functions
 public:
-	PlaneDataOutputWriter(uint8_t *PORT_DATA_OUT, uint8_t *PORT_CONTROL_OUT, 
+	PlaneDataOutputWriter(
+        volatile uint8_t *PORT_DATA_OUT, 
+        volatile uint8_t *PORT_CTRL_OUT, 
         uint8_t CONTROL_CLOCK_PIN, uint8_t CONTROL_OE_PIN, 
         uint8_t CONTROL_STO_PIN, uint8_t HIGH_CYCLE_COUNT);
 	~PlaneDataOutputWriter();
@@ -67,7 +67,7 @@ public:
     bool isReadyForNextPlane();
     bool isReadyToLatch();
 
-    void cyclic();
+    void cyclic() override;
     void reset();
 
 protected:

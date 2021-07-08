@@ -34,20 +34,24 @@ void ModuleManager::cyclic(){
         break;
     
     case EModuleManagerState::Initialize:
-        bool bInitialized = true;
-        for(uint8_t i = 0; i < nModuleCount; i++){
-            if(!arrModules[i]->initialize()){
-                bInitialized = false;
+        {
+            bool bInitialized = true;
+            for(uint8_t i = 0; i < nModuleCount; i++){
+                if(!arrModules[i]->initialize()){
+                    bInitialized = false;
+                }
             }
-        }
-        if(bInitialized){
-            eState = EModuleManagerState::Running;
+            if(bInitialized){
+                eState = EModuleManagerState::Running;
+            }
         }
         break;
 
     case EModuleManagerState::Running:
-        for(uint8_t i = 0; i < nModuleCount; i++){
-            arrModules[i]->cyclic();
+        {
+            for(uint8_t i = 0; i < nModuleCount; i++){
+                arrModules[i]->cyclic();
+            }
         }
         break;
 

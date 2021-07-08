@@ -8,10 +8,14 @@
 
 #include "PlaneOutputWriter.h"
 
-PlaneOutputWriter::PlaneOutputWriter(uint8_t *PORT_CONTROL_OUT, uint8_t CONTROL_CLOCK_PIN, 
-        uint8_t CONTROL_OE_PIN, uint8_t CONTROL_STO_PIN, uint8_t CONTROL_DATA_PIN, 
+PlaneOutputWriter::PlaneOutputWriter(
+        volatile uint8_t *PORT_CTRL_OUT, 
+        uint8_t CONTROL_CLOCK_PIN, 
+        uint8_t CONTROL_OE_PIN, 
+        uint8_t CONTROL_STO_PIN, 
+        uint8_t CONTROL_DATA_PIN, 
         uint8_t HIGH_CYCLE_COUNT) : 
-            PORT_CONTROL_OUT(PORT_CONTROL_OUT),
+            PORT_CTRL_OUT(PORT_CTRL_OUT),
             CONTROL_CLOCK_PIN(CONTROL_CLOCK_PIN), 
             CONTROL_OE_PIN(CONTROL_OE_PIN),
             CONTROL_STO_PIN(CONTROL_STO_PIN),
@@ -20,7 +24,7 @@ PlaneOutputWriter::PlaneOutputWriter(uint8_t *PORT_CONTROL_OUT, uint8_t CONTROL_
     eState = EPlaneOutputWriterState::eIdle;
     nCycleDelay = 0;
     nPlaneIndex = -1;
-    nNextPlaneIndex -1;
+    nNextPlaneIndex = -1;
     bLatchData = false;
 }
 
@@ -48,7 +52,7 @@ void PlaneOutputWriter::reset(){
     eState = EPlaneOutputWriterState::eIdle;
     nCycleDelay = 0;
     nPlaneIndex = -1;
-    nNextPlaneIndex -1;
+    nNextPlaneIndex = -1;
     bLatchData = false;
 }
 
@@ -68,11 +72,11 @@ void PlaneOutputWriter::cyclic(){
 
     case EPlaneOutputWriterState::eSetDataHigh:
         if(nShiftBitCount == nPlaneIndex){
-            *PORT_CONTROL_OUT |= (1<<CONTROL_DATA_PIN); //HIGH
+            *PORT_CTRL_OUT |= (1<<CONTROL_DATA_PIN); //HIGH
         } else {
-            *PORT_CONTROL_OUT &= ~(1<<CONTROL_DATA_PIN); //Low
+            *PORT_CTRL_OUT &= ~(1<<CONTROL_DATA_PIN); //Low
         }
-        *PORT_CONTROL_OUT |= (1<<CONTROL_CLOCK_PIN); //HIGH
+        *PORT_CTRL_OUT |= (1<<CONTROL_CLOCK_PIN); //HIGH
         eState = EPlaneOutputWriterState::eWaitDataHigh;
         break;
 
@@ -82,7 +86,7 @@ void PlaneOutputWriter::cyclic(){
         break;
 
     case EPlaneOutputWriterState::eSetDataLow:
-        *PORT_CONTROL_OUT &= ~(1<<CONTROL_DATA_PIN | 1<<CONTROL_CLOCK_PIN); //Low
+        *PORT_CTRL_OUT &= ~(1<<CONTROL_DATA_PIN | 1<<CONTROL_CLOCK_PIN); //Low
         eState = EPlaneOutputWriterState::eWaitDataLow;
 
     case EPlaneOutputWriterState::eWaitDataLow:
@@ -104,7 +108,7 @@ void PlaneOutputWriter::cyclic(){
         break;
         
     case EPlaneOutputWriterState::eSetStoHigh:
-        *PORT_CONTROL_OUT |= (1<<CONTROL_STO_PIN); //HIGH
+        *PORT_CTRL_OUT |= (1<<CONTROL_STO_PIN); //HIGH
         eState = EPlaneOutputWriterState::eWaitStoHigh;
         break;
 
@@ -114,7 +118,7 @@ void PlaneOutputWriter::cyclic(){
         break;
 
     case EPlaneOutputWriterState::eSetStoLow:
-        *PORT_CONTROL_OUT &= ~(1<<CONTROL_STO_PIN); //Low
+        *PORT_CTRL_OUT &= ~(1<<CONTROL_STO_PIN); //Low
         eState = EPlaneOutputWriterState::eWaitStoLow;
         break;
 
