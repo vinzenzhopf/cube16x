@@ -43,6 +43,8 @@ class ModuleManager {
          */
         void cyclic();    
 
+        bool isInitialized();
+
     protected:
 };
 

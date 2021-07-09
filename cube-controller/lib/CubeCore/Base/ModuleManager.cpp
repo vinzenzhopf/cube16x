@@ -60,3 +60,7 @@ void ModuleManager::cyclic(){
         break;
     }
 }
+
+bool ModuleManager::isInitialized(){
+    return eState == EModuleManagerState::Running;
+}

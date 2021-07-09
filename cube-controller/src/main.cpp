@@ -20,6 +20,14 @@
 #include "Drawing/PlaneOutputWriter.h"
 #include "Drawing/DrawController.h"
 
+void SetBuffer_LedAlternating(buffer_t * pBuffer){
+    for(uint8_t i = 0; i < 16; i++){
+        for(uint8_t j = 0; j < 16; j++){
+            pBuffer->asPlanes[i].asShort[j] = (j%2==0)?0b1010101010101010:0b0101010101010101;
+        }
+    }
+}
+
 int main(void)
 {
     ModuleManager moduleManager;
@@ -55,8 +63,16 @@ int main(void)
     moduleManager.registerModule(&planeDataOutputWriter);
     moduleManager.registerModule(&drawController);
 
+    //manually pull OE to High (FOR TESTING)
+    PORT_CONTROL_OUT |= (1<<PLANE_OE | 1<<COL_OE);
+
     while (1) 
     {
         moduleManager.cyclic();
+
+        if(moduleManager.isInitialized()){
+            SetBuffer_LedAlternating(frameBufferController.getBackBuffer());
+            frameBufferController.setBackBufferReady(true);
+        }
     }
 }

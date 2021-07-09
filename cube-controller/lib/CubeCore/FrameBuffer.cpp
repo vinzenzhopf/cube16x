@@ -9,16 +9,23 @@
 #include <string.h>
 #include "FrameBuffer.h"
 
-/************************************************************************/
-/* Clears the given buffer.                                             */
-/************************************************************************/
+/**
+ * Clears the buffer.
+ */
 void FrameBuffer::clearBuffer(){
 	memset((buffer_t*)&buffer, 0x00, sizeof(buffer_t));
 }
 
-/************************************************************************/
-/* Returns a pointer to the buffer.                                     */
-/************************************************************************/
+/**
+ * Sets the buffer to all 1.
+ */
+void FrameBuffer::setBuffer(){
+	memset((buffer_t*)&buffer, 0x00, sizeof(buffer_t));
+}
+
+/**
+ * Returns a pointer to the buffer.
+ */
 buffer_t* FrameBuffer::getBuffer(){
     return &buffer;
 }

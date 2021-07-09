@@ -21,14 +21,19 @@ class FrameBuffer {
     private:
 	
 	public:
-		/************************************************************************/
-		/* Clears the given buffer.                                             */
-		/************************************************************************/
+		/**
+         * Clears the buffer.
+         */
 		void clearBuffer();
     
-        /************************************************************************/
-		/* Returns a pointer to the buffer.                                     */
-		/************************************************************************/
+        /**
+         * Sets the buffer to all 1.
+         */
+        void setBuffer();
+
+        /**
+		 * Returns a pointer to the buffer.
+		 */
         buffer_t* getBuffer();
 
     protected:
