@@ -12,14 +12,14 @@
 PlaneDataOutputWriter::PlaneDataOutputWriter(
         volatile uint8_t *PORT_DATA_OUT, 
         volatile uint8_t *PORT_CTRL_OUT, 
-        uint8_t CONTROL_CLOCK_PIN, uint8_t CONTROL_OE_PIN, 
-        uint8_t CONTROL_STO_PIN, uint8_t HIGH_CYCLE_COUNT) : 
+        uint8_t CONTROL_CLOCK_PIN, 
+        uint8_t CONTROL_STO_PIN, 
+        uint8_t HIGH_CYCLE_COUNT) : 
             PORT_DATA_OUT(PORT_DATA_OUT),
             PORT_CTRL_OUT(PORT_CTRL_OUT),
             CONTROL_CLOCK_PIN(CONTROL_CLOCK_PIN), 
-            CONTROL_OE_PIN(CONTROL_OE_PIN),
             CONTROL_STO_PIN(CONTROL_STO_PIN),
-            HIGH_CYCLE_COUNT(HIGH_CYCLE_COUNT) {
+            HIGH_CYCLE_COUNT(HIGH_CYCLE_COUNT){
     eState = EPlaneDataOutputWriterState::eIdle;
     nCycleDelay = 0;
     nRowIndex = -1;
@@ -66,6 +66,10 @@ uint8_t PlaneDataOutputWriter::getRowData(){
         }
     }
     return tmp;
+}
+
+bool PlaneDataOutputWriter::initialize(){
+	return CyclicModule::initialize();
 }
 
 void PlaneDataOutputWriter::cyclic(){

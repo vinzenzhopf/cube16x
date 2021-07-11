@@ -39,6 +39,7 @@ public:
     void setBackBufferReady(bool value);
     buffer_t* getFrontBuffer();
     buffer_t* getBackBuffer();
+    void copyBuffer(buffer_t *pBuffer); 
 
     bool initialize() override;
     void cyclic() override;

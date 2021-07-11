@@ -13,10 +13,12 @@ DrawController::DrawController(
         PlaneOutputWriter *pPlaneOutputWriter, 
         PlaneDataOutputWriter *pPlaneDataOutputWriter,
         FrameBufferController *pFrameBufferController,
+        IOutputEnableGuard *pOutputEnableGuard,
         uint8_t PLANE_DELAY_COUNT) :
             pPlaneOutputWriter(pPlaneOutputWriter),
             pPlaneDataOutputWriter(pPlaneDataOutputWriter),
             pFrameBufferController(pFrameBufferController),
+            pOutputEnableGuard(pOutputEnableGuard),
             PLANE_DELAY_COUNT(PLANE_DELAY_COUNT) {
     eState = EDrawControllerState::eIdle;
 }
@@ -29,6 +31,10 @@ void DrawController::reset(){
     eState = EDrawControllerState::eIdle;
     nPlaneIndex = 0;
     this->resetCycleTimeout();
+}
+
+bool DrawController::initialize(){
+	return CyclicModule::initialize();
 }
 
 void DrawController::cyclic(){
@@ -63,7 +69,7 @@ void DrawController::cyclic(){
         if(pPlaneOutputWriter->isReadyToLatch() && pPlaneDataOutputWriter->isReadyToLatch()){
             pPlaneOutputWriter->latchData();
             pPlaneDataOutputWriter->latchData();
-            eState = EDrawControllerState::eWaitForSto;
+            eState = EDrawControllerState::eAdvancePlaneCounter;
         }
         break;
 
@@ -71,7 +77,7 @@ void DrawController::cyclic(){
         if(waitCycleTimeout(PLANE_DELAY_COUNT)){
             nPlaneIndex++;
             if(nPlaneIndex >= CUBE_EDGE_SIZE){
-                eState = EDrawControllerState::eCheckBackBufferReady;
+                eState = EDrawControllerState::eCompleteBufferWritten;
                 pFrameBufferController->setFrontBufferReady(true);
             }else{
                 eState = EDrawControllerState::eLoadPlane;
@@ -79,8 +85,13 @@ void DrawController::cyclic(){
         }
         break;
 
+    case EDrawControllerState::eCompleteBufferWritten:
+        pOutputEnableGuard->setDataReady(true);
+        eState = EDrawControllerState::eCheckBackBufferReady;
+
     default:
         eState = EDrawControllerState::eIdle;
+        pOutputEnableGuard->setDataReady(false);
         break;
     }
 }

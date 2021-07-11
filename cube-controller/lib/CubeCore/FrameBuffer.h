@@ -36,7 +36,17 @@ class FrameBuffer {
 		 */
         buffer_t* getBuffer();
 
+        /**
+         * Sets the Buffer to an alternating pattern, where each bit is alternating zu the prevoius.
+         */
+        void setBufferAlternating();
+
+        /**
+         * Copys the given buffer to this buffer.
+         */        
+        void copyBuffer(buffer_t *pBuffer); 
     protected:
+        void setBufferToByte(uint8_t byte);
     private:
 };
 

@@ -18,6 +18,10 @@ typedef uint8_t char_t;
 typedef uint16_t short_t;
 typedef uint32_t word_t;
 
+#define sbi(port,bit)	(port) |= (1<<(bit))
+#define cbi(port,bit)	(port) &= ~(1<<(bit))
+#define tbi(port,bit)	(port) ^= (1<<(bit))
+
 #define CUBE_EDGE_SIZE 16
 
 //Define buffer sizes
@@ -45,3 +49,4 @@ typedef union {
 } buffer_t;
 
 #endif //__LEDCUBE16X_H__
+

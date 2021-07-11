@@ -1,77 +1,71 @@
-//#include <Arduino.h>
-
-
-
-// void setup() {
-//   // put your setup code here, to run once:
-// }
-
-// void loop() {
-//   // put your main code here, to run repeatedly:
-// }
-
 #include <avr/io.h>
 
 #include "BoardConfig.h"
 #include "Base/ModuleManager.h"
+#include "Watchdog.h"
 #include "FrameBuffer.h"
 #include "FrameBufferController.h"
 #include "Drawing/PlaneDataOutputWriter.h"
 #include "Drawing/PlaneOutputWriter.h"
 #include "Drawing/DrawController.h"
 
-void SetBuffer_LedAlternating(buffer_t * pBuffer){
-    for(uint8_t i = 0; i < 16; i++){
-        for(uint8_t j = 0; j < 16; j++){
-            pBuffer->asPlanes[i].asShort[j] = (j%2==0)?0b1010101010101010:0b0101010101010101;
-        }
-    }
-}
-
 int main(void)
 {
+    Device_InitIOPorts();
+    Device_InitDataDirections();
+    //Set ErrorLED to HIGH during initializaton
+    PORT_INFO |= (1<<PIN_INFO_ERR_LED);
+
     ModuleManager moduleManager;
+    Watchdog watchdog(
+        &(PORT_INFO),
+        PIN_INFO_CYCL_LED,          //INFO_CYCLE_PIN
+        PIN_INFO_ERR_LED,           //INFO_SYSOK_PIN
+        &(PORT_PLANE_CONTROL),      //PORT_PLANE_CTL
+        PIN_PLANE_OE,               //PLANE_OE_PIN
+        &(PORT_COL_CONTROL),        //PORT_DATA_CTL
+        PIN_COL_OE                  //DATA_OE_PIN
+    );
     FrameBufferController frameBufferController;
     PlaneOutputWriter planeOutputWriter(
         &(PORT_CONTROL_OUT),
-        PLANE_CLK, 
-        PLANE_OE,
-        PLANE_STO,
-        PLANE_DATA,
-        2
+        PIN_PLANE_CLK, 
+        PIN_PLANE_STO,
+        PIN_PLANE_DATA,
+        0
     );
     PlaneDataOutputWriter planeDataOutputWriter(
         &(PORT_COLUMN), 
         &(PORT_CONTROL_OUT), 
-        COL_CLK, 
-        COL_OE,
-        COL_STO,
-        2
+        PIN_COL_CLK, 
+        PIN_COL_STO,
+        0
     );
     DrawController drawController(
         &planeOutputWriter, 
         &planeDataOutputWriter,
-        &frameBufferController, 
+        &frameBufferController,
+        &watchdog,
         10
     );
 
-    Device_InitIOPorts();
-    Device_InitDataDirections();
-
+    moduleManager.registerModule(&watchdog);
     moduleManager.registerModule(&frameBufferController);
     moduleManager.registerModule(&planeOutputWriter);
     moduleManager.registerModule(&planeDataOutputWriter);
     moduleManager.registerModule(&drawController);
 
-    //manually pull OE to High (FOR TESTING)
-    PORT_CONTROL_OUT |= (1<<PLANE_OE | 1<<COL_OE);
+    FrameBuffer bufferAlternating, bufferFull, bufferEmpty;
+    bufferAlternating.setBufferAlternating();
+    bufferFull.setBuffer();
+    bufferEmpty.clearBuffer();
 
     while (1) 
     {
         moduleManager.cyclic();
 
-        if(moduleManager.isInitialized()){
-            SetBuffer_LedAlternating(frameBufferController.getBackBuffer());
+        if(moduleManager.isInitialized() && frameBufferController.isFrontBufferReady()){
+            frameBufferController.copyBuffer(bufferFull.getBuffer());  
             frameBufferController.setBackBufferReady(true);
         }
     }

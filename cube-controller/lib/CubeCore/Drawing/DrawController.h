@@ -11,6 +11,7 @@
 
 #include "LedCube16x.h"
 #include "Base/CyclicModule.h"
+#include "Base/IOutputEnableGuard.h"
 #include "PlaneOutputWriter.h"
 #include "PlaneDataOutputWriter.h"
 #include "../FrameBufferController.h"
@@ -21,8 +22,8 @@ enum EDrawControllerState{
     eInitCubeDrawing,
     eLoadPlane,
     eWaitForDataWritten,
-    eWaitForSto,
-    eAdvancePlaneCounter
+    eAdvancePlaneCounter,
+    eCompleteBufferWritten
 };
 
 class DrawController : public CyclicModule
@@ -33,7 +34,9 @@ protected:
     PlaneOutputWriter * const pPlaneOutputWriter;
     PlaneDataOutputWriter * const pPlaneDataOutputWriter;
     FrameBufferController * const pFrameBufferController;
+    IOutputEnableGuard * const pOutputEnableGuard;
     const uint8_t PLANE_DELAY_COUNT;
+    
 
     buffer_t * pFrame;
     uint8_t nPlaneIndex;
@@ -45,10 +48,12 @@ public:
 	DrawController(
         PlaneOutputWriter *pPlaneOutputWriter, 
         PlaneDataOutputWriter *pPlaneDataOutputWriter,
-        FrameBufferController *pFrameBufferController, 
+        FrameBufferController *pFrameBufferController,
+        IOutputEnableGuard *pOutputEnableGuard,
         uint8_t PLANE_DELAY_COUNT);
 	~DrawController();
 
+    bool initialize() override;
     void cyclic() override;  
     void reset();
 };

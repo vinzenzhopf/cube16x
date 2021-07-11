@@ -33,7 +33,6 @@ public:
 protected:
     volatile uint8_t * const PORT_CTRL_OUT;
     const uint8_t CONTROL_CLOCK_PIN;
-    const uint8_t CONTROL_OE_PIN;
     const uint8_t CONTROL_STO_PIN;
     const uint8_t CONTROL_DATA_PIN;
     const uint8_t HIGH_CYCLE_COUNT;
@@ -52,7 +51,6 @@ public:
 	PlaneOutputWriter(
         volatile uint8_t *PORT_CTRL_OUT, 
         uint8_t CONTROL_CLOCK_PIN, 
-        uint8_t CONTROL_OE_PIN, 
         uint8_t CONTROL_STO_PIN, 
         uint8_t CONTROL_DATA_PIN, 
         uint8_t HIGH_CYCLE_COUNT);
@@ -64,6 +62,7 @@ public:
     bool isReadyForNextPlane();
     bool isReadyToLatch();
 
+    bool initialize() override;
     void cyclic() override;
     void reset();
 };

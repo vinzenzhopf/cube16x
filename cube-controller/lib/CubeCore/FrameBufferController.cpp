@@ -63,3 +63,7 @@ buffer_t* FrameBufferController::getFrontBuffer(){
 buffer_t* FrameBufferController::getBackBuffer(){
     return arrFrameBuffers[nBackBufferIdx].getBuffer();
 }
+
+void FrameBufferController::copyBuffer(buffer_t *pBuffer){
+    arrFrameBuffers[nBackBufferIdx].copyBuffer(pBuffer);
+} 

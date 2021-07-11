@@ -11,13 +11,11 @@
 PlaneOutputWriter::PlaneOutputWriter(
         volatile uint8_t *PORT_CTRL_OUT, 
         uint8_t CONTROL_CLOCK_PIN, 
-        uint8_t CONTROL_OE_PIN, 
         uint8_t CONTROL_STO_PIN, 
         uint8_t CONTROL_DATA_PIN, 
         uint8_t HIGH_CYCLE_COUNT) : 
             PORT_CTRL_OUT(PORT_CTRL_OUT),
             CONTROL_CLOCK_PIN(CONTROL_CLOCK_PIN), 
-            CONTROL_OE_PIN(CONTROL_OE_PIN),
             CONTROL_STO_PIN(CONTROL_STO_PIN),
             CONTROL_DATA_PIN(CONTROL_DATA_PIN),            
             HIGH_CYCLE_COUNT(HIGH_CYCLE_COUNT) {
@@ -54,6 +52,10 @@ void PlaneOutputWriter::reset(){
     nPlaneIndex = -1;
     nNextPlaneIndex = -1;
     bLatchData = false;
+}
+
+bool PlaneOutputWriter::initialize(){
+	return CyclicModule::initialize();
 }
 
 void PlaneOutputWriter::cyclic(){
