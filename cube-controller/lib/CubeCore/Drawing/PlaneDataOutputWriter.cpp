@@ -57,8 +57,11 @@ void PlaneDataOutputWriter::reset(){
 
 uint8_t PlaneDataOutputWriter::getRowData(){
     //Build the Data-Byte together from all 32 bits of data in the plane.
-    const uint8_t byteOffset = (nRowIndex/8);
-    const uint8_t bitMask = (1<<(nRowIndex%8));
+    //Invert rowIndex because the 32nd bit needs to be written at first to the shift registers
+    const uint8_t nRowInverted = (31-nRowIndex)%32; //% just for sanity
+    
+    const uint8_t byteOffset = (nRowInverted/8);
+    const uint8_t bitMask = (1<<(nRowInverted%8));
     uint8_t tmp = 0;
     for(uint8_t i = 0; i < 8; i++){
         if((pPlane->asBytes[(i*SHIFT_REGISTER_DEPTH_BYTES)+byteOffset] & bitMask) > 0){
@@ -90,8 +93,7 @@ void PlaneDataOutputWriter::cyclic(){
         *PORT_DATA_OUT = getRowData(); //Data for the output byte
         *PORT_CTRL_OUT |= (1<<CONTROL_CLOCK_PIN); //HIGH
         eState = EPlaneDataOutputWriterState::eWaitDataHigh;
-        break;
-
+        //break; //No break, reduces cycle count if HIGH_CYCLE_COUNT=0/1
     case EPlaneDataOutputWriterState::eWaitDataHigh:
         if(waitCycleTimeout(HIGH_CYCLE_COUNT))
             eState = EPlaneDataOutputWriterState::eSetDataLow;
@@ -100,7 +102,7 @@ void PlaneDataOutputWriter::cyclic(){
     case EPlaneDataOutputWriterState::eSetDataLow:
         *PORT_CTRL_OUT &= ~(1<<CONTROL_CLOCK_PIN); //Low
         eState = EPlaneDataOutputWriterState::eWaitDataLow;
-
+        //break; //No break, reduces cycle count if HIGH_CYCLE_COUNT=0/1
     case EPlaneDataOutputWriterState::eWaitDataLow:
         if(waitCycleTimeout(HIGH_CYCLE_COUNT)){
             nRowIndex++;
@@ -122,8 +124,7 @@ void PlaneDataOutputWriter::cyclic(){
     case EPlaneDataOutputWriterState::eSetStoHigh:
         *PORT_CTRL_OUT |= (1<<CONTROL_STO_PIN); //HIGH
         eState = EPlaneDataOutputWriterState::eWaitStoHigh;
-        break;
-
+        //break; //No break, reduces cycle count if HIGH_CYCLE_COUNT=0/1
     case EPlaneDataOutputWriterState::eWaitStoHigh:
         if(waitCycleTimeout(HIGH_CYCLE_COUNT))
             eState = EPlaneDataOutputWriterState::eSetStoLow;
@@ -132,8 +133,7 @@ void PlaneDataOutputWriter::cyclic(){
     case EPlaneDataOutputWriterState::eSetStoLow:
         *PORT_CTRL_OUT &= ~(1<<CONTROL_STO_PIN); //Low
         eState = EPlaneDataOutputWriterState::eWaitStoLow;
-        break;
-
+        //break; //No break, reduces cycle count if HIGH_CYCLE_COUNT=0/1
     case EPlaneDataOutputWriterState::eWaitStoLow:
         if(waitCycleTimeout(HIGH_CYCLE_COUNT))
             eState = EPlaneDataOutputWriterState::eIdle;

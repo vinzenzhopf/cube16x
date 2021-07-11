@@ -80,8 +80,7 @@ void PlaneOutputWriter::cyclic(){
         }
         *PORT_CTRL_OUT |= (1<<CONTROL_CLOCK_PIN); //HIGH
         eState = EPlaneOutputWriterState::eWaitDataHigh;
-        break;
-
+        //break; //No break, reduces cycle count if HIGH_CYCLE_COUNT=0/1
     case EPlaneOutputWriterState::eWaitDataHigh:
         if(waitCycleTimeout(HIGH_CYCLE_COUNT))
             eState = EPlaneOutputWriterState::eSetDataLow;
@@ -90,7 +89,7 @@ void PlaneOutputWriter::cyclic(){
     case EPlaneOutputWriterState::eSetDataLow:
         *PORT_CTRL_OUT &= ~(1<<CONTROL_DATA_PIN | 1<<CONTROL_CLOCK_PIN); //Low
         eState = EPlaneOutputWriterState::eWaitDataLow;
-
+        //break; //No break, reduces cycle count if HIGH_CYCLE_COUNT=0/1
     case EPlaneOutputWriterState::eWaitDataLow:
         if(waitCycleTimeout(HIGH_CYCLE_COUNT)){
             nShiftBitCount++;
@@ -112,8 +111,7 @@ void PlaneOutputWriter::cyclic(){
     case EPlaneOutputWriterState::eSetStoHigh:
         *PORT_CTRL_OUT |= (1<<CONTROL_STO_PIN); //HIGH
         eState = EPlaneOutputWriterState::eWaitStoHigh;
-        break;
-
+        //break; //No break, reduces cycle count if HIGH_CYCLE_COUNT=0/1
     case EPlaneOutputWriterState::eWaitStoHigh:
         if(waitCycleTimeout(HIGH_CYCLE_COUNT))
             eState = EPlaneOutputWriterState::eSetStoLow;
@@ -122,8 +120,7 @@ void PlaneOutputWriter::cyclic(){
     case EPlaneOutputWriterState::eSetStoLow:
         *PORT_CTRL_OUT &= ~(1<<CONTROL_STO_PIN); //Low
         eState = EPlaneOutputWriterState::eWaitStoLow;
-        break;
-
+        //break; //No break, reduces cycle count if HIGH_CYCLE_COUNT=0/1
     case EPlaneOutputWriterState::eWaitStoLow:
         if(waitCycleTimeout(HIGH_CYCLE_COUNT))
             eState = EPlaneOutputWriterState::eIdle;
