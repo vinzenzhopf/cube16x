@@ -19,6 +19,7 @@ class Watchdog : public CyclicModule, public IOutputEnableGuard {
         volatile uint8_t* const PORT_INFO_OUT;
         const uint8_t INFO_CYCLE_PIN;
         const uint8_t INFO_SYSOK_PIN;
+        const uint8_t INFO_DBG_PIN;
         volatile uint8_t* const PORT_PLANE_CTL;
         const uint8_t PLANE_OE_PIN;
         volatile uint8_t* const PORT_DATA_CTL;
@@ -33,6 +34,7 @@ class Watchdog : public CyclicModule, public IOutputEnableGuard {
             volatile uint8_t *PORT_INFO_OUT, 
             uint8_t INFO_CYCLE_PIN,
             uint8_t INFO_SYSOK_PIN,
+            uint8_t INFO_DBG_PIN,
             volatile uint8_t *PORT_PLANE_CTL,
 			uint8_t PLANE_OE_PIN,
 			volatile uint8_t *PORT_DATA_CTL,

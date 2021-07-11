@@ -35,7 +35,7 @@ void CyclicModule::cyclic(){
  */
 bool CyclicModule::waitCycleTimeout(uint16_t nDelay){
     nCycleDelay++;
-    if(nCycleDelay >= nDelay){
+    if(nCycleDelay > nDelay){
         nCycleDelay = 0;
         return true;
     }

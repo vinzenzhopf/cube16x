@@ -21,6 +21,7 @@ int main(void)
         &(PORT_INFO),
         PIN_INFO_CYCL_LED,          //INFO_CYCLE_PIN
         PIN_INFO_ERR_LED,           //INFO_SYSOK_PIN
+        PIN_INFO_DBG_LED,           //INFO_DBG_PIN
         &(PORT_PLANE_CONTROL),      //PORT_PLANE_CTL
         PIN_PLANE_OE,               //PLANE_OE_PIN
         &(PORT_COL_CONTROL),        //PORT_DATA_CTL

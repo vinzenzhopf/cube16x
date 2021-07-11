@@ -43,7 +43,6 @@ void DrawController::cyclic(){
     switch (eState)
     {
     case EDrawControllerState::eIdle:
-
     case EDrawControllerState::eCheckBackBufferReady:  
         if(pFrameBufferController->isBackBufferReady()){
             pFrameBufferController->switchBuffers();
@@ -88,6 +87,7 @@ void DrawController::cyclic(){
     case EDrawControllerState::eCompleteBufferWritten:
         pOutputEnableGuard->setDataReady(true);
         eState = EDrawControllerState::eCheckBackBufferReady;
+        break;
 
     default:
         eState = EDrawControllerState::eIdle;

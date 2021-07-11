@@ -13,6 +13,7 @@ Watchdog::Watchdog(
             volatile uint8_t *PORT_INFO_OUT, 
             uint8_t INFO_CYCLE_PIN,
             uint8_t INFO_SYSOK_PIN,
+			uint8_t INFO_DBG_PIN,
 			volatile uint8_t *PORT_PLANE_CTL,
 			uint8_t PLANE_OE_PIN,
 			volatile uint8_t *PORT_DATA_CTL,
@@ -20,6 +21,7 @@ Watchdog::Watchdog(
 			PORT_INFO_OUT(PORT_INFO_OUT),
 			INFO_CYCLE_PIN(INFO_CYCLE_PIN),
 			INFO_SYSOK_PIN(INFO_SYSOK_PIN),
+			INFO_DBG_PIN(INFO_DBG_PIN),
 			PORT_PLANE_CTL(PORT_PLANE_CTL),
 			PLANE_OE_PIN(PLANE_OE_PIN),
 			PORT_DATA_CTL(PORT_DATA_CTL),
@@ -68,7 +70,13 @@ void Watchdog::writeInfoLeds(){
 	}else{
 		*PORT_INFO_OUT &= ~(1<<INFO_SYSOK_PIN);
 	}
+	if(bDataReady){
+		*PORT_INFO_OUT |= (1<<INFO_DBG_PIN);
+	}else{
+		*PORT_INFO_OUT &= ~(1<<INFO_DBG_PIN);
+	}
 }
+
 void Watchdog::writeOutputEnable(){
 	if(bOutputActive){
 		*PORT_PLANE_CTL |= (1<<PLANE_OE_PIN);
