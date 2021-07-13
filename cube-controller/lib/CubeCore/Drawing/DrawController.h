@@ -19,7 +19,6 @@
 enum EDrawControllerState{ 
     eIdle,
     eCheckBackBufferReady,
-    eInitCubeDrawing,
     eLoadPlane,
     eWaitForDataWritten,
     eAdvancePlaneCounter,

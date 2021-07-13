@@ -48,10 +48,6 @@ void DrawController::cyclic(){
             pFrameBufferController->switchBuffers();
             pFrame = pFrameBufferController->getFrontBuffer();
         }
-        eState = EDrawControllerState::eInitCubeDrawing;
-        break;
-
-    case EDrawControllerState::eInitCubeDrawing:
         nPlaneIndex = 0;
         eState = EDrawControllerState::eLoadPlane;
         break;
