@@ -9,6 +9,15 @@
 #include "Drawing/PlaneOutputWriter.h"
 #include "Drawing/DrawController.h"
 
+void WriteTestBuffer(buffer_t *pBuffer){
+    const uint16_t data = 0b1000000010000000;
+    for(uint8_t p = 0; p < 16; p++){
+        for(uint8_t r = 0; r < 16; r++){
+            pBuffer->asPlanes[p].asShort[r] = data;
+        }
+    }
+}
+
 int main(void)
 {
     Device_InitIOPorts();
@@ -60,13 +69,28 @@ int main(void)
     bufferAlternating.setBufferAlternating();
     bufferFull.setBuffer();
     bufferEmpty.clearBuffer();
-
+    
+    // FrameBuffer bufferTest;
+    // // bufferTest.clearBuffer();
+    // WriteTestBuffer(bufferTest.getBuffer());
+    uint8_t i = 200;
+    bool bAlternating = false;
     while (1) 
     {
         moduleManager.cyclic();
 
         if(moduleManager.isInitialized() && frameBufferController.isFrontBufferReady()){
-            frameBufferController.copyBuffer(bufferFull.getBuffer());  
+            // i++;
+            // if(i > 200){
+            //     if(bAlternating){
+            //         frameBufferController.copyBuffer(bufferEmpty.getBuffer());  
+            //     }else{
+            //         frameBufferController.copyBuffer(bufferFull.getBuffer());  
+            //     }
+            //     bAlternating = !bAlternating;
+            //     i = 0;
+            // }
+            frameBufferController.copyBuffer(bufferFull.getBuffer()); 
             frameBufferController.setBackBufferReady(true);
         }
     }
