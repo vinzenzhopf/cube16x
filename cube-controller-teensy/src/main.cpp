@@ -8,6 +8,9 @@
 #include "Drawing/PlaneOutputWriter.h"
 #include "Drawing/DrawController.h"
 
+#include "PlaylistManager.h"
+#include "AnimationController.h"
+
 ModuleManager moduleManager;
 Watchdog watchdog(
     PIN_INFO_CYCL_LED,          //INFO_CYCLE_PIN
@@ -38,6 +41,13 @@ DrawController drawController(
     10
 );
 
+PlaylistManager playlistManager;
+AnimationController animationController(
+    &frameBufferController,
+    &playlistManager,
+    ANIMATION_FRAME_TIME_US
+);
+
 FrameBuffer bufferAlternating, bufferFull, bufferEmpty;
 
 void WriteTestBuffer(buffer_t *pBuffer){
@@ -48,6 +58,18 @@ void WriteTestBuffer(buffer_t *pBuffer){
         }
     }
 }
+
+enum class EAnimationType{
+    eFullOn,
+    eFullOff,
+    eLedsAlternating,
+    eWalkingLed,
+    eBlink,
+    ePlaneWalker,
+    eColumnWalker,
+    eIterateLeds,
+    eRainDrops
+};
 
 void setup() {
     BoardInitIOPorts();
@@ -78,20 +100,6 @@ void loop() {
     watchdog.initCycle();
 
     moduleManager.cyclic();
-    if(moduleManager.isInitialized() && frameBufferController.isFrontBufferReady()){
-        // i++;
-        // if(i > 200){
-        //     if(bAlternating){
-        //         frameBufferController.copyBuffer(bufferEmpty.getBuffer());  
-        //     }else{
-        //         frameBufferController.copyBuffer(bufferFull.getBuffer());  
-        //     }
-        //     bAlternating = !bAlternating;
-        //     i = 0;
-        // }
-        frameBufferController.copyBuffer(bufferFull.getBuffer()); 
-        frameBufferController.setBackBufferReady(true);
-    }
 
     watchdog.adjustCycleTime();
 

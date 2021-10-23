@@ -12,11 +12,9 @@
 #ifndef __LEDCUBE16X_H__
 #define __LEDCUBE16X_H__
 
-#include "Base/CubeCore.h"
+#include <stdint.h>
 
-typedef uint8_t char_t;
-typedef uint16_t short_t;
-typedef uint32_t word_t;
+typedef uint32_t row_t;
 
 #define sbi(port,bit)	(port) |= (1<<(bit))
 #define cbi(port,bit)	(port) &= ~(1<<(bit))
@@ -26,25 +24,25 @@ typedef uint32_t word_t;
 
 //Define buffer sizes
 #define BUFFER_BYTE_SIZE 512
-#define BUFFER_SHORT_SIZE (BUFFER_BYTE_SIZE / sizeof(short_t)) // 256
-#define BUFFER_WORD_SIZE (BUFFER_BYTE_SIZE / sizeof(word_t))	// 128
+#define BUFFER_SHORT_SIZE (BUFFER_BYTE_SIZE / sizeof(uint16_t)) // 256
+#define BUFFER_ROW_SIZE (BUFFER_BYTE_SIZE / sizeof(uint32_t))	// 128
 
 #define PLANE_BYTE_SIZE (BUFFER_BYTE_SIZE / 16)
-#define PLANE_SHORT_SIZE (PLANE_BYTE_SIZE / sizeof(short_t)) // 16
-#define PLANE_WORD_SIZE (PLANE_BYTE_SIZE / sizeof(word_t))	// 8
+#define PLANE_SHORT_SIZE (PLANE_BYTE_SIZE / sizeof(uint16_t)) // 16
+#define PLANE_ROW_SIZE (PLANE_BYTE_SIZE / sizeof(row_t))	// 8
 
 typedef union {
-	char_t asBytes[PLANE_BYTE_SIZE];
-	short_t asShort[PLANE_SHORT_SIZE];
-	word_t asWords[PLANE_WORD_SIZE];
+	uint8_t asBytes[PLANE_BYTE_SIZE];
+	uint16_t asShort[PLANE_SHORT_SIZE];
+	row_t asRows[PLANE_ROW_SIZE];
 } plane_t;
 
 #define PLANE_COUNT (BUFFER_BYTE_SIZE / sizeof(plane_t))
 
 typedef union {
-	char_t asBytes[BUFFER_BYTE_SIZE];
-	short_t asShort[BUFFER_SHORT_SIZE];
-	word_t asWords[BUFFER_WORD_SIZE];
+	uint8_t asBytes[BUFFER_BYTE_SIZE];
+	uint16_t asShort[BUFFER_SHORT_SIZE];
+	row_t asRows[BUFFER_ROW_SIZE];
 	plane_t asPlanes[PLANE_COUNT];
 } buffer_t;
 

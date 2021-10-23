@@ -55,7 +55,7 @@ void DrawController::cyclic(){
             nPlaneIndex++;
             if(nPlaneIndex >= CUBE_EDGE_SIZE){
                 eState = EDrawControllerState::eCompleteBufferWritten;
-                pFrameBufferController->setFrontBufferReady(true);
+                pFrameBufferController->setFrontBufferReady();
             }else{
                 eState = EDrawControllerState::eLoadPlane;
             }

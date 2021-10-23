@@ -36,7 +36,9 @@
 #define PIN_INFO_PWR_SIG		32		//PIN 5
 #define PIN_INFO_ERR_LED		40		//PIN 8 - SCK - LED RED
 
-#define CYCLE_TIME_US			5				
+#define CYCLE_TIME_US			5	
+#define ANIMATION_FRAMERATE    	60
+#define ANIMATION_FRAME_TIME_US	( 1 / ANIMATION_FRAMERATE )*1000*1000
 
 inline void BoardInitDataDirections(){
 	//Columns
