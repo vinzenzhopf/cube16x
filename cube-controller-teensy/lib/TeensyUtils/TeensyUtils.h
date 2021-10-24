@@ -8,7 +8,13 @@
 #ifndef __TEENSYUTILS_H__
 #define __TEENSYUTILS_H__
 
+#include <stdint.h>
+
+#ifndef PLATFORM_NATIVE
 #include <Arduino.h>
+#else
+#include "NativeArduinoMock.h"
+#endif
 
 #define NOP1 "nop\n\t"
 #define NOP2 "nop\n\t""nop\n\t"

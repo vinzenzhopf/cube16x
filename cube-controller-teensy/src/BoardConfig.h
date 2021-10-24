@@ -8,7 +8,8 @@
 #ifndef _PORT_DEFINITIONS_
 #define _PORT_DEFINITIONS_
 
-#include <Arduino.h>
+#include "CubeCore.h"
+
 #include "TeensyUtils.h"
 
 /* Pin Definitions */	

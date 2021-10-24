@@ -12,7 +12,12 @@
 #ifndef __CUBECORE_H__
 #define __CUBECORE_H__
 
+#ifndef PLATFORM_NATIVE
 #include <Arduino.h>
+#else
+#include "NativeArduinoMock.h"
+#endif
+
 #include "LedCube16x.h"
 
 #define MAX_MODULE_COUNT 10

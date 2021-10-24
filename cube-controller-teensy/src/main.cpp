@@ -1,4 +1,6 @@
-#include <Arduino.h>
+
+#include "CubeCore.h"
+
 #include "BoardConfig.h"
 #include "Base/ModuleManager.h"
 #include "Watchdog.h"

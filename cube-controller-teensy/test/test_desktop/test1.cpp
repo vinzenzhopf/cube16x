@@ -1,5 +1,4 @@
 
-
 #include <unity.h>
 
 // void setUp(void) {
@@ -16,10 +15,12 @@
 
 void test_negative_buffer_overflow(void) {
     uint16_t start = 0xFFF0;
-    uint16_t end = 0x0010;
+    uint16_t diff = 0x20;
+    uint16_t end = start + diff;
     uint16_t dt = end - start;
 
-    TEST_ASSERT_EQUAL(0x20, dt);
+    TEST_ASSERT_LESS_OR_EQUAL_HEX32(start, end);
+    TEST_ASSERT_EQUAL(diff, dt);
 }
 
 int main(int argc, char **argv) {
