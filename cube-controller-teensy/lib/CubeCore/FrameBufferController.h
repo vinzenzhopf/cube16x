@@ -29,17 +29,13 @@ private:
 
 //functions
 public:
-	FrameBufferController()
-    {
-        bBackBufferReady = false;
-        bFrontBufferReady = false;
-        nFrontBufferIdx = 0;
-        nBackBufferIdx = 1;
+	FrameBufferController() : 
+        nFrontBufferIdx(0),
+        nBackBufferIdx(1),
+        bBackBufferReady(false),
+        bFrontBufferReady(false) {
     }
-
-	~FrameBufferController()
-    {
-    }
+	~FrameBufferController() = default;
 
     void switchBuffers(){
         uint8_t tmp = nBackBufferIdx;

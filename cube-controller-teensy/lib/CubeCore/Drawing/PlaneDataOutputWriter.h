@@ -56,19 +56,8 @@ public:
             uint8_t CONTROL_CLOCK_PIN, 
             uint8_t CONTROL_STO_PIN,
             uint8_t DATA_PIN, 
-            uint8_t HIGH_CYCLE_COUNT) : 
-                CONTROL_CLOCK_PIN(CONTROL_CLOCK_PIN), 
-                CONTROL_STO_PIN(CONTROL_STO_PIN),
-                DATA_PIN(DATA_PIN),
-                HIGH_CYCLE_COUNT(HIGH_CYCLE_COUNT){
-        eState = EPlaneDataOutputWriterState::eIdle;
-        nCycleDelay = 0;
-        nRowIndex = -1;
-        pNextPlane = nullptr;
-        bLatchData = false;
-    }
-	~PlaneDataOutputWriter(){
-    }
+            uint8_t HIGH_CYCLE_COUNT);
+	~PlaneDataOutputWriter() = default;
 
     void setPlane(plane_t *plane);
     void latchData();

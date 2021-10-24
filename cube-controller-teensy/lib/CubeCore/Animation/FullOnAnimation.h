@@ -16,11 +16,9 @@ class FullOnAnimation : public FrameGenerator {
     public:
     protected:
     private:
-
         FrameBuffer tmpBuffer;
         uint8_t rowIndex;
         uint8_t planeIndex;
-
 	public:
         FullOnAnimation(uint32_t const animationFrameTimeUs,
                         bool const repeatUntilTimeExeeded);

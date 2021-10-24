@@ -8,6 +8,22 @@
 
 #include "PlaneOutputWriter.h"
 
+PlaneOutputWriter::PlaneOutputWriter(
+            uint8_t CONTROL_CLOCK_PIN, 
+            uint8_t CONTROL_STO_PIN, 
+            uint8_t DATA_PIN, 
+            uint8_t HIGH_CYCLE_COUNT) : 
+                CONTROL_CLOCK_PIN(CONTROL_CLOCK_PIN), 
+                CONTROL_STO_PIN(CONTROL_STO_PIN),
+                DATA_PIN(DATA_PIN),            
+                HIGH_CYCLE_COUNT(HIGH_CYCLE_COUNT),
+                eState(EPlaneOutputWriterState::eIdle),
+                nCycleDelay(0),
+                nPlaneIndex(-1),
+                nNextPlaneIndex(-1),
+                bLatchData(false) {
+}
+
 bool PlaneOutputWriter::isReadyForNextPlane(){
     return eState == EPlaneOutputWriterState::eIdle;
 }

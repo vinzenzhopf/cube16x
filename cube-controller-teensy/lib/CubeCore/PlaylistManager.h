@@ -1,7 +1,7 @@
 /*
  * PlaylistManager.h
  *
- * Created: 11.07.2017 22:03:45
+ * Created: 23.10.2021 10:03:38
  * Author: Vinzenz hopf (happyfreak.de)
  */ 
 
@@ -17,7 +17,7 @@
 #include <Entropy.h>
 #endif
 
-class PlaylistManager : IPlaylistManager {
+class PlaylistManager : public IPlaylistManager {
     public:
     protected:        
         ICyclicFrameGeneration *entries[MAX_PLAYLIST_ENTRIES];

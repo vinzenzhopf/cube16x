@@ -13,7 +13,7 @@
 #include "Animation/ICyclicFrameGeneration.h"
 
 class IPlaylistManager {
-	public:
+    public:
         virtual void addAnimation(ICyclicFrameGeneration *frameGenerator) = 0;
         virtual ICyclicFrameGeneration* getNextAnimation() = 0;
         virtual ICyclicFrameGeneration* getCurrentAnimation() = 0;

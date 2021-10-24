@@ -36,7 +36,6 @@ protected:
     IOutputEnableGuard * const pOutputEnableGuard;
     const uint8_t PLANE_DELAY_COUNT;
     
-
     buffer_t * pFrame;
     uint8_t nPlaneIndex;
     EDrawControllerState eState;
@@ -49,17 +48,8 @@ public:
             PlaneDataOutputWriter *pPlaneDataOutputWriter,
             FrameBufferController *pFrameBufferController,
             IOutputEnableGuard *pOutputEnableGuard,
-            uint8_t PLANE_DELAY_COUNT) :
-                pPlaneOutputWriter(pPlaneOutputWriter),
-                pPlaneDataOutputWriter(pPlaneDataOutputWriter),
-                pFrameBufferController(pFrameBufferController),
-                pOutputEnableGuard(pOutputEnableGuard),
-                PLANE_DELAY_COUNT(PLANE_DELAY_COUNT) {
-        eState = EDrawControllerState::eIdle;
-    }
-
-    ~DrawController() {
-    }
+            uint8_t PLANE_DELAY_COUNT);
+    virtual ~DrawController() = default;
 
     bool initialize() override;
     void cyclic() override;  

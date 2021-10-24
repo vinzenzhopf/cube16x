@@ -44,12 +44,13 @@ class Watchdog final : public CyclicModule, public IOutputEnableGuard {
                     INFO_SYSERR_PIN(INFO_SYSERR_PIN),
                     INFO_DBG_PIN(INFO_DBG_PIN),
                     OE_PIN(OE_PIN),
-                    TARGET_CYCLE_TIME_US(TARGET_CYCLE_TIME_US) {
-            bOutputActive = false;
-            bSystemOk = false;
-            bDataReady = false;
-            bCycleTimeExceeded = false;
+                    TARGET_CYCLE_TIME_US(TARGET_CYCLE_TIME_US),
+                    bDataReady(false),
+                    bOutputActive(false),
+                    bSystemOk(false),
+                    bCycleTimeExceeded(false) {
         }
+        ~Watchdog() = default;
 
         void setDataReady(bool bDataReady) override{
             this->bDataReady = bDataReady;

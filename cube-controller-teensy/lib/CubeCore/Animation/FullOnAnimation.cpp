@@ -5,7 +5,9 @@
 FullOnAnimation::FullOnAnimation(
                 uint32_t const animationFrameTimeUs,
                 bool const repeatUntilTimeExeeded) : 
-            FrameGenerator(animationFrameTimeUs, repeatUntilTimeExeeded){
+            FrameGenerator(animationFrameTimeUs, repeatUntilTimeExeeded),
+            rowIndex(0),
+            planeIndex(0) {
     tmpBuffer.setBuffer();
 }
 

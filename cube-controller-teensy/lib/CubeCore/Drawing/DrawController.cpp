@@ -8,6 +8,20 @@
 
 #include "DrawController.h"
 
+DrawController::DrawController(
+            PlaneOutputWriter *pPlaneOutputWriter, 
+            PlaneDataOutputWriter *pPlaneDataOutputWriter,
+            FrameBufferController *pFrameBufferController,
+            IOutputEnableGuard *pOutputEnableGuard,
+            uint8_t PLANE_DELAY_COUNT) :
+                pPlaneOutputWriter(pPlaneOutputWriter),
+                pPlaneDataOutputWriter(pPlaneDataOutputWriter),
+                pFrameBufferController(pFrameBufferController),
+                pOutputEnableGuard(pOutputEnableGuard),
+                PLANE_DELAY_COUNT(PLANE_DELAY_COUNT),
+                eState(EDrawControllerState::eIdle) {
+}
+
 void DrawController::reset(){
     eState = EDrawControllerState::eIdle;
     nPlaneIndex = 0;

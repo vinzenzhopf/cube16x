@@ -28,13 +28,11 @@ class ModuleManager {
 
     //Methods
     public:
-        ModuleManager(){
-            nModuleCount = 0;
-            eState = EModuleManagerState::Initialize;
+        ModuleManager() :
+            nModuleCount(0),
+            eState(EModuleManagerState::Initialize) {
         }
-	    ~ModuleManager(){
-            
-        }
+	    virtual ~ModuleManager() = default;
 
         /**
          * Registers a module for cyclic execution
