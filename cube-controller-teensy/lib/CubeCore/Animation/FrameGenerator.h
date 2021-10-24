@@ -12,8 +12,11 @@
 
 class FrameGenerator {
     public:
+        uint32_t const animationFrameTimeUs;
+        bool const repeatUntilTimeExeeded;
+
     protected:
-        buffer_t *nextFrame;
+        buffer_t *frame;
 
         uint32_t totalFrameTimeUs;
         uint32_t frameCounter;
@@ -25,42 +28,22 @@ class FrameGenerator {
         bool sequenceFinished;
 
 	public:
-        FrameGenerator(){
-        }
-        ~FrameGenerator(){
-        }
+        FrameGenerator( uint32_t const animationFrameTimeUs,
+                        bool const repeatUntilTimeExeeded);
+        virtual ~FrameGenerator() = default;
 
-        void restartFrameSequence(uint32_t currentTicks){
-            this->sequenceStartTicks = currentTicks;
-            this->sequenceFinished = false;
-            initializeFrameSequence();
-        }
+        virtual void restartFrameSequence(uint32_t currentTicks);
+        virtual void startFrame(buffer_t *nextFrame, uint32_t const currentTicks, uint32_t const totalFrameTimeUs);
+        virtual void generateCyclicBase(uint32_t const currentTicks);
 
-        void startNewFrame(buffer_t *nextFrame, uint32_t const currentTicks, uint32_t const totalFrameTimeUs){
-            this->nextFrame = nextFrame;
-            this->frameFinished = false;
+        void endFrame();
 
-            this->lastFrameStartTicks = currentTicks;
-            this->totalFrameTimeUs = totalFrameTimeUs;
-            initializeFrame();
-        }
+        bool isSequenceFinished();
 
-        virtual void generateCyclic(uint32_t const currentTicks) = 0;
-
-        bool isSequenceFinished(){
-            return sequenceFinished;
-        }
-
-        bool isFrameFinished(){
-            return frameFinished;
-        }
-        bool getFrameCounter(){
-            return frameCounter;
-        }
+        bool isFrameFinished();
+        bool getFrameCounter();
 
     protected:
-        virtual void initializeFrameSequence() = 0;
-        virtual void initializeFrame() = 0;
 
         void inline setSequenceFinished(){
             sequenceFinished = true;

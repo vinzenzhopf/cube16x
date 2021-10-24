@@ -19,14 +19,14 @@
 #define NOP_DELAY8 __asm__(NOP4 NOP4)
 #define NOP_DELAY16 __asm__(NOP4 NOP4 NOP4 NOP4)
 
-inline void digitalWriteByte(u_int8_t startPin, u_int8_t byte){
+inline void digitalWriteByte(uint8_t startPin, uint8_t byte){
     for(int i = 0; i < 8; i++){
         digitalWriteFast(startPin+i, (byte&(1<<i))!=0);
     }
 }
 
-inline u_int8_t digitalReadByte(u_int8_t startPin){
-    u_int8_t byte = 0;
+inline uint8_t digitalReadByte(uint8_t startPin){
+    uint8_t byte = 0;
     for(int i = 0; i < 8; i++){
         byte |= (digitalReadFast(startPin+i)<<i);
     }

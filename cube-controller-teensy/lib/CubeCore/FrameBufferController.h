@@ -31,6 +31,8 @@ private:
 public:
 	FrameBufferController()
     {
+        bBackBufferReady = false;
+        bFrontBufferReady = false;
         nFrontBufferIdx = 0;
         nBackBufferIdx = 1;
     }
@@ -66,11 +68,7 @@ public:
         return arrFrameBuffers[nBackBufferIdx].getBuffer();
     }
 
-    void copyBuffer(buffer_t *pBuffer){
-        arrFrameBuffers[nBackBufferIdx].copyBuffer(pBuffer);
-    } 
-
-    bool initialize(){
+    bool initialize() override{
         arrFrameBuffers[0].clearBuffer();
         arrFrameBuffers[1].clearBuffer();
         bBackBufferReady = true;
@@ -78,7 +76,7 @@ public:
         return true;
     }
 
-    void cyclic(){
+    void cyclic() override{
     }
     
 protected:

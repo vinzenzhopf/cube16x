@@ -14,10 +14,9 @@
 #include "FrameBufferController.h"
 #include "PlaylistManager.h"
 #include "Animation/FrameGenerator.h"
-#include <Entropy.h>
 
 enum class FrameSequenceState {
-    eStart,
+    eStart = 0,
     eGetNextAnimation,
     eSequenceInitialize,
     eWaitForFrameRequired,
@@ -34,9 +33,9 @@ class AnimationController final : public CyclicModule {
         PlaylistManager * const playlistManager;
         uint32_t const animationFrameTimeUs;
 
-        buffer_t *pBackBuffer;
+        buffer_t *backBuffer;
 
-        PlaylistEntry* currentEntry;
+        FrameGenerator* currentGenerator;
         FrameSequenceState frameGenerationState;
 
         uint32_t animationStartTicks;
@@ -51,23 +50,22 @@ class AnimationController final : public CyclicModule {
                 playlistManager(playlistManager),
                 animationFrameTimeUs(animationFrameTimeUs){
             frameGenerationState = FrameSequenceState::eStart;
-            currentEntry = nullptr;
+            currentGenerator = nullptr;
         }
         ~AnimationController(){
         }
 
-        bool initialize(){
+        bool initialize() override{
             return true;
         }
         
-        void cyclic(){
+        void cyclic()  override{
             uint32_t currentTicks = micros();
             uint32_t elapsedFrameTimeUs = currentTicks - animationStartTicks;
-
             switch (frameGenerationState){
                 case FrameSequenceState::eStart:
-                    currentEntry = playlistManager->getNextAnimation();
-                    if(currentEntry != nullptr){
+                    currentGenerator = playlistManager->getNextAnimation();
+                    if(currentGenerator != nullptr){
                         animationStartTicks = currentTicks;
                         elapsedFrameTimeUs = currentTicks - animationStartTicks;
                         frameGenerationState = FrameSequenceState::eSequenceInitialize;
@@ -75,52 +73,55 @@ class AnimationController final : public CyclicModule {
                     break;
 
                 case FrameSequenceState::eSequenceInitialize:
-                    currentEntry->generator->restartFrameSequence(currentTicks);
+                    digitalToggleFast(40);
+                    currentGenerator->restartFrameSequence(currentTicks);
                     frameGenerationState = FrameSequenceState::eWaitForFrameRequired;
-
-                case FrameSequenceState::eWaitForFrameRequired:
-                    //BackBuffer is becomes false when bufferes are switched
-                    if(!bufferController->isBackBufferReady()){
-                        pBackBuffer = bufferController->getBackBuffer();
-                        frameGenerationState = FrameSequenceState::eNewFrame;
-                    }
                     break;
 
-                case FrameSequenceState::eNewFrame:
-                    currentEntry->generator->startNewFrame(pBackBuffer, currentTicks, animationFrameTimeUs);
-                    frameGenerationState = FrameSequenceState::eGenerateFrame;
-                    break;
+                // case FrameSequenceState::eWaitForFrameRequired:
+                //     //BackBuffer becomes false when bufferes are switched
+                //     if(!bufferController->isBackBufferReady()){
+                //         backBuffer = bufferController->getBackBuffer();
+                //         frameGenerationState = FrameSequenceState::eNewFrame;
+                //     }
+                //     break;
 
-                case FrameSequenceState::eGenerateFrame:
-                    currentEntry->generator->generateCyclic(currentTicks);
-                    if(currentEntry->generator->isFrameFinished()){
-                        frameGenerationState = FrameSequenceState::eFrameFinished;
-                    }
-                    break;
+            //     case FrameSequenceState::eNewFrame:
+            //         currentGenerator->startFrame(backBuffer, currentTicks, animationFrameTimeUs);
+            //         frameGenerationState = FrameSequenceState::eGenerateFrame;
+            //         break;
 
-                case FrameSequenceState::eFrameFinished:
-                    bufferController->setBackBufferReady();
-                    if(currentEntry->generator->isSequenceFinished()){
-                        frameGenerationState = FrameSequenceState::eSequenceFinished;
-                    }else{
-                        frameGenerationState = FrameSequenceState::eWaitForFrameRequired;
-                    }
-                    break;
+            //     case FrameSequenceState::eGenerateFrame:
+            //         currentGenerator->generateCyclicBase(currentTicks);
+            //         if(currentGenerator->isFrameFinished()){
+            //             frameGenerationState = FrameSequenceState::eFrameFinished;
+            //         }
+            //         break;
 
-                case FrameSequenceState::eSequenceFinished:
-                    if(currentEntry->repeatAnimation && 
-                            elapsedFrameTimeUs < currentEntry->animationDurationUs){
-                        //Repeat Animation
-                        frameGenerationState = FrameSequenceState::eSequenceInitialize;
-                    }else{
-                        //Start with new Animation
-                        frameGenerationState = FrameSequenceState::eStart;
-                    }
-                    break;
+            //     case FrameSequenceState::eFrameFinished:
+            //         currentGenerator->endFrame();
+            //         bufferController->setBackBufferReady();
+            //         if(currentEntry->generator->isSequenceFinished()){
+            //             frameGenerationState = FrameSequenceState::eSequenceFinished;
+            //         }else{
+            //             frameGenerationState = FrameSequenceState::eWaitForFrameRequired;
+            //         }
+            //         break;
 
-                default:
-                    frameGenerationState = FrameSequenceState::eStart;
-                    break;
+            //     case FrameSequenceState::eSequenceFinished:
+            //         if(currentEntry->repeatAnimation && 
+            //                 elapsedFrameTimeUs < currentEntry->animationDurationUs){
+            //             //Repeat Animation
+            //             frameGenerationState = FrameSequenceState::eSequenceInitialize;
+            //         }else{
+            //             //Start with new Animation
+            //             frameGenerationState = FrameSequenceState::eStart;
+            //         }
+            //         break;
+
+            //     default:
+            //         frameGenerationState = FrameSequenceState::eStart;
+            //         break;
             }
         }
         

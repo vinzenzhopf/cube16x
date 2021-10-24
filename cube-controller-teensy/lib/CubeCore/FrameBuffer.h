@@ -44,7 +44,21 @@ class FrameBuffer {
         /**
          * Copys the given buffer to this buffer.
          */        
-        void copyBuffer(buffer_t *pBuffer); 
+        void copyFromBuffer(buffer_t *pBuffer){
+            for(uint16_t i = 0; i < BUFFER_ROW_SIZE; i++){
+                buffer.asRows[i] = pBuffer->asRows[i];
+            }
+        } 
+
+        /**
+         * Copys the this buffer to the given buffer.
+         */        
+        void copyToBuffer(buffer_t *pBuffer){
+            for(uint16_t i = 0; i < BUFFER_ROW_SIZE; i++){
+                pBuffer->asRows[i] = buffer.asRows[i];
+            }
+        } 
+
     protected:
         void setBufferToByte(uint8_t byte);
     private:

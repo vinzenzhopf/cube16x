@@ -10,18 +10,21 @@
 #define __PLAYLISTMANAGER_H__
 
 #include "Animation/FrameGenerator.h"
-#include <Entropy.h>
 
-struct PlaylistEntry {
-    FrameGenerator* generator;
-    uint32_t animationDurationUs;
-    bool repeatAnimation;
-};
+#ifndef PLATFORM_NATIVE
+#include <Entropy.h>
+#endif
+
+// struct PlaylistEntry {
+//     FrameGenerator* generator;
+//     uint32_t animationDurationUs;
+//     bool repeatAnimation;
+// };
 
 class PlaylistManager {
     public:
     protected:        
-        PlaylistEntry entries[MAX_PLAYLIST_ENTRIES];
+        FrameGenerator* entries[MAX_PLAYLIST_ENTRIES];
         uint8_t entryCount = 0;
 
         uint8_t currentIndex = 0;
@@ -30,18 +33,14 @@ class PlaylistManager {
 	public:
         PlaylistManager(){
         }
-        ~PlaylistManager(){
-        }
+        ~PlaylistManager() = default;
 
-        void addAnimation(FrameGenerator* const frameGenerator, int32_t const animationDurationUs, bool const repeatAnimation){
-            entries[entryCount].generator = frameGenerator;
-            entries[entryCount].animationDurationUs = animationDurationUs;
-            entries[entryCount].repeatAnimation = repeatAnimation;
+        void addAnimation(FrameGenerator* const frameGenerator){
+            entries[entryCount] = frameGenerator;
             entryCount++;
-            random(20);
         }
         
-        PlaylistEntry* getNextAnimation(){
+        FrameGenerator* getNextAnimation(){
             if(entryCount > 0){
                 currentIndex = generateNewIndex();
                 return getCurrentAnimation();
@@ -50,9 +49,9 @@ class PlaylistManager {
             }
         }
 
-        PlaylistEntry* getCurrentAnimation(){
+        FrameGenerator* getCurrentAnimation(){
             if(entryCount > 0){
-                return &entries[currentIndex];
+                return entries[currentIndex];
             }else{
                 return nullptr;
             }

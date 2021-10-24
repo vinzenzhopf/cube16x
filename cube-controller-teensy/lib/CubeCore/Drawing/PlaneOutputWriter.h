@@ -72,8 +72,8 @@ public:
     bool isReadyForNextPlane();
     bool isReadyToLatch();
 
-    bool initialize();
-    void cyclic();
+    bool initialize() override;
+    void cyclic() override;
     void reset();
 };
 

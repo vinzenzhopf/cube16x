@@ -5,8 +5,6 @@
  * Author: Vinzenz Hopf (happyfreak.de)
  */ 
 
-#include <avr/io.h>
-#include <string.h>
 #include "FrameBuffer.h"
 
 /**
@@ -48,12 +46,3 @@ void FrameBuffer::setBufferAlternating(){
 buffer_t* FrameBuffer::getBuffer(){
     return &buffer;
 }
-
-/**
- * Copys the given buffer to this buffer.
- */  
-void FrameBuffer::copyBuffer(buffer_t *pBuffer){
-	for(int i = 0; i < BUFFER_BYTE_SIZE; i++){
-		buffer.asBytes[i] = pBuffer->asBytes[i];
-	}
-} 

@@ -48,9 +48,10 @@ class Watchdog final : public CyclicModule, public IOutputEnableGuard {
             bOutputActive = false;
             bSystemOk = false;
             bDataReady = false;
+            bCycleTimeExceeded = false;
         }
 
-        void setDataReady(bool bDataReady){
+        void setDataReady(bool bDataReady) override{
             this->bDataReady = bDataReady;
         }
 
@@ -61,11 +62,11 @@ class Watchdog final : public CyclicModule, public IOutputEnableGuard {
             return bSystemOk;
         }
 
-        bool initialize(){
+        bool initialize() override{
             return true;
         }
 
-        void cyclic(){
+        void cyclic() override{
             //For Test-Purposes:
 
             bOutputActive = bDataReady && bSystemOk;

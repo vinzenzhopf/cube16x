@@ -61,8 +61,8 @@ public:
     ~DrawController() {
     }
 
-    bool initialize();
-    void cyclic();  
+    bool initialize() override;
+    void cyclic() override;  
     void reset();
 };
 

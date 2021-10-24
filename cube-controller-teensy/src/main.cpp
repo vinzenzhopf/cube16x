@@ -11,6 +11,8 @@
 #include "PlaylistManager.h"
 #include "AnimationController.h"
 
+#include "Animation/FullOnAnimation.h"
+
 ModuleManager moduleManager;
 Watchdog watchdog(
     PIN_INFO_CYCL_LED,          //INFO_CYCLE_PIN
@@ -48,16 +50,7 @@ AnimationController animationController(
     ANIMATION_FRAME_TIME_US
 );
 
-FrameBuffer bufferAlternating, bufferFull, bufferEmpty;
-
-void WriteTestBuffer(buffer_t *pBuffer){
-    const uint16_t data = 0b1000000010000000;
-    for(uint8_t p = 0; p < 16; p++){
-        for(uint8_t r = 0; r < 16; r++){
-            pBuffer->asPlanes[p].asShort[r] = data;
-        }
-    }
-}
+FullOnAnimation fullOnAnimation(2000, true);
 
 enum class EAnimationType{
     eFullOn,
@@ -71,6 +64,8 @@ enum class EAnimationType{
     eRainDrops
 };
 
+FrameBuffer bufferFull;
+
 void setup() {
     BoardInitIOPorts();
     BoardInitDataDirections();
@@ -83,16 +78,11 @@ void setup() {
     moduleManager.registerModule(&planeOutputWriter);
     moduleManager.registerModule(&planeDataOutputWriter);
     moduleManager.registerModule(&drawController);
+    //moduleManager.registerModule(&animationController);
 
-    bufferAlternating.setBufferAlternating();
+    playlistManager.addAnimation(&fullOnAnimation);
+
     bufferFull.setBuffer();
-    bufferEmpty.clearBuffer();
-
-    // FrameBuffer bufferTest;
-    // // bufferTest.clearBuffer();
-    // WriteTestBuffer(bufferTest.getBuffer());
-    // uint8_t i = 200;
-    // bool bAlternating = false;
 }
 
 void loop() {
@@ -100,6 +90,20 @@ void loop() {
     watchdog.initCycle();
 
     moduleManager.cyclic();
+    if(moduleManager.isInitialized() && frameBufferController.isFrontBufferReady()){
+        // i++;
+        // if(i > 200){
+        //     if(bAlternating){
+        //         frameBufferController.copyBuffer(bufferEmpty.getBuffer());  
+        //     }else{
+        //         frameBufferController.copyBuffer(bufferFull.getBuffer());  
+        //     }
+        //     bAlternating = !bAlternating;
+        //     i = 0;
+        // }
+        bufferFull.copyToBuffer(frameBufferController.getBackBuffer()); 
+        frameBufferController.setBackBufferReady();
+    }
 
     watchdog.adjustCycleTime();
 
