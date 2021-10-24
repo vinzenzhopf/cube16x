@@ -46,12 +46,8 @@ class PlaylistManager : public IPlaylistManager {
 
         ICyclicFrameGeneration* getCurrentAnimation() override{
             return entries[currentIndex];
-            // if(currentIndex < entryCount){
-            //     return entries[currentIndex];
-            // }else{
-            //     return nullptr;
-            // }
-            // if(currentIndex >= 0 && currentIndex < entryCount){
+            // Why is this not working??
+            // if(currentIndex >= 0){
             //     return entries[currentIndex];
             // }else{
             //     return nullptr;
@@ -68,7 +64,7 @@ class PlaylistManager : public IPlaylistManager {
         
     protected:
         int8_t generateNewIndex(){
-            return (currentIndex+1) % (entryCount-1);
+            return (currentIndex+1) % (entryCount);
             //return Entropy.randomByte() % (entryCount-1);
         }
 

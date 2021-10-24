@@ -63,7 +63,7 @@ class AnimationController final : public CyclicModule {
             switch (frameGenerationState){
                 case FrameSequenceState::eStart:
                     currentGenerator = playlistManager->getNextAnimation();
-                    if(currentGenerator != nullptr){
+                    if(currentGenerator){
                         animationStartTicks = currentTicks;
                         // elapsedFrameTimeUs = currentTicks - animationStartTicks;
                         frameGenerationState = FrameSequenceState::eSequenceInitialize;

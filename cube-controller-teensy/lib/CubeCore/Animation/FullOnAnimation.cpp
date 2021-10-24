@@ -31,11 +31,12 @@ void FullOnAnimation::generateCyclicBase(uint32_t const currentTicks){
     //     setFrameFinished();
     //     setSequenceFinished();
     // }
-    //WriteTestBuffer(frame);
-    // tmpBuffer.copyToBuffer(frame);
-    // setFrameFinished();
-    // setSequenceFinished();
+    // WriteTestBuffer(frame);
+    tmpBuffer.copyToBuffer(frame);
+    setFrameFinished();
+    setSequenceFinished();
 }
 
 void FullOnAnimation::endFrame(){
+    FrameGenerator::endFrame();
 }

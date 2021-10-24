@@ -80,7 +80,7 @@ void setup() {
     moduleManager.registerModule(&planeOutputWriter);
     moduleManager.registerModule(&planeDataOutputWriter);
     moduleManager.registerModule(&drawController);
-    //moduleManager.registerModule(&animationController);
+    moduleManager.registerModule(&animationController);
 
     playlistManager.addAnimation(&fullOnAnimation);
 
@@ -92,20 +92,20 @@ void loop() {
     watchdog.initCycle();
 
     moduleManager.cyclic();
-    if(moduleManager.isInitialized() && frameBufferController.isFrontBufferReady()){
-        // i++;
-        // if(i > 200){
-        //     if(bAlternating){
-        //         frameBufferController.copyBuffer(bufferEmpty.getBuffer());  
-        //     }else{
-        //         frameBufferController.copyBuffer(bufferFull.getBuffer());  
-        //     }
-        //     bAlternating = !bAlternating;
-        //     i = 0;
-        // }
-        bufferFull.copyToBuffer(frameBufferController.getBackBuffer()); 
-        frameBufferController.setBackBufferReady();
-    }
+    // if(moduleManager.isInitialized() && frameBufferController.isFrontBufferReady()){
+    //     // i++;
+    //     // if(i > 200){
+    //     //     if(bAlternating){
+    //     //         frameBufferController.copyBuffer(bufferEmpty.getBuffer());  
+    //     //     }else{
+    //     //         frameBufferController.copyBuffer(bufferFull.getBuffer());  
+    //     //     }
+    //     //     bAlternating = !bAlternating;
+    //     //     i = 0;
+    //     // }
+    //     bufferFull.copyToBuffer(frameBufferController.getBackBuffer()); 
+    //     frameBufferController.setBackBufferReady();
+    // }
 
     watchdog.adjustCycleTime();
 
