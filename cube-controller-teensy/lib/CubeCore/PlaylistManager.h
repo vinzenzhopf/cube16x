@@ -5,9 +5,7 @@
  * Author: Vinzenz hopf (happyfreak.de)
  */ 
 
-
-#ifndef __PLAYLISTMANAGER_H__
-#define __PLAYLISTMANAGER_H__
+#pragma once
 
 #include "CubeCore.h"
 #include "Animation/ICyclicFrameGeneration.h"
@@ -77,4 +75,3 @@ class PlaylistManager : public IPlaylistManager {
     private:  
 };
 
-#endif //__PLAYLISTMANAGER_H__

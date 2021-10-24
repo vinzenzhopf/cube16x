@@ -5,9 +5,7 @@
  * Author: Vinzenz hopf (happyfreak.de)
  */ 
 
-
-#ifndef __NATIVEENTROPYMOCK_H__
-#define __NATIVEENTROPYMOCK_H__
+#pragma once
 
 #ifdef PLATFORM_NATIVE
 

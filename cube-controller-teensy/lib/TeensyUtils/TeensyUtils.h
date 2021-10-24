@@ -4,9 +4,7 @@
  * Aggregations of useful functions to use with the Teensy-Adurino API
  */ 
 
-
-#ifndef __TEENSYUTILS_H__
-#define __TEENSYUTILS_H__
+#pragma once
 
 #include <stdint.h>
 
@@ -39,5 +37,5 @@ inline uint8_t digitalReadByte(uint8_t startPin){
     return byte;
 }
 
-#endif //__TEENSYUTILS_H__
+
 

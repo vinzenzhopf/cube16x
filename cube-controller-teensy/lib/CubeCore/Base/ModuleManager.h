@@ -5,10 +5,7 @@
  * Author: Vinzenz Hopf (happyfreak.de)
  */ 
 
-
-#ifndef __MODULEMANAGER_H__
-#define __MODULEMANAGER_H__
-
+#pragma once
 
 #include "CyclicModule.h"
 
@@ -87,4 +84,3 @@ class ModuleManager {
     protected:
 };
 
-#endif //__MODULEMANAGER_H__

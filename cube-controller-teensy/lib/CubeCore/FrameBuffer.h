@@ -8,9 +8,7 @@
  * Author: Vinzenz hopf (happyfreak.de)
  */ 
 
-
-#ifndef __FRAMEBUFFER_H__
-#define __FRAMEBUFFER_H__
+#pragma once
 
 #include <LedCube16x.h>
 
@@ -64,4 +62,3 @@ class FrameBuffer {
     private:
 };
 
-#endif //__FRAMEBUFFER_H__

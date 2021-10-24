@@ -8,9 +8,7 @@
  * Author: Vinzenz hopf (happyfreak.de)
  */ 
 
-
-#ifndef __CYCLICMODULE_H__
-#define __CYCLICMODULE_H__
+#pragma once
 
 #include "CubeCore.h"
 
@@ -49,4 +47,3 @@ class CyclicModule {
         void resetCycleTimeout();
 };
 
-#endif //__CYCLICMODULE_H__

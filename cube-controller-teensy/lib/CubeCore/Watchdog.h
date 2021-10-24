@@ -5,9 +5,7 @@
  * Author: Vinzenz hopf (happyfreak.de)
  */ 
 
-
-#ifndef __WATCHDOG_H__
-#define __WATCHDOG_H__
+#pragma once
 
 #include <LedCube16x.h>
 #include <Base/CyclicModule.h>
@@ -115,4 +113,3 @@ class Watchdog final : public CyclicModule, public IOutputEnableGuard {
     private:
 };
 
-#endif //__WATCHDOG_H__

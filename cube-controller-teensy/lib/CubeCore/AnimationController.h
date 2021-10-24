@@ -5,9 +5,7 @@
  * Author: Vinzenz hopf (happyfreak.de)
  */ 
 
-
-#ifndef __ANIMATIONCONTROLLER_H__
-#define __ANIMATIONCONTROLLER_H__
+#pragma once
 
 #include "LedCube16x.h"
 #include "Base/CyclicModule.h"
@@ -129,4 +127,3 @@ class AnimationController final : public CyclicModule {
     private:  
 };
 
-#endif //__ANIMATIONCONTROLLER_H__

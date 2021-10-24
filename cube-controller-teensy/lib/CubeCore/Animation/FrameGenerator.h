@@ -5,8 +5,7 @@
  * Author: Vinzenz hopf (happyfreak.de)
  */ 
 
-#ifndef __FRAMEGENERATOR_H__
-#define __FRAMEGENERATOR_H__
+#pragma once
 
 #include "CubeCore.h"
 #include "ICyclicFrameGeneration.h"
@@ -70,4 +69,3 @@ class FrameGenerator : public ICyclicFrameGeneration {
     private:  
 };
 
-#endif //__FRAMEGENERATOR_H__

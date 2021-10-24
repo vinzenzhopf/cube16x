@@ -8,9 +8,7 @@
  * Author: Vinzenz hopf (happyfreak.de)
  */ 
 
-
-#ifndef __CUBECORE_H__
-#define __CUBECORE_H__
+#pragma once
 
 #ifndef PLATFORM_NATIVE
 #include <Arduino.h>
@@ -23,5 +21,5 @@
 #define MAX_MODULE_COUNT 10
 #define MAX_PLAYLIST_ENTRIES 16
 
-#endif //__CUBECORE_H__
+
 

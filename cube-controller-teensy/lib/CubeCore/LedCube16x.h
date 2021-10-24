@@ -8,9 +8,7 @@
  * Author: Vinzenz hopf (happyfreak.de)
  */ 
 
-
-#ifndef __LEDCUBE16X_H__
-#define __LEDCUBE16X_H__
+#pragma once
 
 #include <stdint.h>
 
@@ -46,5 +44,5 @@ typedef union {
 	plane_t asPlanes[PLANE_COUNT];
 } buffer_t;
 
-#endif //__LEDCUBE16X_H__
+
 

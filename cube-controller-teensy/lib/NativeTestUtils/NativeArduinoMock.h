@@ -5,9 +5,7 @@
  * Author: Vinzenz hopf (happyfreak.de)
  */ 
 
-
-#ifndef __NATIVEARDUINOMOCK_H__
-#define __NATIVEARDUINOMOCK_H__
+#pragma once
 
 #ifdef PLATFORM_NATIVE
 

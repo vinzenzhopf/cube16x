@@ -1,4 +1,5 @@
 
+#pragma once
 #include <unity.h>
 #include "PlaylistManager.h"
 #include "Animation/ICyclicFrameGeneration.h"
@@ -73,5 +74,3 @@ void AnimationTest_test_playlist_manager_get_next_entry(void) {
 void AnimationTest_test_animation_controller(){
     
 }
-
-#endif //__ANIMATIONTEST_H__

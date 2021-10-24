@@ -5,9 +5,7 @@
  * Author: Vinzenz hopf (happyfreak.de)
  */ 
 
-
-#ifndef __TEENSYMOCK_H__
-#define __TEENSYMOCK_H__
+#pragma once
 
 #ifdef PLATFORM_NATIVE
 

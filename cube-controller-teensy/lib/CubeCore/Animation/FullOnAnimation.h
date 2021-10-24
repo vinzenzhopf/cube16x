@@ -5,8 +5,7 @@
  * Author: Vinzenz hopf (happyfreak.de)
  */ 
 
-#ifndef __FULLONANIMATION_H__
-#define __FULLONANIMATION_H__
+#pragma once
 
 #include "CubeCore.h"
 #include "FrameGenerator.h"
@@ -35,5 +34,3 @@ class FullOnAnimation : public FrameGenerator {
     protected:
     private:  
 };
-
-#endif //__FULLONANIMATION_H__

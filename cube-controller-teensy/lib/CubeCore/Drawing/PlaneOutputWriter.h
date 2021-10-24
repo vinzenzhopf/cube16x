@@ -5,9 +5,7 @@
 * Author: vhopf
 */
 
-
-#ifndef __PLANEOUTPUTWRITER_H__
-#define __PLANEOUTPUTWRITER_H__
+#pragma once
 
 #include "LedCube16x.h"
 #include "Base/CyclicModule.h"
@@ -65,4 +63,3 @@ public:
     void reset();
 };
 
-#endif //__PLANEOUTPUTWRITER_H__

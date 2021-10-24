@@ -5,9 +5,7 @@
  * Author: Vinzenz hopf (happyfreak.de)
  */ 
 
-
-#ifndef __IOUTPUTENABLEGUARD_H__
-#define __IOUTPUTENABLEGUARD_H__
+#pragma once
 
 class IOutputEnableGuard
 {
@@ -15,5 +13,5 @@ class IOutputEnableGuard
         virtual void setDataReady(bool bDataReady) = 0;
 };
 
-#endif //__IOUTPUTENABLEGUARD_H__
+
 

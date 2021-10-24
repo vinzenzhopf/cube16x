@@ -5,9 +5,7 @@
  * Author: Vinzenz hopf (happyfreak.de)
  */ 
 
-
-#ifndef __IPLAYLISTMANAGER_H__
-#define __IPLAYLISTMANAGER_H__
+#pragma once
 
 #include "CubeCore.h"
 #include "Animation/ICyclicFrameGeneration.h"
@@ -22,4 +20,3 @@ class IPlaylistManager {
         virtual uint8_t getCurrentIndex() = 0;
 };
 
-#endif //__IPLAYLISTMANAGER_H__

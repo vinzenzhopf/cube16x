@@ -5,9 +5,7 @@
 * Author: vhopf
 */
 
-
-#ifndef __FRAMEBUFFERCONTROLLER_H__
-#define __FRAMEBUFFERCONTROLLER_H__
+#pragma once
 
 #include "FrameBuffer.h"
 #include "Base/CyclicModule.h"
@@ -79,4 +77,4 @@ protected:
 private:
 };
 
-#endif //__FRAMEBUFFERCONTROLLER_H__
+

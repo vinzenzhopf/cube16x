@@ -5,9 +5,7 @@
 * Author: vhopf
 */
 
-
-#ifndef __DRAWCONTROLLER_H__
-#define __DRAWCONTROLLER_H__
+#pragma once
 
 #include "LedCube16x.h"
 #include "Base/CyclicModule.h"
@@ -56,4 +54,3 @@ public:
     void reset();
 };
 
-#endif //__DRAWCONTROLLER_H__

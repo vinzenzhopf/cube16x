@@ -5,9 +5,7 @@
 * Author: vhopf
 */
 
-
-#ifndef __PLANEDATAOUTPUTWRITER_H__
-#define __PLANEDATAOUTPUTWRITER_H__
+#pragma once
 
 #include "LedCube16x.h"
 #include "Base/CyclicModule.h"
@@ -75,4 +73,3 @@ protected:
 private:
 };
 
-#endif //__PLANEDATAOUTPUTWRITER_H__

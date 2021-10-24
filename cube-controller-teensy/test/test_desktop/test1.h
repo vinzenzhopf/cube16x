@@ -1,10 +1,8 @@
 
+#pragma once
+
 #include <iostream>
 #include <unity.h>
-
-#ifndef __TEST1_H__
-#define __TEST1_H__
-
 
 // void setUp(void) {
 // // set stuff up here
