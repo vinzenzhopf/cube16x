@@ -41,7 +41,7 @@ class FrameGenerator : public ICyclicFrameGeneration {
         bool isFrameFinished() override;
         uint32_t getFrameCounter() override;
 
-        bool getAnimationFrameTimeUs() override{
+        uint32_t getAnimationFrameTimeUs() override{
             return animationFrameTimeUs;
         }
         bool getRepeatUntilTimeExceeded() override{

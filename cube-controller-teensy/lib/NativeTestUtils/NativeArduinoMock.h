@@ -17,5 +17,3 @@
 #include "TeensyMock.h"
 
 #endif
-
-#endif // __NATIVEARDUINOMOCK_H__

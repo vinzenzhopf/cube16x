@@ -32,7 +32,9 @@ class A {
             std::cout << "I'm A" << std::endl;
         }
 
-        virtual ~A() {}
+        virtual ~A() = default;
+
+        virtual void print_me2(void) = 0;
 };
 
 class B : public A {
@@ -41,9 +43,19 @@ class B : public A {
             A::print_me();
             std::cout << "I'm B" << std::endl;
         }
+
+        virtual void print_me2(void){
+            std::cout << "I'm B2" << std::endl;
+        }
 };
 
-class C {
+class IC{
+    public:
+        virtual void addEntry(A *a) = 0;
+        virtual A* getEntry(int index) = 0;
+};
+
+class C : public IC {
     protected:
         A *entries[5];
         int index;
@@ -52,37 +64,42 @@ class C {
         }
         ~C() = default;
     
-        void addEntry(A *a){
+        void addEntry(A *a) override{
             entries[index] = a;
             index++;
         }
     
-        A* getEntry(int index){
+        A* getEntry(int index) override{
             return entries[index];
         }
 };
 
 void test_pointer_to_objects(void) {
-    A a;
+    //A a;
     B b;
     
     C c;
-    c.addEntry(&a);
-    c.addEntry(&b);
+    IC *ic;
+    ic = &c;
 
-    A* p = &a;
-    p->print_me();
+    //ic->addEntry(&a);
+    ic->addEntry(&b);
+
+    A* p = nullptr;
+    //p = &a;
+    // p->print_me();
 
     p = &b;
     p->print_me();
+    p->print_me2();
 
     std::cout << "------" << std::endl;
-    p = c.getEntry(0);
+    p = ic->getEntry(0);
     std::cout << (p == nullptr) << std::endl;
     p->print_me();
-    p = c.getEntry(1);
-    p->print_me();
+    p->print_me2();
+    // p = ic->getEntry(1);
+    // p->print_me();
 
 }
 
-#endif //__TEST1_H__
