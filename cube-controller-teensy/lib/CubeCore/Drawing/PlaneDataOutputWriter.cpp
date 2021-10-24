@@ -18,11 +18,12 @@ PlaneDataOutputWriter::PlaneDataOutputWriter(
                 CONTROL_STO_PIN(CONTROL_STO_PIN),
                 DATA_PIN(DATA_PIN),
                 HIGH_CYCLE_COUNT(HIGH_CYCLE_COUNT),
-                eState(EPlaneDataOutputWriterState::eIdle),
+                pPlane(nullptr),
+                pNextPlane(nullptr),
+                bLatchData(false),
                 nCycleDelay(0),
                 nRowIndex(-1),
-                pNextPlane(nullptr),
-                bLatchData(false) {
+                eState(EPlaneDataOutputWriterState::eIdle) {
 }
 
 bool PlaneDataOutputWriter::isReadyForNextPlane(){

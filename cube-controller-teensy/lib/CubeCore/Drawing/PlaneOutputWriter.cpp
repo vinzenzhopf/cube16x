@@ -17,11 +17,12 @@ PlaneOutputWriter::PlaneOutputWriter(
                 CONTROL_STO_PIN(CONTROL_STO_PIN),
                 DATA_PIN(DATA_PIN),            
                 HIGH_CYCLE_COUNT(HIGH_CYCLE_COUNT),
-                eState(EPlaneOutputWriterState::eIdle),
-                nCycleDelay(0),
                 nPlaneIndex(-1),
                 nNextPlaneIndex(-1),
-                bLatchData(false) {
+                bLatchData(false),
+                nCycleDelay(0),
+                nShiftBitCount(0),
+                eState(EPlaneOutputWriterState::eIdle) {
 }
 
 bool PlaneOutputWriter::isReadyForNextPlane(){
