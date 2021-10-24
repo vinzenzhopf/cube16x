@@ -7,11 +7,8 @@
 
 #include "CyclicModule.h"
 
-CyclicModule::CyclicModule(){
-    nCycleDelay = 0;
-}
-
-CyclicModule::~CyclicModule(){
+CyclicModule::CyclicModule() :
+    nCycleDelay(0) {
 }
 
 /**

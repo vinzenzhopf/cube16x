@@ -26,11 +26,13 @@ class FullOnAnimation : public FrameGenerator {
                         bool const repeatUntilTimeExeeded);
         virtual ~FullOnAnimation() = default;
 
-        virtual void restartFrameSequence(uint32_t currentTicks) override;
+        void initializeFrameSequence(uint32_t currentTicks) override;
 
-        virtual void startFrame(buffer_t *nextFrame, uint32_t const currentTicks, uint32_t const totalFrameTimeUs);
+        void startFrame(buffer_t *nextFrame, uint32_t const currentTicks, uint32_t const totalFrameTimeUs);
 
-        virtual void generateCyclicBase(uint32_t const currentTicks);
+        void generateCyclicBase(uint32_t const currentTicks);
+
+        void endFrame();
 
     protected:
     private:  

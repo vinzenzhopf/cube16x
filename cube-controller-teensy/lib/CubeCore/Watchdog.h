@@ -105,7 +105,7 @@ class Watchdog final : public CyclicModule, public IOutputEnableGuard {
         void writeInfoLeds() {
             //digitalToggleFast(INFO_CYCLE_PIN);
             digitalWriteFast(INFO_SYSOK_PIN, bSystemOk);
-            digitalWriteFast(INFO_SYSERR_PIN, bCycleTimeExceeded);
+            //digitalWriteFast(INFO_SYSERR_PIN, bCycleTimeExceeded);
             digitalWriteFast(INFO_DBG_PIN, bDataReady);
         }
         void writeOutputEnable() {

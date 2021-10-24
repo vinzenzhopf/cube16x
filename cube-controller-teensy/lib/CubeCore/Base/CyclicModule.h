@@ -22,7 +22,7 @@ class CyclicModule {
     //Methods
     public:
         CyclicModule();
-	    ~CyclicModule();
+	    ~CyclicModule() = default;
 
         /**
          * Method for Module initialization, if the module is depending on other stuff to be initialized. 

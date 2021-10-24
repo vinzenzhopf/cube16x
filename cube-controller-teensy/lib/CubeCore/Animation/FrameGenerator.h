@@ -9,11 +9,12 @@
 #define __FRAMEGENERATOR_H__
 
 #include "CubeCore.h"
+#include "ICyclicFrameGeneration.h"
 
-class FrameGenerator {
+class FrameGenerator : public ICyclicFrameGeneration {
     public:
         uint32_t const animationFrameTimeUs;
-        bool const repeatUntilTimeExeeded;
+        bool const repeatUntilTimeExceeded;
 
     protected:
         buffer_t *frame;
@@ -29,22 +30,26 @@ class FrameGenerator {
 
 	public:
         FrameGenerator( uint32_t const animationFrameTimeUs,
-                        bool const repeatUntilTimeExeeded);
+                        bool const repeatUntilTimeExceeded);
         virtual ~FrameGenerator() = default;
 
-        virtual void restartFrameSequence(uint32_t currentTicks);
-        virtual void startFrame(buffer_t *nextFrame, uint32_t const currentTicks, uint32_t const totalFrameTimeUs);
-        virtual void generateCyclicBase(uint32_t const currentTicks);
+        virtual void initializeFrameSequence(uint32_t currentTicks) override;
+        virtual void startFrame(buffer_t *nextFrame, uint32_t const currentTicks, uint32_t const totalFrameTimeUs) override;
+        virtual void generateCyclicBase(uint32_t const currentTicks) override;
+        virtual void endFrame() override;
 
-        void endFrame();
+        bool isSequenceFinished() override;
+        bool isFrameFinished() override;
+        uint32_t getFrameCounter() override;
 
-        bool isSequenceFinished();
-
-        bool isFrameFinished();
-        bool getFrameCounter();
+        bool getAnimationFrameTimeUs() override{
+            return animationFrameTimeUs;
+        }
+        bool getRepeatUntilTimeExceeded() override{
+            return repeatUntilTimeExceeded;
+        }
 
     protected:
-
         void inline setSequenceFinished(){
             sequenceFinished = true;
         }

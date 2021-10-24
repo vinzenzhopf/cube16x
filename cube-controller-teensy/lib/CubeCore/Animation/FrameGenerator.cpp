@@ -2,20 +2,19 @@
 
 #include "FrameGenerator.h"
 
-FrameGenerator::FrameGenerator(
-                        uint32_t const animationFrameTimeUs,
-                        bool const repeatUntilTimeExeeded) : 
+FrameGenerator::FrameGenerator( uint32_t const animationFrameTimeUs,
+                                bool const repeatUntilTimeExeeded) : 
                             animationFrameTimeUs(animationFrameTimeUs),
-                            repeatUntilTimeExeeded(repeatUntilTimeExeeded),
-                            frameFinished(false),
-                            sequenceFinished(false),
+                            repeatUntilTimeExceeded(repeatUntilTimeExeeded),
+                            totalFrameTimeUs(0),
+                            frameCounter(0),
                             sequenceStartTicks(0),
                             lastFrameStartTicks(0),
-                            totalFrameTimeUs(0),
-                            frameCounter(0){
+                            frameFinished(false),
+                            sequenceFinished(false) {
 }
 
-void FrameGenerator::restartFrameSequence(uint32_t currentTicks){
+void FrameGenerator::initializeFrameSequence(uint32_t currentTicks){
     this->sequenceStartTicks = currentTicks;
     this->sequenceFinished = false;
     this->frameCounter = 0;
@@ -42,6 +41,7 @@ bool FrameGenerator::isSequenceFinished(){
 bool FrameGenerator::isFrameFinished(){
     return frameFinished;
 }
-bool FrameGenerator::getFrameCounter(){
+
+uint32_t FrameGenerator::getFrameCounter(){
     return frameCounter;
 }

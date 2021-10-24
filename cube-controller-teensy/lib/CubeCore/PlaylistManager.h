@@ -9,38 +9,35 @@
 #ifndef __PLAYLISTMANAGER_H__
 #define __PLAYLISTMANAGER_H__
 
-#include "Animation/FrameGenerator.h"
+#include "CubeCore.h"
+#include "Animation/ICyclicFrameGeneration.h"
+#include "IPlaylistManager.h"
 
 #ifndef PLATFORM_NATIVE
 #include <Entropy.h>
 #endif
 
-// struct PlaylistEntry {
-//     FrameGenerator* generator;
-//     uint32_t animationDurationUs;
-//     bool repeatAnimation;
-// };
-
-class PlaylistManager {
+class PlaylistManager : IPlaylistManager {
     public:
     protected:        
-        FrameGenerator* entries[MAX_PLAYLIST_ENTRIES];
-        uint8_t entryCount = 0;
-
-        uint8_t currentIndex = 0;
+        ICyclicFrameGeneration *entries[MAX_PLAYLIST_ENTRIES];
+        int8_t entryCount;
+        int8_t currentIndex;
     private:
 
 	public:
-        PlaylistManager(){
+        PlaylistManager() : 
+            entryCount(0),
+            currentIndex(0) {
         }
         ~PlaylistManager() = default;
 
-        void addAnimation(FrameGenerator* const frameGenerator){
+        void addAnimation(ICyclicFrameGeneration *frameGenerator) override{
             entries[entryCount] = frameGenerator;
             entryCount++;
         }
         
-        FrameGenerator* getNextAnimation(){
+        ICyclicFrameGeneration* getNextAnimation() override{
             if(entryCount > 0){
                 currentIndex = generateNewIndex();
                 return getCurrentAnimation();
@@ -49,16 +46,30 @@ class PlaylistManager {
             }
         }
 
-        FrameGenerator* getCurrentAnimation(){
-            if(entryCount > 0){
-                return entries[currentIndex];
-            }else{
-                return nullptr;
-            }
+        ICyclicFrameGeneration* getCurrentAnimation() override{
+            return entries[currentIndex];
+            // if(currentIndex < entryCount){
+            //     return entries[currentIndex];
+            // }else{
+            //     return nullptr;
+            // }
+            // if(currentIndex >= 0 && currentIndex < entryCount){
+            //     return entries[currentIndex];
+            // }else{
+            //     return nullptr;
+            // }
+        }
+
+        uint8_t getEntryCount() override{
+            return (uint8_t)entryCount;
+        }
+
+        uint8_t getCurrentIndex() override{
+            return (uint8_t)currentIndex;
         }
         
     protected:
-        uint8_t generateNewIndex(){
+        int8_t generateNewIndex(){
             return (currentIndex+1) % (entryCount-1);
             //return Entropy.randomByte() % (entryCount-1);
         }

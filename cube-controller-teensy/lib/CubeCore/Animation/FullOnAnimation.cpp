@@ -9,8 +9,8 @@ FullOnAnimation::FullOnAnimation(
     tmpBuffer.setBuffer();
 }
 
-void FullOnAnimation::restartFrameSequence(uint32_t currentTicks){
-    FrameGenerator::restartFrameSequence(currentTicks);
+void FullOnAnimation::initializeFrameSequence(uint32_t currentTicks){
+    FrameGenerator::initializeFrameSequence(currentTicks);
 }
 
 void FullOnAnimation::startFrame(buffer_t *nextFrame, uint32_t const currentTicks, uint32_t const totalFrameTimeUs){
@@ -33,4 +33,7 @@ void FullOnAnimation::generateCyclicBase(uint32_t const currentTicks){
     // tmpBuffer.copyToBuffer(frame);
     // setFrameFinished();
     // setSequenceFinished();
+}
+
+void FullOnAnimation::endFrame(){
 }

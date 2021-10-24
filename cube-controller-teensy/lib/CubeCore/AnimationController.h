@@ -12,7 +12,7 @@
 #include "LedCube16x.h"
 #include "Base/CyclicModule.h"
 #include "FrameBufferController.h"
-#include "PlaylistManager.h"
+#include "IPlaylistManager.h"
 #include "Animation/FrameGenerator.h"
 
 enum class FrameSequenceState {
@@ -30,12 +30,12 @@ class AnimationController final : public CyclicModule {
     public:
     protected:
         FrameBufferController * const bufferController;
-        PlaylistManager * const playlistManager;
+        IPlaylistManager * const playlistManager;
         uint32_t const animationFrameTimeUs;
 
         buffer_t *backBuffer;
 
-        FrameGenerator* currentGenerator;
+        ICyclicFrameGeneration* currentGenerator;
         FrameSequenceState frameGenerationState;
 
         uint32_t animationStartTicks;
@@ -44,7 +44,7 @@ class AnimationController final : public CyclicModule {
 	public:
         AnimationController(
             FrameBufferController *bufferController,
-            PlaylistManager *playlistManager,
+            IPlaylistManager *playlistManager,
             uint32_t const animationFrameTimeUs) :
                 bufferController(bufferController),
                 playlistManager(playlistManager),
@@ -74,7 +74,7 @@ class AnimationController final : public CyclicModule {
 
                 case FrameSequenceState::eSequenceInitialize:
                     digitalToggleFast(40);
-                    currentGenerator->restartFrameSequence(currentTicks);
+                    currentGenerator->initializeFrameSequence(currentTicks);
                     frameGenerationState = FrameSequenceState::eWaitForFrameRequired;
                     break;
 
