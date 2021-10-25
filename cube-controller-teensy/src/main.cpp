@@ -14,6 +14,7 @@
 #include "AnimationController.h"
 
 #include "Animation/FullOnAnimation.h"
+#include "Animation/TestAnimation.h"
 
 ModuleManager moduleManager;
 Watchdog watchdog(
@@ -53,6 +54,7 @@ AnimationController animationController(
 );
 
 FullOnAnimation fullOnAnimation(2000, true);
+TestAnimation testAnimation(2000, true);
 
 enum class EAnimationType{
     eFullOn,
@@ -82,7 +84,9 @@ void setup() {
     moduleManager.registerModule(&drawController);
     moduleManager.registerModule(&animationController);
 
-    playlistManager.addAnimation(&fullOnAnimation);
+    //playlistManager.addAnimation(&fullOnAnimation);
+    playlistManager.addAnimation(&testAnimation);
+
 
     bufferFull.setBuffer();
 }
