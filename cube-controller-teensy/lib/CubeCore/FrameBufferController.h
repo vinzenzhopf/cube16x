@@ -56,10 +56,10 @@ public:
         bBackBufferReady = true;
     }
     buffer_t* getFrontBuffer(){
-        return arrFrameBuffers[nFrontBufferIdx].getBuffer();
+        return arrFrameBuffers[nFrontBufferIdx].getBufferRef();
     }
     buffer_t* getBackBuffer(){
-        return arrFrameBuffers[nBackBufferIdx].getBuffer();
+        return arrFrameBuffers[nBackBufferIdx].getBufferRef();
     }
 
     bool initialize() override{
