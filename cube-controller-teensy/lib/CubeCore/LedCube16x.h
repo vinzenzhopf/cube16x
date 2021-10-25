@@ -12,37 +12,59 @@
 
 #include <stdint.h>
 
-typedef uint32_t row_t;
-
 #define sbi(port,bit)	(port) |= (1<<(bit))
 #define cbi(port,bit)	(port) &= ~(1<<(bit))
 #define tbi(port,bit)	(port) ^= (1<<(bit))
 
-#define CUBE_EDGE_SIZE 16
+typedef uint8_t	byte_t;
+typedef uint16_t row_t;
+typedef uint32_t word_t;
 
-//Define buffer sizes
-#define BUFFER_BYTE_SIZE 512
-#define BUFFER_SHORT_SIZE (BUFFER_BYTE_SIZE / sizeof(uint16_t)) // 256
-#define BUFFER_ROW_SIZE (BUFFER_BYTE_SIZE / sizeof(uint32_t))	// 128
+const uint8_t 	CUBE_EDGE_SIZE 		= 16;
+const uint16_t	PLANE_LED_COUNT 	= CUBE_EDGE_SIZE * CUBE_EDGE_SIZE; // 256
+const uint16_t	TOTAL_LED_COUNT 	= CUBE_EDGE_SIZE * CUBE_EDGE_SIZE * CUBE_EDGE_SIZE; // 4096
+const uint8_t	PLANE_COUNT 		= CUBE_EDGE_SIZE; // 16
 
-#define PLANE_BYTE_SIZE (BUFFER_BYTE_SIZE / 16)
-#define PLANE_SHORT_SIZE (PLANE_BYTE_SIZE / sizeof(uint16_t)) // 16
-#define PLANE_ROW_SIZE (PLANE_BYTE_SIZE / sizeof(row_t))	// 8
+const uint8_t	LEDS_PER_BYTE		= 8;
+
+//Define plane sizes
+const int		PLANE_BYTE_SIZE 	= PLANE_LED_COUNT / LEDS_PER_BYTE;		// 32
+const int		PLANE_ROW_SIZE 		= PLANE_BYTE_SIZE / sizeof(row_t);		// 16
+const int		PLANE_WORD_SIZE 	= PLANE_BYTE_SIZE / sizeof(word_t);		// 8
 
 typedef union {
 	uint8_t asBytes[PLANE_BYTE_SIZE];
-	uint16_t asShort[PLANE_SHORT_SIZE];
 	row_t asRows[PLANE_ROW_SIZE];
+	word_t asWords[PLANE_WORD_SIZE];
 } plane_t;
 
-#define PLANE_COUNT (BUFFER_BYTE_SIZE / sizeof(plane_t))
+const int 		LEDS_PER_ROW		= sizeof(row_t) * LEDS_PER_BYTE; 
+const int 		LEDS_PER_WORD		= sizeof(word_t) * LEDS_PER_BYTE;
+const int 		LEDS_PER_PLANE		= sizeof(plane_t) * LEDS_PER_BYTE;
+
+//Define buffer sizes
+const int		BUFFER_BYTE_SIZE	= TOTAL_LED_COUNT / LEDS_PER_BYTE;		// 512
+const int		BUFFER_ROW_SIZE		= BUFFER_BYTE_SIZE / sizeof(row_t); 	// 256
+const int		BUFFER_WORD_SIZE	= BUFFER_BYTE_SIZE / sizeof(word_t);	// 128
+const int		BUFFER_PLANE_COUNT	= BUFFER_BYTE_SIZE / sizeof(plane_t);	// 16
 
 typedef union {
 	uint8_t asBytes[BUFFER_BYTE_SIZE];
-	uint16_t asShort[BUFFER_SHORT_SIZE];
 	row_t asRows[BUFFER_ROW_SIZE];
+	word_t asWords[BUFFER_WORD_SIZE];
 	plane_t asPlanes[PLANE_COUNT];
 } buffer_t;
 
 
 
+enum class ECubeDirection :  uint8_t {
+	X, //Front
+	Y, //Side/Right
+	Z, //Up
+};
+
+struct Vector3D { 
+    float x;
+	float y;
+	float z;
+}; 
