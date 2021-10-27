@@ -5,19 +5,19 @@
 
 #include "ConstantsTest.h"
 #include "BufferUtilTest.h"
-#include "DrawingTest.h"
+#include "PlaneDrawingTest.h"
 #include "test1.h"
 //#include "AnimationTest.h"
 #include "PlaylistManagerTest.h"
 
 void setUp(void) {
     BufferUtilTest::setUp();
-    DrawingTest::setUp();
+    PlaneDrawingTest::setUp();
 }
 
 void tearDown(void) {
     BufferUtilTest::tearDown();
-    DrawingTest::tearDown();
+    PlaneDrawingTest::tearDown();
 }
 
 int main(int argc, char **argv) {
@@ -25,7 +25,7 @@ int main(int argc, char **argv) {
 
     ConstantsTest::runTests();
     BufferUtilTest::runTests();
-    DrawingTest::runTests();
+    PlaneDrawingTest::runTests();
     
     //test1.h
     // RUN_TEST(test_negative_buffer_overflow);
