@@ -10,11 +10,6 @@
 #include "LedCube16x.h"
 #include "Base/CyclicModule.h"
 
-//Number of LED per Shift-Register Stack
-#define SHIFT_REGISTER_DEPTH 32
-#define SHIFT_REGISTER_DEPTH_BYTES (SHIFT_REGISTER_DEPTH / 8)
-#define SHIFT_REGISTER_ROW_COUNT (BUFFER_SHORT_SIZE / SHIFT_REGISTER_DEPTH)
-
 enum class EPlaneDataOutputWriterState{ 
     eIdle,
     eSetDataHigh,
@@ -68,7 +63,8 @@ public:
     void reset();
 
 protected:
-    uint8_t getRowData();
+    uint8_t getOutputData8();
+    uint8_t getOutputData32();
 
 private:
 };

@@ -55,7 +55,11 @@ typedef union {
 	plane_t asPlanes[PLANE_COUNT];
 } buffer_t;
 
-
+//Parameter for the hardware connection:
+//Number of LED per Shift-Register Stack
+const int		SHIFT_REGISTER_LANE_COUNT = 8;
+const int 		SHIFT_REGISTER_DEPTH = PLANE_LED_COUNT / SHIFT_REGISTER_LANE_COUNT;
+const int		SHIFT_REGISTER_DEPTH_BYTES = SHIFT_REGISTER_DEPTH / 8;
 
 enum class ECubeDirection :  uint8_t {
 	X, //Front
