@@ -15,6 +15,8 @@
 
 #include "Animation/FullOnAnimation.h"
 #include "Animation/TestAnimation.h"
+#include "Animation/PlaneWalkerAnimation.h"
+#include "Animation/LedWalkerAnimation.h"
 
 ModuleManager moduleManager;
 Watchdog watchdog(
@@ -55,6 +57,8 @@ AnimationController animationController(
 
 FullOnAnimation fullOnAnimation(2000, true);
 TestAnimation testAnimation(2000, true);
+PlaneWalkerAnimation planeWalkerAnimation(2000, true, ECubeDirection::Z);
+LedWalkerAnimation ledWalkerAnimation(2000, true);
 
 enum class EAnimationType{
     eFullOn,
@@ -85,8 +89,9 @@ void setup() {
     moduleManager.registerModule(&animationController);
 
     //playlistManager.addAnimation(&fullOnAnimation);
-    playlistManager.addAnimation(&testAnimation);
-
+    //playlistManager.addAnimation(&testAnimation);
+    playlistManager.addAnimation(&planeWalkerAnimation);
+    playlistManager.addAnimation(&ledWalkerAnimation);
 
     bufferFull.setBuffer();
 }
