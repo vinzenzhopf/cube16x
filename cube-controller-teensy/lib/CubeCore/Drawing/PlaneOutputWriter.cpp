@@ -60,7 +60,7 @@ void PlaneOutputWriter::cyclic(){
         if(nNextPlaneIndex != -1){
             eState = EPlaneOutputWriterState::eSetDataHigh;
             nShiftBitCount = 0;
-            nPlaneIndex = nNextPlaneIndex;
+            nPlaneIndex = 15 - nNextPlaneIndex;
             nNextPlaneIndex = -1;
         }
         break;
