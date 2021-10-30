@@ -17,6 +17,9 @@
 #include "Animation/TestAnimation.h"
 #include "Animation/PlaneWalkerAnimation.h"
 #include "Animation/LedWalkerAnimation.h"
+#include "Animation/RandomToggleAnimation.h"
+#include "Animation/RandomOnOffAnimation.h"
+#include "Animation/RaindropsAnimation.h"
 
 ModuleManager moduleManager;
 Watchdog watchdog(
@@ -59,6 +62,9 @@ FullOnAnimation fullOnAnimation(2000, true);
 TestAnimation testAnimation(2000, true);
 PlaneWalkerAnimation planeWalkerAnimation(2000, true, ECubeDirection::Z);
 LedWalkerAnimation ledWalkerAnimation(2000, true);
+RandomToggleAnimation randomToggleAnimation(2000, true);
+RandomOnOffAnimation randomOnOffAnimation(2000, true);
+RaindropsAnimation raindropsAnimation(2000, true);
 
 enum class EAnimationType{
     eFullOn,
@@ -90,8 +96,13 @@ void setup() {
 
     //playlistManager.addAnimation(&fullOnAnimation);
     //playlistManager.addAnimation(&testAnimation);
+
+    playlistManager.addAnimation(&raindropsAnimation);
     playlistManager.addAnimation(&planeWalkerAnimation);
-    playlistManager.addAnimation(&ledWalkerAnimation);
+    // playlistManager.addAnimation(&randomToggleAnimation);
+    // playlistManager.addAnimation(&ledWalkerAnimation);
+    //playlistManager.addAnimation(&randomOnOffAnimation);
+
 
     bufferFull.setBuffer();
 }

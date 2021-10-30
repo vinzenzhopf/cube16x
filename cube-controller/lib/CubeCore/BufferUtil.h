@@ -104,15 +104,6 @@ class BufferUtil {
         }
 
         /**
-         * Sets the led with the given index to a given value.
-         */
-        void setLed(uint16_t index, bool value){
-            uint16_t i = index/LEDS_PER_ROW;
-            uint16_t newbit = !!value; // Also booleanize to force 0 or 1
-            buffer->asRows[i] ^= (-newbit ^ buffer->asRows[i]) & (1 << (index%LEDS_PER_ROW));
-        }
-
-        /**
          * Returns the value of the LED on the given corrdinates. Uses the default cube orientation (y is front).
          */
         bool getLed(uint8_t x, uint8_t y, uint8_t z){
@@ -120,14 +111,29 @@ class BufferUtil {
             return (buffer->asRows[index] >> x) & 1;
         }
 
+        /**
+         * Returns the value of the LED on the given corrdinates. Uses the default cube orientation (y is front).
+         */
+        bool getLed(uint16_t x){
+            return (buffer->asWords[x/sizeof(word_t)] >> (x%sizeof(word_t))) & 1;
+        }
+
+        /**
+         * Sets the led with the given index to a given value.
+         */
+        void setLed(uint16_t index, bool value){
+            row_t i = index/LEDS_PER_ROW;
+            row_t newbit = !!value; // Also booleanize to force 0 or 1
+            buffer->asRows[i] ^= (-newbit ^ buffer->asRows[i]) & (1 << (index%LEDS_PER_ROW));
+        }
 
         /**
          * Sets the LED with the given corrdinates to the given value.
          */
         void setLed(uint8_t x, uint8_t y, uint8_t z, bool value) {
-            uint16_t index = (uint16_t)z * PLANE_LED_COUNT + (uint16_t)y * CUBE_EDGE_SIZE;
+            uint16_t index = ((uint16_t)z) * PLANE_LED_COUNT + ((uint16_t)y) * LEDS_PER_ROW;
             row_t newbit = !!value; // Also booleanize to force 0 or 1
-            buffer->asRows[index] ^= (-newbit ^ buffer->asRows[index]) & (1 << x);
+            buffer->asRows[index] ^= (-newbit ^ buffer->asRows[index]) & ((row_t)1 << x);
         }
 
         void setLed(ECubeDirection dir, uint8_t x, uint8_t y, uint8_t z, bool value){

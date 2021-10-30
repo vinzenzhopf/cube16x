@@ -6,6 +6,7 @@ Cube 16x TODO's:
         ☐ Test Capabillity for Animatons
             Test to verify that Animations are running correctly
         ☐ Enable Native test debugging and breakpoints
+        ☐ Fix Native Test for PlaneDataWriting
 
         FrameBuffer:
             ☐ Add more plane functions
@@ -41,11 +42,11 @@ Cube 16x TODO's:
             
     Animations:
         Simple:
-            ☐ RainDropsAnimation
+            ☐ RainDropsAnimation @started(21-10-30 13:08)
                 Set random leds active on first plane; move active leds down by one plane each frame
-            ☐ RandomOnOffAnimation
+            ✔ RandomOnOffAnimation @started(21-10-30 12:50) @done(21-10-30 13:04) @lasted(14m56s)
                 Turn random leds on; after some time, turn random leds off.
-            ☐ RandomToggleAnimation
+            ✔ RandomToggleAnimation @started(21-10-30 12:32) @done(21-10-30 12:50) @lasted(18m23s)
                 Toggle random leds.
             ☐ BouncingCubeAnimation
                 One cube, that stretches in each corner/edge of the cube.
@@ -61,6 +62,8 @@ Cube 16x TODO's:
                 Add Font(s) and draw them on the cube.
                 Static or translating
                 Adjustable letter depth
+            ☐ BouncingBall
+                A "round" ball or object, that bounces around in the cube.
             ☐ Bouncing Cubes
                 Multiple cubes, that bouncing against each other
             ☐ NetworkStreamAnimation
