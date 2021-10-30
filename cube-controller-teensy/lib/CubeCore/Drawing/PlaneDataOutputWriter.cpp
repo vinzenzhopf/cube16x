@@ -50,7 +50,7 @@ void PlaneDataOutputWriter::reset(){
     bLatchData = false;
 }
 
-uint8_t PlaneDataOutputWriter::getRowData(){
+uint8_t PlaneDataOutputWriter::getOutputData8(){
     //Build the Data-Byte together from all 32 bits of data in the plane.
     //Invert rowIndex because the 32nd bit needs to be written at first to the shift registers
     const uint8_t nRowInverted = (31-nRowIndex)%32; //% just for sanity
@@ -64,6 +64,21 @@ uint8_t PlaneDataOutputWriter::getRowData(){
         }
     }
     return tmp;
+}
+
+uint8_t PlaneDataOutputWriter::getOutputData32(){
+    // Write output in 8 bits parallel, 32 bits sequential
+    // 2 Rows per output bit
+    // Start with the 32th-Bit and end with the first bit
+    const uint8_t ledIndex = (31-nRowIndex); //% just for sanity
+    const word_t mask = (1 << ledIndex);
+    uint8_t tmp;
+    uint8_t out = 0;
+    for(uint8_t i = 0; i < 8; i++){
+        tmp = !!(pPlane->asWords[i] & mask);
+        out |= (tmp << i);
+    }
+    return out;
 }
 
 bool PlaneDataOutputWriter::initialize(){
@@ -85,7 +100,7 @@ void PlaneDataOutputWriter::cyclic(){
         break;
 
     case EPlaneDataOutputWriterState::eSetDataHigh:
-        digitalWriteByte(DATA_PIN, getRowData()); //Data for the output byte
+        digitalWriteByte(DATA_PIN, getOutputData32()); //Data for the output byte
         digitalWriteFast(CONTROL_CLOCK_PIN, HIGH);
         eState = EPlaneDataOutputWriterState::eWaitDataHigh;
         //break; //No break, reduces cycle count if HIGH_CYCLE_COUNT=0/1
