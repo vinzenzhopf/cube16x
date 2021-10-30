@@ -126,7 +126,7 @@ class BufferUtil {
          */
         void setLed(uint8_t x, uint8_t y, uint8_t z, bool value) {
             uint16_t index = (uint16_t)z * PLANE_LED_COUNT + (uint16_t)y * CUBE_EDGE_SIZE;
-            uint16_t newbit = !!value; // Also booleanize to force 0 or 1
+            row_t newbit = !!value; // Also booleanize to force 0 or 1
             buffer->asRows[index] ^= (-newbit ^ buffer->asRows[index]) & (1 << x);
         }
 
@@ -136,6 +136,15 @@ class BufferUtil {
 
         void setRow(ECubeDirection dir, uint8_t x, uint8_t y, row_t *data){
             
+        }
+
+        void setPlaneData(ECubeDirection dir, uint8_t x, uint8_t data){
+            row_t d = !!data;
+            for(uint8_t i = 0; i < PLANE_ROW_SIZE; i++){
+                for(uint8_t j = 0; j < CUBE_EDGE_SIZE; j++){
+                    buffer->asPlanes[x].asRows[i] |= (d << j);
+                }
+            }
         }
 
         void setPlane(ECubeDirection dir, uint8_t x, plane_t *data){
