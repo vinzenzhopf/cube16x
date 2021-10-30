@@ -24,6 +24,9 @@
 void addPinChangeCallback(IPinChangeCallback *callback);
 void removePinChangeCallback(IPinChangeCallback *callback);
 
+uint32_t* getTeensyPinValues();
+uint32_t* getTeensyPinModes();
+
 void pinMode(uint8_t pin, uint8_t mode);
 void digitalWrite(uint8_t pin, uint8_t val);
 void digitalWriteFast(uint8_t pin, uint8_t val);

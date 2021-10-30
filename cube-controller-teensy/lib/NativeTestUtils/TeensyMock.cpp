@@ -10,6 +10,14 @@ uint32_t teensyMockPinValues[TEENSY_PIN_COUNT];
 uint32_t teensyMockPinMode[TEENSY_PIN_COUNT];
 std::vector<IPinChangeCallback*> pinChangeCallbacks;
 
+uint32_t* getTeensyPinValues(){
+    return (uint32_t*)&teensyMockPinValues;
+}
+
+uint32_t* getTeensyPinModes(){
+    return (uint32_t*)&teensyMockPinMode;
+}
+
 void updatePinChangeCallbacks(EPinChangeType type, uint8_t pin, uint8_t val){
     for(std::vector<IPinChangeCallback*>::iterator it = std::begin(pinChangeCallbacks); 
             it != std::end(pinChangeCallbacks); ++it) {

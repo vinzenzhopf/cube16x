@@ -53,6 +53,8 @@ namespace PlaneDrawingTest
         CLK_PIN, STO_PIN, DAT_PIN, 0);
 
     bool PlaneDrawingTest_write_plane(uint32_t requestedPlane){
+        addPinChangeCallback(&pinChangeCallback);
+
         //Init data
         planeData = 0;
         clockCounter = 0;
@@ -105,8 +107,7 @@ namespace PlaneDrawingTest
     }
 
     void setUp() {
-        addPinChangeCallback(&pinChangeCallback);
-
+        // addPinChangeCallback(&pinChangeCallback);
     }
 
     void tearDown() {

@@ -35,10 +35,17 @@ namespace ConstantsTest
         TEST_ASSERT_EQUAL_UINT32_MESSAGE(16,    BUFFER_PLANE_COUNT, "BUFFER_PLANE_COUNT");
         TEST_ASSERT_EQUAL_UINT32_MESSAGE(BUFFER_BYTE_SIZE, sizeof(buffer_t), "sizeof(buffer_t)");
     }
+
+    void ConstantsTest_check_data_output_sizes_16x_cube(){
+        TEST_ASSERT_EQUAL_UINT32_MESSAGE(8, SHIFT_REGISTER_LANE_COUNT, "SHIFT_REGISTER_LANE_COUNT");
+        TEST_ASSERT_EQUAL_UINT32_MESSAGE(32, SHIFT_REGISTER_DEPTH, "SHIFT_REGISTER_DEPTH");
+        TEST_ASSERT_EQUAL_UINT32_MESSAGE(4, SHIFT_REGISTER_DEPTH_BYTES, "SHIFT_REGISTER_DEPTH_BYTES");
+    }
     
     void runTests(){
         RUN_TEST(ConstantsTest_check_sizes_general_16x_cube);
         RUN_TEST(ConstantsTest_check_sizes_plane_type_16x_cube);
         RUN_TEST(ConstantsTest_check_sizes_buffer_type_16x_cube);
+        RUN_TEST(ConstantsTest_check_data_output_sizes_16x_cube);
     }
 }
