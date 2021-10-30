@@ -1,0 +1,76 @@
+Cube 16x TODO's:
+    cube-controller:
+        ☐ FrameTime correction. Allow animations to specify a dedicated frametime.
+            Wait until the frame-time exceeded an start the next frame after this.
+        
+        ☐ Test Capabillity for Animatons
+            Test to verify that Animations are running correctly
+        ☐ Enable Native test debugging and breakpoints
+
+        FrameBuffer:
+            ☐ Add more plane functions
+            ☐ Allow different perspectives when writing leds, rows or planes.
+            ☐ Allow rotation by degrees. 
+                Rotate the complete buffer? via Rotation Matrix?
+                https://github.com/g-truc/glm/tree/master/doc
+            ☐ Add Translation Methods?
+            ☐ Add Scaling Methods?
+            
+        PlaylistManager:
+            ☐ Sort out weired bug?
+            ☐ Start by first animation, not second.
+
+        Network Connectivity:
+            ☐ Add Hardware for Network connectivity (Wiznet Module)
+                Is Extra hardware needed? (Level shifter?)
+                New Version of WizNetModule needed? Current is WIZ820io R1.0
+            ☐ Integrate into current cube-controller
+            ☐ Add NetworkStreamAnimation
+            ☐ Pioritize NetworkStreamAnimation over other Animations in the PlaylistManager/AnimationController and interrupt other animations.
+
+        Pixel Pipeline:
+            ☐ Read into Pixel Pipeline Lib
+                How to acces the "Pixel Processing Pipeline"
+                https://forum.pjrc.com/threads/64860-T4-Pixel-Pipeline-Library
+        
+    Network Connectivity:
+        ☐ Define Network Protocol
+                Structure with leds, frame counter, frametime, ...
+                tcp or udp?
+            ☐ C# simple streaming app?
+            
+    Animations:
+        Simple:
+            ☐ RainDropsAnimation
+                Set top plane to on; move random led down by one plane
+            ☐ RandomOnOfAnimation
+                Toggle random leds.
+            ☐ BouncingCubeAnimation
+                One cube, that stretches in each corner/edge of the cube.
+            ☐ WaveAnimation
+                Specifiable Wave-Form that travens from one side of the cube to an nother. Leds under the function are lit, above are off.
+
+        Advanced:
+            ☐ WhiskAnimation
+                Cross of two intersecting planes, that rotate around one axis.
+            ☐ WriteTextAnimation
+                Add Font(s) and draw them on the cube.
+                Static or translating
+                Adjustable letter depth
+            ☐ Bouncing Cubes
+                Multiple cubes, that bouncing against each other
+            ☐ NetworkStreamAnimation
+                Receives an stream of Frames and writes them to the output.
+            ☐ AudioSpecrumAnimation
+                FFT over an Audio-Signal, that gets feeded into the Cube.
+                Cube shows the Spectrum in 16 bands with the time on the third axis.
+            ☐ Snake
+                Play Snake over a dedicated Input device??
+            ☐ Pong3D
+                Play Pong in 3 dimensions
+            
+
+
+
+            
+
