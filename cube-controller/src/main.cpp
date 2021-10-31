@@ -59,14 +59,14 @@ AnimationController animationController(
     ANIMATION_FRAME_TIME_US
 );
 
-FullOnAnimation fullOnAnimation(2000, true);
-TestAnimation testAnimation(2000, true);
-PlaneWalkerAnimation planeWalkerAnimation(2000, true, ECubeDirection::Z);
-LedWalkerAnimation ledWalkerAnimation(2000, true);
-RandomToggleAnimation randomToggleAnimation(2000, true);
-RandomOnOffAnimation randomOnOffAnimation(2000, true);
-RaindropsAnimation raindropsAnimation(2000, true);
-FallingLedsAnimation fallingLedsAnimation(2000, true);
+FullOnAnimation fullOnAnimation;
+TestAnimation testAnimation;
+PlaneWalkerAnimation planeWalkerAnimation;
+LedWalkerAnimation ledWalkerAnimation;
+RandomToggleAnimation randomToggleAnimation;
+RandomOnOffAnimation randomOnOffAnimation;
+RaindropsAnimation raindropsAnimation;
+FallingLedsAnimation fallingLedsAnimation;
 
 enum class EAnimationType{
     eFullOn,
@@ -96,16 +96,15 @@ void setup() {
     moduleManager.registerModule(&drawController);
     moduleManager.registerModule(&animationController);
 
-    //playlistManager.addAnimation(&fullOnAnimation);
-    //playlistManager.addAnimation(&testAnimation);
-
+    // playlistManager.addAnimation(&fullOnAnimation);
+    // playlistManager.addAnimation(&testAnimation);
     
     playlistManager.addAnimation(&raindropsAnimation);
     playlistManager.addAnimation(&planeWalkerAnimation);
     // playlistManager.addAnimation(&randomToggleAnimation);
     // playlistManager.addAnimation(&ledWalkerAnimation);
     // playlistManager.addAnimation(&randomOnOffAnimation);
-    playlistManager.addAnimation(&fallingLedsAnimation);
+    // playlistManager.addAnimation(&fallingLedsAnimation);
 
 
     bufferFull.setBuffer();

@@ -1,8 +1,10 @@
 Cube 16x TODO's:
     cube-controller:
-        ☐ FrameTime correction. Allow animations to specify a dedicated frametime.
+        ✔ FrameTime correction. Allow animations to specify a dedicated frametime. @started(21-10-31 08:37) @done(21-10-31 14:51) @lasted(6h14m43s)
             Wait until the frame-time exceeded an start the next frame after this.
-        
+            Frame Time Correction is done, but introduces slight jitter becaus you never know, how fast everythig runs...
+        ☐ Reduce FrameTimeJitter
+        ☐ Introduce AnimationDuration parameter
         ☐ Test Capabillity for Animatons
             Test to verify that Animations are running correctly
         ☐ Enable Native test debugging and breakpoints

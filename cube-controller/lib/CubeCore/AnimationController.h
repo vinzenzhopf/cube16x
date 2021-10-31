@@ -21,6 +21,7 @@ enum class FrameSequenceState {
     eNewFrame,
     eGenerateFrame,
     eFrameFinished,
+    eAdjustFrameTime,
     eSequenceFinished
 };
 
@@ -36,7 +37,6 @@ class AnimationController final : public CyclicModule {
         ICyclicFrameGeneration* currentGenerator;
         FrameSequenceState frameGenerationState;
 
-        uint32_t animationStartTicks;
     private:
 
 	public:
@@ -48,8 +48,7 @@ class AnimationController final : public CyclicModule {
                 playlistManager(playlistManager),
                 animationFrameTimeUs(animationFrameTimeUs),
                 currentGenerator(nullptr),
-                frameGenerationState(FrameSequenceState::eStart),
-                animationStartTicks(0) {
+                frameGenerationState(FrameSequenceState::eStart) {
         }
         ~AnimationController() = default;
 
@@ -59,13 +58,10 @@ class AnimationController final : public CyclicModule {
         
         void cyclic()  override{
             uint32_t currentTicks = micros();
-            // uint32_t elapsedFrameTimeUs = currentTicks - animationStartTicks;
             switch (frameGenerationState){
                 case FrameSequenceState::eStart:
                     currentGenerator = playlistManager->getNextAnimation();
                     if(currentGenerator){
-                        animationStartTicks = currentTicks;
-                        // elapsedFrameTimeUs = currentTicks - animationStartTicks;
                         frameGenerationState = FrameSequenceState::eSequenceInitialize;
                     }
                     break;
@@ -80,12 +76,12 @@ class AnimationController final : public CyclicModule {
                     if(!bufferController->isBackBufferReady()){
                         backBuffer = bufferController->getBackBuffer();
                         frameGenerationState = FrameSequenceState::eNewFrame;
+                    }else{
+                        break;
                     }
-                    break;
-
                 case FrameSequenceState::eNewFrame:
                     digitalWriteFast(40, HIGH);
-                    currentGenerator->startFrame(backBuffer, currentTicks, animationFrameTimeUs);
+                    currentGenerator->startFrame(backBuffer, currentTicks);
                     frameGenerationState = FrameSequenceState::eGenerateFrame;
                     break;
 
@@ -98,12 +94,21 @@ class AnimationController final : public CyclicModule {
 
                 case FrameSequenceState::eFrameFinished:
                     digitalWriteFast(40, LOW);
-                    currentGenerator->endFrame();
-                    bufferController->setBackBufferReady();
-                    if(currentGenerator->isSequenceFinished()){
-                        frameGenerationState = FrameSequenceState::eSequenceFinished;
-                    }else{
-                        frameGenerationState = FrameSequenceState::eWaitForFrameRequired;
+                    currentGenerator->endFrame(currentTicks);
+                    frameGenerationState = FrameSequenceState::eAdjustFrameTime;
+
+                case FrameSequenceState::eAdjustFrameTime:
+                    if(currentGenerator->isFreeRunning() ||
+                        currentGenerator->getElapsedFrameTime(currentTicks) >= currentGenerator->getFrameTimeUs()){
+                        
+                        bufferController->setBackBufferReady();
+                        currentGenerator->setFrameStartTicks(currentTicks);
+
+                        if(currentGenerator->isSequenceFinished()){
+                            frameGenerationState = FrameSequenceState::eSequenceFinished;
+                        }else{
+                            frameGenerationState = FrameSequenceState::eWaitForFrameRequired;
+                        }
                     }
                     break;
 

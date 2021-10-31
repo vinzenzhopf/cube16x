@@ -14,17 +14,14 @@
 class PlaneWalkerAnimation : public FrameGenerator {
     public:
     protected:
-        ECubeDirection const walkingDirection;
     private:
         FrameBuffer tmpBuffer;
-        uint8_t planeIndex;
         uint32_t cycleCount;
+        uint8_t planeIndex;
 	public:
-        PlaneWalkerAnimation(uint32_t const animationFrameTimeUs,
-                        bool const repeatUntilTimeExeeded,
-                        ECubeDirection const walkingDirection) :
-                    FrameGenerator(animationFrameTimeUs, repeatUntilTimeExeeded),
-                    walkingDirection(walkingDirection),
+        PlaneWalkerAnimation() :
+                    FrameGenerator(10000),
+                    cycleCount(0),
                     planeIndex(0) {
         }
         virtual ~PlaneWalkerAnimation() = default;
@@ -35,8 +32,8 @@ class PlaneWalkerAnimation : public FrameGenerator {
             tmpBuffer.clearBuffer();
         }
 
-        void startFrame(buffer_t *nextFrame, uint32_t const currentTicks, uint32_t const totalFrameTimeUs) override{
-            FrameGenerator::startFrame(nextFrame, currentTicks, totalFrameTimeUs);
+        void startFrame(buffer_t *nextFrame, uint32_t const currentTicks) override{
+            FrameGenerator::startFrame(nextFrame, currentTicks);
             cycleCount = 0;
         }
 
@@ -52,14 +49,11 @@ class PlaneWalkerAnimation : public FrameGenerator {
                     break;
                 case 2:  
                     tmpBuffer.copyToBuffer(frame);
+                    setFrameFinished();
                     break;
             }
-            
             cycleCount++;
-            if(cycleCount > 50000){
-                setFrameFinished();    
-            }
-
+            
             // for(uint8_t i = 0; i < CUBE_EDGE_SIZE; i++){
             //     //Clear Previous Rows
             //     if(planeIndex > 0){
@@ -80,8 +74,8 @@ class PlaneWalkerAnimation : public FrameGenerator {
             // WriteTestBuffer(frame);
         }
 
-        void endFrame(){
-            FrameGenerator::endFrame();
+        void endFrame(uint32_t const currentTicks){
+            FrameGenerator::endFrame(currentTicks);
             planeIndex++;
             if(planeIndex >= CUBE_EDGE_SIZE){
                 setSequenceFinished();

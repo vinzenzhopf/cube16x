@@ -24,9 +24,8 @@ class FallingLedsAnimation : public FrameGenerator {
         uint32_t currentLed;
         bool fallingMode;
 	public:
-        FallingLedsAnimation(uint32_t const animationFrameTimeUs,
-                        bool const repeatUntilTimeExeeded) :
-                    FrameGenerator(animationFrameTimeUs, repeatUntilTimeExeeded), 
+        FallingLedsAnimation() :
+                    FrameGenerator(5000), 
                     cycleCount(0),
                     currentLed(0),
                     fallingMode(true) {
@@ -40,8 +39,8 @@ class FallingLedsAnimation : public FrameGenerator {
             currentLed = Entropy.random(PLANE_LED_COUNT);
         }
 
-        void startFrame(buffer_t *nextFrame, uint32_t const currentTicks, uint32_t const totalFrameTimeUs) override{
-            FrameGenerator::startFrame(nextFrame, currentTicks, totalFrameTimeUs);
+        void startFrame(buffer_t *nextFrame, uint32_t const currentTicks) override{
+            FrameGenerator::startFrame(nextFrame, currentTicks);
             cycleCount = 0;
             fallingMode = (frameCounter < 2000);
         }
@@ -73,15 +72,14 @@ class FallingLedsAnimation : public FrameGenerator {
                 case 2:  
                     tmpBuffer.copyToBuffer(frame);
                     break;
+                case 3:
+                    setFrameFinished();
             }
             cycleCount++;
-            if(cycleCount > 1000){
-                setFrameFinished();    
-            }
         }
 
-        void endFrame(){
-            FrameGenerator::endFrame();
+        void endFrame(uint32_t const currentTicks){
+            FrameGenerator::endFrame(currentTicks);
             if(frameCounter >= 4000){
                 setSequenceFinished();
             }

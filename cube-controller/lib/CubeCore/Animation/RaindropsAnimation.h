@@ -19,14 +19,14 @@ class RaindropsAnimation : public FrameGenerator {
     protected:
     private:
         FrameBuffer tmpBuffer;
+        uint32_t cycleCount;
         int8_t plane[PLANE_LED_COUNT]; 
         plane_t floor;
-        uint32_t cycleCount;
         uint32_t currentLed;
 	public:
-        RaindropsAnimation(uint32_t const animationFrameTimeUs,
-                        bool const repeatUntilTimeExeeded) :
-                    FrameGenerator(animationFrameTimeUs, repeatUntilTimeExeeded), 
+        RaindropsAnimation() :
+                    FrameGenerator(20000), 
+                    cycleCount(0),
                     currentLed(0) {
         }
         virtual ~RaindropsAnimation() = default;
@@ -37,8 +37,8 @@ class RaindropsAnimation : public FrameGenerator {
             memset(&floor, 0, sizeof(plane_t));
         }
 
-        void startFrame(buffer_t *nextFrame, uint32_t const currentTicks, uint32_t const totalFrameTimeUs) override{
-            FrameGenerator::startFrame(nextFrame, currentTicks, totalFrameTimeUs);
+        void startFrame(buffer_t *nextFrame, uint32_t const currentTicks) override{
+            FrameGenerator::startFrame(nextFrame, currentTicks);
             cycleCount = 0;
         }
 
@@ -82,15 +82,15 @@ class RaindropsAnimation : public FrameGenerator {
                 case 3:  
                     tmpBuffer.copyToBuffer(frame);
                     break;
+                case 4:
+                    setFrameFinished();
+                    break;
             }
             cycleCount++;
-            if(cycleCount > 3000){
-                setFrameFinished();    
-            }
         }
 
-        void endFrame(){
-            FrameGenerator::endFrame();
+        void endFrame(uint32_t currentTicks){
+            FrameGenerator::endFrame(currentTicks);
             if(frameCounter >= 800){
                 setSequenceFinished();
             }

@@ -22,9 +22,8 @@ class RandomOnOffAnimation : public FrameGenerator {
         uint32_t currentLed;
         bool turnOffPhase;
 	public:
-        RandomOnOffAnimation(uint32_t const animationFrameTimeUs,
-                        bool const repeatUntilTimeExeeded) :
-                    FrameGenerator(animationFrameTimeUs, repeatUntilTimeExeeded), 
+        RandomOnOffAnimation() :
+                    FrameGenerator(), 
                     cycleCount(0),
                     currentLed(0),
                     turnOffPhase(false) {
@@ -37,8 +36,8 @@ class RandomOnOffAnimation : public FrameGenerator {
             turnOffPhase = false;
         }
 
-        void startFrame(buffer_t *nextFrame, uint32_t const currentTicks, uint32_t const totalFrameTimeUs) override{
-            FrameGenerator::startFrame(nextFrame, currentTicks, totalFrameTimeUs);
+        void startFrame(buffer_t *nextFrame, uint32_t const currentTicks) override{
+            FrameGenerator::startFrame(nextFrame, currentTicks);
             cycleCount = 0;
             if(frameCounter >= 3000){
                 turnOffPhase = true;
@@ -55,8 +54,8 @@ class RandomOnOffAnimation : public FrameGenerator {
             setFrameFinished();
         }
 
-        void endFrame(){
-            FrameGenerator::endFrame();
+        void endFrame(uint32_t const currentTicks){
+            FrameGenerator::endFrame(currentTicks);
             if(frameCounter >= 6000){
                 setSequenceFinished();
             }

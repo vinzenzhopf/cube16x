@@ -19,9 +19,8 @@ class LedWalkerAnimation : public FrameGenerator {
         uint16_t ledIndex;
         uint32_t cycleCount;
 	public:
-        LedWalkerAnimation(uint32_t const animationFrameTimeUs,
-                        bool const repeatUntilTimeExeeded) :
-                    FrameGenerator(animationFrameTimeUs, repeatUntilTimeExeeded),
+        LedWalkerAnimation() :
+                    FrameGenerator(0),
                     ledIndex(0),
                     cycleCount(0) {
         }
@@ -33,8 +32,8 @@ class LedWalkerAnimation : public FrameGenerator {
             ledIndex = 0;
         }
 
-        void startFrame(buffer_t *nextFrame, uint32_t const currentTicks, uint32_t const totalFrameTimeUs) override{
-            FrameGenerator::startFrame(nextFrame, currentTicks, totalFrameTimeUs);
+        void startFrame(buffer_t *nextFrame, uint32_t const currentTicks) override{
+            FrameGenerator::startFrame(nextFrame, currentTicks);
             cycleCount = 0;
         }
 
@@ -44,14 +43,11 @@ class LedWalkerAnimation : public FrameGenerator {
             tmpBuffer.setLed(ledIndex, true);
             tmpBuffer.copyToBuffer(frame);
 
-            cycleCount++;
-            if(cycleCount > 1000){
-                setFrameFinished();    
-            }
+            setFrameFinished();    
         }
 
-        void endFrame(){
-            FrameGenerator::endFrame();
+        void endFrame(uint32_t const currentTicks){
+            FrameGenerator::endFrame(currentTicks);
             ledIndex++;
             if(ledIndex >= TOTAL_LED_COUNT){
                 setSequenceFinished();

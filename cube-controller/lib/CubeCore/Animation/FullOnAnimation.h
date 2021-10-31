@@ -19,17 +19,43 @@ class FullOnAnimation : public FrameGenerator {
         uint8_t rowIndex;
         uint8_t planeIndex;
 	public:
-        FullOnAnimation(uint32_t const animationFrameTimeUs,
-                        bool const repeatUntilTimeExeeded);
+        FullOnAnimation() : 
+                    FrameGenerator(), 
+                    rowIndex(0),
+                    planeIndex(0) {
+            tmpBuffer.setBuffer();
+        }
         virtual ~FullOnAnimation() = default;
 
-        void initializeFrameSequence(uint32_t currentTicks) override;
+        void initializeFrameSequence(uint32_t currentTicks) override{
+            FrameGenerator::initializeFrameSequence(currentTicks);
+        }
 
-        void startFrame(buffer_t *nextFrame, uint32_t const currentTicks, uint32_t const totalFrameTimeUs);
+        void startFrame(buffer_t *nextFrame, uint32_t const currentTicks){
+            FrameGenerator::startFrame(nextFrame, currentTicks);
+            rowIndex = 0;
+            planeIndex = 0;
+        }
 
-        void generateCyclicBase(uint32_t const currentTicks);
+        void generateCyclicBase(uint32_t const currentTicks){
+            FrameGenerator::generateCyclicBase(currentTicks);
+            // for(rowIndex = 0; rowIndex < CUBE_EDGE_SIZE; rowIndex++){
+            //     frame->asPlanes[planeIndex].asRows[rowIndex] = 0xFFFF;
+            // }
+            // planeIndex++;
+            // if(planeIndex >= CUBE_EDGE_SIZE){
+            //     setFrameFinished();
+            //     setSequenceFinished();
+            // }
+            // WriteTestBuffer(frame);
+            tmpBuffer.copyToBuffer(frame);
+            setFrameFinished();
+            setSequenceFinished();
+        }
 
-        void endFrame();
+        void endFrame(uint32_t const currentTicks){
+            FrameGenerator::endFrame(currentTicks);
+        }
 
     protected:
     private:  

@@ -21,9 +21,8 @@ class RandomToggleAnimation : public FrameGenerator {
         uint32_t cycleCount;
         uint32_t currentLed;
 	public:
-        RandomToggleAnimation(uint32_t const animationFrameTimeUs,
-                        bool const repeatUntilTimeExeeded) :
-                    FrameGenerator(animationFrameTimeUs, repeatUntilTimeExeeded), 
+        RandomToggleAnimation() :
+                    FrameGenerator(50), 
                     currentLed(0) {
         }
         virtual ~RandomToggleAnimation() = default;
@@ -33,8 +32,8 @@ class RandomToggleAnimation : public FrameGenerator {
             tmpBuffer.clearBuffer();
         }
 
-        void startFrame(buffer_t *nextFrame, uint32_t const currentTicks, uint32_t const totalFrameTimeUs) override{
-            FrameGenerator::startFrame(nextFrame, currentTicks, totalFrameTimeUs);
+        void startFrame(buffer_t *nextFrame, uint32_t const currentTicks) override{
+            FrameGenerator::startFrame(nextFrame, currentTicks);
             cycleCount = 0;
         }
 
@@ -51,16 +50,14 @@ class RandomToggleAnimation : public FrameGenerator {
                     break;
                 case 2:  
                     tmpBuffer.copyToBuffer(frame);
+                    setFrameFinished();    
                     break;
             }
             cycleCount++;
-            if(cycleCount > 50){
-                setFrameFinished();    
-            }
         }
 
-        void endFrame(){
-            FrameGenerator::endFrame();
+        void endFrame(uint32_t const currentTicks){
+            FrameGenerator::endFrame(currentTicks);
             if(frameCounter >= 8000){
                 setSequenceFinished();
             }

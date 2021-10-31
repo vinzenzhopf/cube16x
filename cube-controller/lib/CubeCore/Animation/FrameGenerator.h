@@ -12,42 +12,55 @@
 
 class FrameGenerator : public ICyclicFrameGeneration {
     public:
-        uint32_t const animationFrameTimeUs;
-        bool const repeatUntilTimeExceeded;
-
+        uint32_t const frameTimeUs;
+        
     protected:
         buffer_t *frame;
 
-        uint32_t totalFrameTimeUs;
+        //uint32_t animationDurationMs;
         uint32_t frameCounter;
 
         uint32_t sequenceStartTicks;
-        uint32_t lastFrameStartTicks;
+        uint32_t frameStartTicks;
+        
     private:
         bool frameFinished;
         bool sequenceFinished;
 
 	public:
-        FrameGenerator( uint32_t const animationFrameTimeUs,
-                        bool const repeatUntilTimeExceeded);
+        FrameGenerator();
+        FrameGenerator(uint32_t const frameTimeUs);
         virtual ~FrameGenerator() = default;
 
         virtual void initializeFrameSequence(uint32_t currentTicks) override;
-        virtual void startFrame(buffer_t *nextFrame, uint32_t const currentTicks, uint32_t const totalFrameTimeUs) override;
+        virtual void startFrame(buffer_t *nextFrame, uint32_t const currentTicks) override;
         virtual void generateCyclicBase(uint32_t const currentTicks) override;
-        virtual void endFrame() override;
+        virtual void endFrame(uint32_t const currentTicks) override;
 
         bool isSequenceFinished() override;
         bool isFrameFinished() override;
         uint32_t getFrameCounter() override;
 
-        uint32_t getAnimationFrameTimeUs() override{
-            return animationFrameTimeUs;
+        uint32_t getFrameTimeUs() override{
+            return frameTimeUs;
         }
-        bool getRepeatUntilTimeExceeded() override{
-            return repeatUntilTimeExceeded;
+        bool isFreeRunning() override{
+            return frameTimeUs == 0;
         }
 
+        uint32_t inline getElapsedSequenceTime(uint32_t const currentTicks){
+            return currentTicks - sequenceStartTicks;
+        }
+        uint32_t inline getElapsedFrameTime(uint32_t const currentTicks){
+            return currentTicks - frameStartTicks;
+        }
+        uint32_t inline getRemainingFrameTime(uint32_t const currentTicks){
+            return frameTimeUs - getElapsedFrameTime(currentTicks);
+        }
+
+        void setFrameStartTicks(uint32_t const startTicks) override{
+            frameStartTicks = startTicks;
+        }
     protected:
         void inline setSequenceFinished(){
             sequenceFinished = true;
@@ -55,16 +68,6 @@ class FrameGenerator : public ICyclicFrameGeneration {
 
         void inline setFrameFinished(){
             frameFinished = true;
-        }
-
-        uint32_t inline getElapsedSequenceTime(uint32_t const currentTicks){
-            return currentTicks - lastFrameStartTicks;
-        }
-        uint32_t inline getElapsedFrameTime(uint32_t const currentTicks){
-            return currentTicks - lastFrameStartTicks;
-        }
-        uint32_t inline getRemainingFrameTime(uint32_t const currentTicks){
-            return totalFrameTimeUs - getElapsedFrameTime(currentTicks);
         }
     private:  
 };

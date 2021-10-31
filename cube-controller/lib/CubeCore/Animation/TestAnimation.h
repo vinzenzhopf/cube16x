@@ -19,9 +19,8 @@ class TestAnimation : public FrameGenerator {
         uint8_t ledIndex;
         uint32_t cycleCount;
 	public:
-        TestAnimation(uint32_t const animationFrameTimeUs,
-                        bool const repeatUntilTimeExeeded) :
-                    FrameGenerator(animationFrameTimeUs, repeatUntilTimeExeeded),
+        TestAnimation() :
+                    FrameGenerator(200000),
                     ledIndex(0),
                     cycleCount(0) {
         }
@@ -33,8 +32,8 @@ class TestAnimation : public FrameGenerator {
             ledIndex = 0;
         }
 
-        void startFrame(buffer_t *nextFrame, uint32_t const currentTicks, uint32_t const totalFrameTimeUs) override{
-            FrameGenerator::startFrame(nextFrame, currentTicks, totalFrameTimeUs);
+        void startFrame(buffer_t *nextFrame, uint32_t const currentTicks) override{
+            FrameGenerator::startFrame(nextFrame, currentTicks);
             cycleCount = 0;
         }
 
@@ -43,15 +42,13 @@ class TestAnimation : public FrameGenerator {
 
             tmpBuffer.setLed(ledIndex, true);
             tmpBuffer.copyToBuffer(frame);
+            setFrameFinished();   
 
             cycleCount++;
-            if(cycleCount > 50000){
-                setFrameFinished();    
-            }
         }
 
-        void endFrame(){
-            FrameGenerator::endFrame();
+        void endFrame(uint32_t const currentTicks){
+            FrameGenerator::endFrame(currentTicks);
             ledIndex++;
             if(ledIndex >= TOTAL_LED_COUNT){
                 setSequenceFinished();

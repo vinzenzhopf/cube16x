@@ -2,32 +2,34 @@
 
 #include "FrameGenerator.h"
 
-FrameGenerator::FrameGenerator( uint32_t const animationFrameTimeUs,
-                                bool const repeatUntilTimeExeeded) : 
-                            animationFrameTimeUs(animationFrameTimeUs),
-                            repeatUntilTimeExceeded(repeatUntilTimeExeeded),
-                            totalFrameTimeUs(0),
-                            frameCounter(0),
-                            sequenceStartTicks(0),
-                            lastFrameStartTicks(0),
-                            frameFinished(false),
-                            sequenceFinished(false) {
+FrameGenerator::FrameGenerator() : FrameGenerator(0){
+}
+
+FrameGenerator::FrameGenerator(uint32_t const frameTimeUs) :
+        frameTimeUs(frameTimeUs),
+        frameCounter(0),
+        sequenceStartTicks(0),
+        frameStartTicks(0),
+        frameFinished(false),
+        sequenceFinished(false) {
 }
 
 void FrameGenerator::initializeFrameSequence(uint32_t currentTicks){
     this->sequenceStartTicks = currentTicks;
+    this->frameStartTicks = currentTicks; 
     this->sequenceFinished = false;
     this->frameCounter = 0;
 }
 
-void FrameGenerator::startFrame(buffer_t *nextFrame, uint32_t const currentTicks, uint32_t const totalFrameTimeUs){
+void FrameGenerator::startFrame(buffer_t *nextFrame, uint32_t const currentTicks){
     this->frame = nextFrame;
     this->frameFinished = false;
-    this->lastFrameStartTicks = currentTicks;
-    this->totalFrameTimeUs = totalFrameTimeUs;
+    //Dont use startframe as Tick-Start to add in compensation for buffer-switching of the last frame.
+    //frameStartTicks is set from the AnimationController
+    //this->frameStartTicks = currentTicks; 
 }
 
-void FrameGenerator::endFrame(){
+void FrameGenerator::endFrame(uint32_t const currentTicks){
     this->frameCounter++;
 }
 
