@@ -115,7 +115,7 @@ class BufferUtil {
          * Returns the value of the LED on the given corrdinates. Uses the default cube orientation (y is front).
          */
         bool getLed(uint16_t x){
-            return (buffer->asWords[x/sizeof(word_t)] >> (x%sizeof(word_t))) & 1;
+            return (buffer->asWords[ x / LEDS_PER_WORD] >> (x % LEDS_PER_WORD)) & 1;
         }
 
         /**
@@ -151,6 +151,10 @@ class BufferUtil {
                     buffer->asPlanes[x].asRows[i] |= (d << j);
                 }
             }
+        }
+
+        void setPlane(uint8_t x, plane_t *data){
+            memcpy(&(buffer->asPlanes[x]), data, sizeof(plane_t));
         }
 
         void setPlane(ECubeDirection dir, uint8_t x, plane_t *data){
