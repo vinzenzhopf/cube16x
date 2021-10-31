@@ -20,6 +20,7 @@
 #include "Animation/RandomToggleAnimation.h"
 #include "Animation/RandomOnOffAnimation.h"
 #include "Animation/RaindropsAnimation.h"
+#include "Animation/FallingLedsAnimation.h"
 
 ModuleManager moduleManager;
 Watchdog watchdog(
@@ -65,6 +66,7 @@ LedWalkerAnimation ledWalkerAnimation(2000, true);
 RandomToggleAnimation randomToggleAnimation(2000, true);
 RandomOnOffAnimation randomOnOffAnimation(2000, true);
 RaindropsAnimation raindropsAnimation(2000, true);
+FallingLedsAnimation fallingLedsAnimation(2000, true);
 
 enum class EAnimationType{
     eFullOn,
@@ -103,6 +105,7 @@ void setup() {
     // playlistManager.addAnimation(&randomToggleAnimation);
     // playlistManager.addAnimation(&ledWalkerAnimation);
     // playlistManager.addAnimation(&randomOnOffAnimation);
+    playlistManager.addAnimation(&fallingLedsAnimation);
 
 
     bufferFull.setBuffer();

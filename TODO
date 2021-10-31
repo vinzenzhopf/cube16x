@@ -42,7 +42,7 @@ Cube 16x TODO's:
             
     Animations:
         Simple:
-            ☐ RainDropsAnimation @started(21-10-30 13:08)
+            ✔ RainDropsAnimation @started(21-10-30 13:08) @done(21-10-31 02:16) @lasted(13h8m7s)
                 Set random leds active on first plane; move active leds down by one plane each frame
             ✔ RandomOnOffAnimation @started(21-10-30 12:50) @done(21-10-30 13:04) @lasted(14m56s)
                 Turn random leds on; after some time, turn random leds off.
@@ -52,8 +52,9 @@ Cube 16x TODO's:
                 One cube, that stretches in each corner/edge of the cube.
             ☐ WaveAnimation
                 Specifiable Wave-Form that travens from one side of the cube to an nother. Leds under the function are lit, above are off.
-            ☐ FallingLeds
+            ✔ FallingLeds @started(21-10-31 02:24) @done(21-10-31 02:47) @lasted(23m53s)
                 One LED per z-Row active: On random led falls from the top layer to the bottom. After some time, die direction turns.
+            ☐ Improve PlaneWalkerAnimation
 
         Advanced:
             ☐ WhiskAnimation
