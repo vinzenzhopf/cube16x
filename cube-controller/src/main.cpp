@@ -97,11 +97,12 @@ void setup() {
     //playlistManager.addAnimation(&fullOnAnimation);
     //playlistManager.addAnimation(&testAnimation);
 
+    
     playlistManager.addAnimation(&raindropsAnimation);
     playlistManager.addAnimation(&planeWalkerAnimation);
     // playlistManager.addAnimation(&randomToggleAnimation);
     // playlistManager.addAnimation(&ledWalkerAnimation);
-    //playlistManager.addAnimation(&randomOnOffAnimation);
+    // playlistManager.addAnimation(&randomOnOffAnimation);
 
 
     bufferFull.setBuffer();

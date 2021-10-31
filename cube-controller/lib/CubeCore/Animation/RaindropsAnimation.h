@@ -10,6 +10,7 @@
 #include "CubeCore.h"
 #include "FrameGenerator.h"
 #include "FrameBuffer.h"
+#include "PlaneUtil.h"
 
 #include "Entropy.h"
 
@@ -49,17 +50,17 @@ class RaindropsAnimation : public FrameGenerator {
                     break;
                 case 1: 
                     //4 new Drops per run
-                    for(uint32_t i = 0; i < 4; i++){
+                    for(uint32_t i = 0; i < 8; i++){
                         uint32_t newDropIdx = Entropy.random(PLANE_LED_COUNT);
                         if(plane[newDropIdx] == 0)
-                            plane[newDropIdx] = 15;
+                            plane[newDropIdx] = 16;
                     }
 
                     //Advance every "drop" by one
                     for(uint32_t i = 0; i < PLANE_LED_COUNT; i++){
                         if(plane[i] == 1){
                             //write wet floor
-                            floor.asWords[i/sizeof(word_t)] |= i%sizeof(word_t);
+                            PlaneUtil.setLed(&floor, i, true);
                         }
                         if(plane[i] > 0){
                             plane[i]--;
@@ -67,30 +68,30 @@ class RaindropsAnimation : public FrameGenerator {
                     }
                     break;
                 case 2:
-                    // //Write all drops
-                    // for(uint32_t i = 0; i < PLANE_LED_COUNT; i++){
-                    //     if(plane[i] > 0){
-                    //         uint16_t index = PLANE_LED_COUNT * plane[i] + i;
-                    //         tmpBuffer.setLed(index, true);
-                    //     }
-                    // }
+                    //Write all drops
+                    for(uint32_t i = 0; i < PLANE_LED_COUNT; i++){
+                        if(plane[i] > 0){
+                            uint16_t index = PLANE_LED_COUNT * plane[i] + i;
+                            tmpBuffer.setLed(index, true);
+                        }
+                    }
                     
                     //write wet floor   
-                    //tmpBuffer.setPlane(ECubeDirection::Z, 0, &floor);
+                    tmpBuffer.setPlane(0, &floor);
                     break;
                 case 3:  
                     tmpBuffer.copyToBuffer(frame);
                     break;
             }
             cycleCount++;
-            if(cycleCount > 50){
+            if(cycleCount > 3000){
                 setFrameFinished();    
             }
         }
 
         void endFrame(){
             FrameGenerator::endFrame();
-            if(frameCounter >= 8000){
+            if(frameCounter >= 800){
                 setSequenceFinished();
             }
         }
