@@ -71,7 +71,6 @@ class AnimationController final : public CyclicModule {
                     break;
 
                 case FrameSequenceState::eSequenceInitialize:
-                    digitalToggleFast(40);
                     currentGenerator->initializeFrameSequence(currentTicks);
                     frameGenerationState = FrameSequenceState::eWaitForFrameRequired;
                     break;
@@ -85,6 +84,7 @@ class AnimationController final : public CyclicModule {
                     break;
 
                 case FrameSequenceState::eNewFrame:
+                    digitalWriteFast(40, HIGH);
                     currentGenerator->startFrame(backBuffer, currentTicks, animationFrameTimeUs);
                     frameGenerationState = FrameSequenceState::eGenerateFrame;
                     break;
@@ -97,6 +97,7 @@ class AnimationController final : public CyclicModule {
                     break;
 
                 case FrameSequenceState::eFrameFinished:
+                    digitalWriteFast(40, LOW);
                     currentGenerator->endFrame();
                     bufferController->setBackBufferReady();
                     if(currentGenerator->isSequenceFinished()){
