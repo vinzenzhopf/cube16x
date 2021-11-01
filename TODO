@@ -42,6 +42,17 @@ Cube 16x TODO's:
                 tcp or udp?
             ☐ C# simple streaming app?
             
+    Controller Input:
+        ☐ Check out possible Input methods
+        USB-Host:
+            ☐ Enable Host-USB funcionality
+            ☐ Add Keyboard as an Input for the Teensy
+            ☐ Add GameControllers as an Input for the Teensy
+        Self-Build-Controller:
+            ☐ Use AnalogSticks, Buttons and 3d-Printing for an self Build Controller
+            ☐ Bridge Hardware with an AVR to i2c, Connect a controller with i2c to the Teensy
+            ☐ use NRF24 chips to build wireless controller?
+
     Animations:
         Simple:
             ✔ RainDropsAnimation @started(21-10-30 13:08) @done(21-10-31 02:16) @lasted(13h8m7s)
@@ -61,6 +72,7 @@ Cube 16x TODO's:
         Advanced:
             ☐ WhiskAnimation
                 Cross of two intersecting planes, that rotate around one axis.
+            ☐ FireworksAnimation
             ☐ Rotating Objects
                 Rotate Objects within the cube
             ☐ WriteTextAnimation
