@@ -50,7 +50,7 @@ Cube 16x TODO's:
                 Turn random leds on; after some time, turn random leds off.
             ✔ RandomToggleAnimation @started(21-10-30 12:32) @done(21-10-30 12:50) @lasted(18m23s)
                 Toggle random leds.
-            ☐ BouncingCubeAnimation
+            ✔ BouncingCubeAnimation @done(21-11-01 01:27)
                 One cube, that stretches in each corner/edge of the cube.
             ☐ WaveAnimation
                 Specifiable Wave-Form that travens from one side of the cube to an nother. Leds under the function are lit, above are off.
@@ -61,6 +61,8 @@ Cube 16x TODO's:
         Advanced:
             ☐ WhiskAnimation
                 Cross of two intersecting planes, that rotate around one axis.
+            ☐ Rotating Objects
+                Rotate Objects within the cube
             ☐ WriteTextAnimation
                 Add Font(s) and draw them on the cube.
                 Static or translating

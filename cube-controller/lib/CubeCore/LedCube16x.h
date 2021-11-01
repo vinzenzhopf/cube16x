@@ -66,9 +66,3 @@ enum class ECubeDirection :  uint8_t {
 	Y, //Side/Right
 	Z, //Up
 };
-
-struct Vector3D { 
-    float x;
-	float y;
-	float z;
-}; 

@@ -1,5 +1,5 @@
 /*
- * FrameBuffer.h
+ * BufferUtil.h
  *
  * Defines the frame-buffer and methods for operating on it.
  *
@@ -13,6 +13,8 @@
 #include <LedCube16x.h>
 #include <string.h>
 #include <math.h>
+#include "Util/IntVectors.h"
+#include "Util/PlaneUtil.h"
 
 class BufferUtil {
     public:
@@ -131,9 +133,9 @@ class BufferUtil {
          * Sets the LED with the given corrdinates to the given value.
          */
         void setLed(uint8_t x, uint8_t y, uint8_t z, bool value) {
-            uint16_t index = ((uint16_t)z) * PLANE_LED_COUNT + ((uint16_t)y) * LEDS_PER_ROW;
+            row_t i = ((row_t)z * PLANE_LED_COUNT + (row_t)y * LEDS_PER_ROW) / LEDS_PER_ROW;
             row_t newbit = !!value; // Also booleanize to force 0 or 1
-            buffer->asRows[index] ^= (-newbit ^ buffer->asRows[index]) & ((row_t)1 << x);
+            buffer->asRows[i] ^= (-newbit ^ buffer->asRows[i]) & (1 << (row_t)x);
         }
 
         void setLed(ECubeDirection dir, uint8_t x, uint8_t y, uint8_t z, bool value){
@@ -158,9 +160,18 @@ class BufferUtil {
         }
 
         void setPlane(ECubeDirection dir, uint8_t x, plane_t *data){
-            for(uint8_t i = 0; i < BUFFER_ROW_SIZE; i++){
-                for(uint8_t j = 0; j < BUFFER_ROW_SIZE; j++){
-                    
+            if(dir == ECubeDirection::Z){
+                setPlane(x, data);
+            }else{
+                for(uint8_t i = 0; i < LEDS_PER_ROW; i++){
+                    for(uint8_t j = 0; j < LEDS_PER_ROW; j++){
+                        bool value = PlaneUtil.getLed(data, i, j);
+                        if(dir == ECubeDirection::X){
+                            setLed(x, j, i, value);
+                        }else if(dir == ECubeDirection::Y){
+                            setLed(j, x, i, value);
+                        }
+                    }
                 }
             }
         }

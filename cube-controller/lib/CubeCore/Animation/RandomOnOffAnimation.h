@@ -1,9 +1,3 @@
-/*
- * TestAnimation.h
- *
- * Created: 25.10.2021 19:16:18
- * Author: Vinzenz hopf (happyfreak.de)
- */ 
 
 #pragma once
 

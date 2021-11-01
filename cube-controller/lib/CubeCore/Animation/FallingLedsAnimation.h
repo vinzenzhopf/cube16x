@@ -10,7 +10,7 @@
 #include "CubeCore.h"
 #include "FrameGenerator.h"
 #include "FrameBuffer.h"
-#include "PlaneUtil.h"
+#include "Util/PlaneUtil.h"
 
 #include "Entropy.h"
 

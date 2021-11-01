@@ -20,7 +20,7 @@ class FullOnAnimation : public FrameGenerator {
         uint8_t planeIndex;
 	public:
         FullOnAnimation() : 
-                    FrameGenerator(), 
+                    FrameGenerator(10000), 
                     rowIndex(0),
                     planeIndex(0) {
             tmpBuffer.setBuffer();
@@ -50,11 +50,13 @@ class FullOnAnimation : public FrameGenerator {
             // WriteTestBuffer(frame);
             tmpBuffer.copyToBuffer(frame);
             setFrameFinished();
-            setSequenceFinished();
         }
 
         void endFrame(uint32_t const currentTicks){
             FrameGenerator::endFrame(currentTicks);
+            if(frameCounter >= 400){
+                setSequenceFinished();
+            }
         }
 
     protected:

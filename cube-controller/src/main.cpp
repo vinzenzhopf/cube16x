@@ -21,6 +21,7 @@
 #include "Animation/RandomOnOffAnimation.h"
 #include "Animation/RaindropsAnimation.h"
 #include "Animation/FallingLedsAnimation.h"
+#include "Animation/BouncingCubeAnimation.h"
 
 ModuleManager moduleManager;
 Watchdog watchdog(
@@ -67,6 +68,7 @@ RandomToggleAnimation randomToggleAnimation;
 RandomOnOffAnimation randomOnOffAnimation;
 RaindropsAnimation raindropsAnimation;
 FallingLedsAnimation fallingLedsAnimation;
+BouncingCubeAnimation bouncingCubeAnimation;
 
 enum class EAnimationType{
     eFullOn,
@@ -96,11 +98,12 @@ void setup() {
     moduleManager.registerModule(&drawController);
     moduleManager.registerModule(&animationController);
 
-    // playlistManager.addAnimation(&fullOnAnimation);
+    playlistManager.addAnimation(&fullOnAnimation);
     // playlistManager.addAnimation(&testAnimation);
     
-    playlistManager.addAnimation(&raindropsAnimation);
-    playlistManager.addAnimation(&planeWalkerAnimation);
+    // playlistManager.addAnimation(&raindropsAnimation);
+    // playlistManager.addAnimation(&planeWalkerAnimation);
+    playlistManager.addAnimation(&bouncingCubeAnimation);
     // playlistManager.addAnimation(&randomToggleAnimation);
     // playlistManager.addAnimation(&ledWalkerAnimation);
     // playlistManager.addAnimation(&randomOnOffAnimation);
