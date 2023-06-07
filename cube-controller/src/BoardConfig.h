@@ -1,12 +1,11 @@
 /*
  * BoardConfig.h
  *
- * Created: 02.07.2017 14:02:59
- *  Author: vhopf
+ * Created: 02.07.2017
+ * Author: vhopf
  */ 
 
-#ifndef _PORT_DEFINITIONS_
-#define _PORT_DEFINITIONS_
+#pragma once
 
 #include "CubeCore.h"
 
@@ -80,5 +79,3 @@ inline void BoardInitIOPorts(){
 	digitalWriteFast(PIN_INFO_PWR_SIG, 0);
 	digitalWriteFast(PIN_INFO_ERR_LED, 0);
 }
-
-#endif //_PORT_DEFINITIONS_

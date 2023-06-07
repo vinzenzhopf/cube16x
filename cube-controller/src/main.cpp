@@ -63,6 +63,7 @@ AnimationController animationController(
 FullOnAnimation fullOnAnimation;
 TestAnimation testAnimation;
 PlaneWalkerAnimation planeWalkerAnimation;
+PlaneWalkerAnimation2 planeWalkerAnimation2;
 LedWalkerAnimation ledWalkerAnimation;
 RandomToggleAnimation randomToggleAnimation;
 RandomOnOffAnimation randomOnOffAnimation;
