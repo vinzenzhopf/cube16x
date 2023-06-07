@@ -24,6 +24,7 @@
 #include "Animation/BouncingCubeAnimation.h"
 #include "Animation/PlaneWalkerAnimation2.h"
 
+#include "Entropy.h"
 
 ModuleManager moduleManager;
 Watchdog watchdog(
@@ -114,6 +115,8 @@ void setup() {
     playlistManager.addAnimation(&fallingLedsAnimation);
 
     bufferFull.setBuffer();
+
+    Entropy.Initialize();
 }
 
 void loop() {
