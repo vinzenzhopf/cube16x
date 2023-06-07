@@ -22,6 +22,8 @@
 #include "Animation/RaindropsAnimation.h"
 #include "Animation/FallingLedsAnimation.h"
 #include "Animation/BouncingCubeAnimation.h"
+#include "Animation/PlaneWalkerAnimation2.h"
+
 
 ModuleManager moduleManager;
 Watchdog watchdog(
@@ -104,12 +106,12 @@ void setup() {
     
     // playlistManager.addAnimation(&raindropsAnimation);
     // playlistManager.addAnimation(&planeWalkerAnimation);
-    playlistManager.addAnimation(&bouncingCubeAnimation);
+    // // playlistManager.addAnimation(&planeWalkerAnimation2);
+    // playlistManager.addAnimation(&bouncingCubeAnimation);
     // playlistManager.addAnimation(&randomToggleAnimation);
-    // playlistManager.addAnimation(&ledWalkerAnimation);
-    // playlistManager.addAnimation(&randomOnOffAnimation);
-    // playlistManager.addAnimation(&fallingLedsAnimation);
-
+    playlistManager.addAnimation(&ledWalkerAnimation);
+    playlistManager.addAnimation(&randomOnOffAnimation);
+    playlistManager.addAnimation(&fallingLedsAnimation);
 
     bufferFull.setBuffer();
 }
@@ -119,20 +121,6 @@ void loop() {
     watchdog.initCycle();
 
     moduleManager.cyclic();
-    // if(moduleManager.isInitialized() && frameBufferController.isFrontBufferReady()){
-    //     // i++;
-    //     // if(i > 200){
-    //     //     if(bAlternating){
-    //     //         frameBufferController.copyBuffer(bufferEmpty.getBuffer());  
-    //     //     }else{
-    //     //         frameBufferController.copyBuffer(bufferFull.getBuffer());  
-    //     //     }
-    //     //     bAlternating = !bAlternating;
-    //     //     i = 0;
-    //     // }
-    //     bufferFull.copyToBuffer(frameBufferController.getBackBuffer()); 
-    //     frameBufferController.setBackBufferReady();
-    // }
 
     watchdog.adjustCycleTime();
 
