@@ -45,7 +45,7 @@ class PlaneWalkerAnimation : public FrameGenerator {
                     tmpBuffer.clearBuffer();
                     break;
                 case 1: 
-                    tmpBuffer.setPlaneData(ECubeDirection::Z, planeIndex, 1);
+                    tmpBuffer.setPlane(ECubeDirection::Z, planeIndex, 1);
                     break;
                 case 2:  
                     tmpBuffer.copyToBuffer(frame);

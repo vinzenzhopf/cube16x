@@ -146,13 +146,11 @@ class BufferUtil {
             
         }
 
-        void setPlaneData(ECubeDirection dir, uint8_t x, uint8_t data){
-            row_t d = !!data;
-            for(uint8_t i = 0; i < PLANE_ROW_SIZE; i++){
-                for(uint8_t j = 0; j < CUBE_EDGE_SIZE; j++){
-                    buffer->asPlanes[x].asRows[i] |= (d << j);
-                }
-            }
+        void setPlane(ECubeDirection dir, uint8_t x, uint8_t data){
+            uint8_t d = !!data;
+            plane_t plane;
+            memset(&plane, d, sizeof(plane_t));
+            setPlane(dir, x, &plane);
         }
 
         void setPlane(uint8_t x, plane_t *data){
