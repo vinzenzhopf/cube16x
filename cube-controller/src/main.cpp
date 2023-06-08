@@ -26,6 +26,8 @@
 
 #include "Entropy.h"
 
+#include <EEPROM.h>
+
 ModuleManager moduleManager;
 Watchdog watchdog(
     PIN_INFO_CYCL_LED,          //INFO_CYCLE_PIN
