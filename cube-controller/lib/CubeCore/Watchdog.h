@@ -60,6 +60,9 @@ class Watchdog final : public CyclicModule, public IOutputEnableGuard {
         bool isSystemOk(){
             return bSystemOk;
         }
+        bool isCycleTimeExceeded(){
+            return bCycleTimeExceeded;
+        }
 
         bool initialize() override{
             return true;
@@ -85,10 +88,17 @@ class Watchdog final : public CyclicModule, public IOutputEnableGuard {
             this->cycleStartTicks = micros();
         }
 
-        inline void adjustCycleTime() {
+        inline void adjustCycleTime(bool serialDebug) {
             digitalWriteFast(INFO_CYCLE_PIN, LOW);
             uint32_t cycleTimeCurrent = micros() - cycleStartTicks;
             this->lastCycleTime = cycleTimeCurrent;
+
+            // if(serialDebug){
+            //     Serial.printf("Last:%d Excceded:%d SystemOk:%d\n", lastCycleTime, bCycleTimeExceeded, bSystemOk);
+
+            //     uint32_t cycleTimeCurrent = micros() - cycleStartTicks;
+            //     this->lastCycleTime = cycleTimeCurrent;
+            // }
 
             if(cycleTimeCurrent > TARGET_CYCLE_TIME_US){
                 bCycleTimeExceeded = true;

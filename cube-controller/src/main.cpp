@@ -57,9 +57,11 @@ DrawController drawController(
 );
 
 PlaylistManager playlistManager;
+FrameStatistics frameStatistics;
 AnimationController animationController(
     &frameBufferController,
     &playlistManager,
+    &frameStatistics,
     ANIMATION_FRAME_TIME_US
 );
 
@@ -101,6 +103,7 @@ void setup() {
     moduleManager.registerModule(&planeDataOutputWriter);
     moduleManager.registerModule(&drawController);
     moduleManager.registerModule(&animationController);
+    moduleManager.registerModule(&frameStatistics);
 
     playlistManager.addAnimation(&fullOnAnimation);
     // playlistManager.addAnimation(&testAnimation);
@@ -117,7 +120,15 @@ void setup() {
     bufferFull.setBuffer();
 
     Entropy.Initialize();
+    Serial.begin(9600); // USB is always 12 or 480 Mbit/sec
+    // while (!Serial) {
+    //     // wait for Arduino Serial Monitor to be ready
+    // }
+    Serial.println("Serial monitor initialized");
 }
+
+int16_t cycleCount = 0;
+bool debugOutput = false;
 
 void loop() {
 
@@ -125,6 +136,12 @@ void loop() {
 
     moduleManager.cyclic();
 
-    watchdog.adjustCycleTime();
-
+    cycleCount++;
+    debugOutput = false;
+    if(cycleCount >= 1000){
+        cycleCount = 0;
+        debugOutput = true;
+    }
+    watchdog.adjustCycleTime(debugOutput);
+    
 }

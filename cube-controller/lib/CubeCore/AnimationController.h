@@ -12,6 +12,7 @@
 #include "FrameBufferController.h"
 #include "IPlaylistManager.h"
 #include "Animations/FrameGenerator.h"
+#include "FrameStatistics.h"
 
 enum class FrameSequenceState {
     eStart = 0,
@@ -30,6 +31,7 @@ class AnimationController final : public CyclicModule {
     protected:
         FrameBufferController * const bufferController;
         IPlaylistManager * const playlistManager;
+        FrameStatistics * const frameStatistics;
         uint32_t const animationFrameTimeUs;
 
         buffer_t *backBuffer;
@@ -43,9 +45,11 @@ class AnimationController final : public CyclicModule {
         AnimationController(
             FrameBufferController *bufferController,
             IPlaylistManager *playlistManager,
+            FrameStatistics *frameStatistics,
             uint32_t const animationFrameTimeUs) :
                 bufferController(bufferController),
                 playlistManager(playlistManager),
+                frameStatistics(frameStatistics),
                 animationFrameTimeUs(animationFrameTimeUs),
                 currentGenerator(nullptr),
                 frameGenerationState(FrameSequenceState::eStart) {
@@ -82,6 +86,7 @@ class AnimationController final : public CyclicModule {
                 case FrameSequenceState::eNewFrame:
                     digitalWriteFast(40, HIGH);
                     currentGenerator->startFrame(backBuffer, currentTicks);
+                    frameStatistics->startFrame(currentTicks);
                     frameGenerationState = FrameSequenceState::eGenerateFrame;
                     break;
 
@@ -95,6 +100,7 @@ class AnimationController final : public CyclicModule {
                 case FrameSequenceState::eFrameFinished:
                     digitalWriteFast(40, LOW);
                     currentGenerator->endFrame(currentTicks);
+                    frameStatistics->endFrame(currentTicks);
                     frameGenerationState = FrameSequenceState::eAdjustFrameTime;
 
                 case FrameSequenceState::eAdjustFrameTime:
