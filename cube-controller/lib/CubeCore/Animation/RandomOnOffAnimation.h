@@ -17,7 +17,7 @@ class RandomOnOffAnimation : public FrameGenerator {
         bool turnOffPhase;
 	public:
         RandomOnOffAnimation() :
-                    FrameGenerator(), 
+                    FrameGenerator(50), 
                     cycleCount(0),
                     currentLed(0),
                     turnOffPhase(false) {
@@ -40,12 +40,15 @@ class RandomOnOffAnimation : public FrameGenerator {
 
         void generateCyclicBase(uint32_t const currentTicks){
             FrameGenerator::generateCyclicBase(currentTicks);
-            for(uint8_t i = 0; i < 20; i++){
+            while(cycleCount < 2){
                 currentLed = Entropy.random(4096);
                 tmpBuffer.setLed(currentLed, !turnOffPhase);
+                cycleCount++;
             }
-            tmpBuffer.copyToBuffer(frame);
-            setFrameFinished();
+            if(cycleCount == 2){
+                tmpBuffer.copyToBuffer(frame);
+                setFrameFinished();    
+            }
         }
 
         void endFrame(uint32_t const currentTicks){

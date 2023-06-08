@@ -105,11 +105,11 @@ void setup() {
     playlistManager.addAnimation(&fullOnAnimation);
     // playlistManager.addAnimation(&testAnimation);
     
-    // playlistManager.addAnimation(&raindropsAnimation);
-    // playlistManager.addAnimation(&planeWalkerAnimation);
+    playlistManager.addAnimation(&raindropsAnimation);
+    playlistManager.addAnimation(&planeWalkerAnimation);
     // // playlistManager.addAnimation(&planeWalkerAnimation2);
-    // playlistManager.addAnimation(&bouncingCubeAnimation);
-    // playlistManager.addAnimation(&randomToggleAnimation);
+    playlistManager.addAnimation(&bouncingCubeAnimation);
+    playlistManager.addAnimation(&randomToggleAnimation);
     playlistManager.addAnimation(&ledWalkerAnimation);
     playlistManager.addAnimation(&randomOnOffAnimation);
     playlistManager.addAnimation(&fallingLedsAnimation);
