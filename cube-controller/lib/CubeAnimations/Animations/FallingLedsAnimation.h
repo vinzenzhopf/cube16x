@@ -1,14 +1,8 @@
-/*
- * TestAnimation.h
- *
- * Created: 25.10.2021 19:16:18
- * Author: Vinzenz hopf (happyfreak.de)
- */ 
 
 #pragma once
 
 #include "CubeCore.h"
-#include "FrameGenerator.h"
+#include "Animations/FrameGenerator.h"
 #include "FrameBuffer.h"
 #include "Util/PlaneUtil.h"
 

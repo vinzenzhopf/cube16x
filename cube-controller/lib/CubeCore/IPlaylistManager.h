@@ -8,7 +8,7 @@
 #pragma once
 
 #include "CubeCore.h"
-#include "Animation/ICyclicFrameGeneration.h"
+#include "Animations/ICyclicFrameGeneration.h"
 
 class IPlaylistManager {
     public:

@@ -8,7 +8,7 @@
 #pragma once
 
 #include "CubeCore.h"
-#include "FrameGenerator.h"
+#include "Animations/FrameGenerator.h"
 #include "FrameBuffer.h"
 #include "Base/ExecuteState.h"
 #include <glm/glm.hpp>

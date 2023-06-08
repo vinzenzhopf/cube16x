@@ -1,5 +1,5 @@
 /*
- * FrameBuffer.h
+ * PlaneUtil.h
  *
  * Defines the frame-buffer and methods for operating on it.
  *

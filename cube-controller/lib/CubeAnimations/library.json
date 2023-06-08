@@ -1,7 +1,7 @@
 {
-    "name": "CubeCore",
+    "name": "CubeAnimations",
     "version": "0.0.1",
-    "description": "LED Cube Base Library",
+    "description": "LED Cube Animations Library",
     "authors": {
         "name": "Vinzenz Hopf",
         "email": "vinzenz.hopf@hopf-hof.de",
@@ -9,9 +9,6 @@
     },
     "license": "MIT",
     "dependencies": [
-        {
-            "name": "glm",
-            "version": "https://github.com/g-truc/glm.git#0.9.9.8"
-        }
+
     ]
 }

@@ -8,23 +8,23 @@
 #pragma once
 
 #include "CubeCore.h"
-#include "FrameGenerator.h"
+#include "Animations/FrameGenerator.h"
 #include "FrameBuffer.h"
 
-class LedWalkerAnimation : public FrameGenerator {
+class TestAnimation : public FrameGenerator {
     public:
     protected:
     private:
         FrameBuffer tmpBuffer;
-        uint16_t ledIndex;
+        uint8_t ledIndex;
         uint32_t cycleCount;
 	public:
-        LedWalkerAnimation() :
-                    FrameGenerator(0),
+        TestAnimation() :
+                    FrameGenerator(200000),
                     ledIndex(0),
                     cycleCount(0) {
         }
-        virtual ~LedWalkerAnimation() = default;
+        virtual ~TestAnimation() = default;
 
         void initializeFrameSequence(uint32_t currentTicks) override {
             FrameGenerator::initializeFrameSequence(currentTicks);
@@ -42,8 +42,9 @@ class LedWalkerAnimation : public FrameGenerator {
 
             tmpBuffer.setLed(ledIndex, true);
             tmpBuffer.copyToBuffer(frame);
+            setFrameFinished();   
 
-            setFrameFinished();    
+            cycleCount++;
         }
 
         void endFrame(uint32_t const currentTicks){

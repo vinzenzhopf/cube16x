@@ -11,7 +11,7 @@
 #include "Base/CyclicModule.h"
 #include "FrameBufferController.h"
 #include "IPlaylistManager.h"
-#include "Animation/FrameGenerator.h"
+#include "Animations/FrameGenerator.h"
 
 enum class FrameSequenceState {
     eStart = 0,
