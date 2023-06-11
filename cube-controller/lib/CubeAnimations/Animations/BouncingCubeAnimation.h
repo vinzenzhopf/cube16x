@@ -51,7 +51,7 @@ class BouncingCubeAnimation : public FrameGenerator {
             cycleCount = 0;
         }
 
-        void generateCyclicBase(uint32_t const currentTicks){
+        bool generateCyclicBase(uint32_t const currentTicks){
             FrameGenerator::generateCyclicBase(currentTicks);
             switch(cycleCount){
                 case 0:
@@ -102,10 +102,11 @@ class BouncingCubeAnimation : public FrameGenerator {
                     cube.drawCubeWireframe(&tmpBuffer);
                 case 3:  
                     tmpBuffer.copyToBuffer(frame);
-                    setFrameFinished();
+                    return true;
                     break;
             }
             cycleCount++;
+            return false;
         }
 
         void setCubeDimension(uint8_t edgeNum, uint8_t frame){

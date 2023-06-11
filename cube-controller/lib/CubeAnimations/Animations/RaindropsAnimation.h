@@ -36,7 +36,7 @@ class RaindropsAnimation : public FrameGenerator {
             cycleCount = 0;
         }
 
-        void generateCyclicBase(uint32_t const currentTicks){
+        bool generateCyclicBase(uint32_t const currentTicks){
             FrameGenerator::generateCyclicBase(currentTicks);
             switch(cycleCount){
                 case 0:
@@ -77,10 +77,11 @@ class RaindropsAnimation : public FrameGenerator {
                     tmpBuffer.copyToBuffer(frame);
                     break;
                 case 4:
-                    setFrameFinished();
+                    return true;
                     break;
             }
             cycleCount++;
+            return false;
         }
 
         void endFrame(uint32_t currentTicks){

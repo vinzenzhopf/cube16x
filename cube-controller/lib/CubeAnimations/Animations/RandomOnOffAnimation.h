@@ -38,7 +38,7 @@ class RandomOnOffAnimation : public FrameGenerator {
             }
         }
 
-        void generateCyclicBase(uint32_t const currentTicks){
+        bool generateCyclicBase(uint32_t const currentTicks){
             FrameGenerator::generateCyclicBase(currentTicks);
             while(cycleCount < 2){
                 currentLed = Entropy.random(4096);
@@ -47,8 +47,9 @@ class RandomOnOffAnimation : public FrameGenerator {
             }
             if(cycleCount == 2){
                 tmpBuffer.copyToBuffer(frame);
-                setFrameFinished();    
+                return true;
             }
+            return false;
         }
 
         void endFrame(uint32_t const currentTicks){

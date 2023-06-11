@@ -31,7 +31,7 @@ class RandomToggleAnimation : public FrameGenerator {
             cycleCount = 0;
         }
 
-        void generateCyclicBase(uint32_t const currentTicks){
+        bool generateCyclicBase(uint32_t const currentTicks){
             FrameGenerator::generateCyclicBase(currentTicks);
             uint8_t value;
             switch(cycleCount){
@@ -44,10 +44,11 @@ class RandomToggleAnimation : public FrameGenerator {
                     break;
                 case 2:  
                     tmpBuffer.copyToBuffer(frame);
-                    setFrameFinished();    
+                    return true; 
                     break;
             }
             cycleCount++;
+            return false;
         }
 
         void endFrame(uint32_t const currentTicks){

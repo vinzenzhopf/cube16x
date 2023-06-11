@@ -91,8 +91,8 @@ class AnimationController final : public CyclicModule {
                     break;
 
                 case FrameSequenceState::eGenerateFrame:
-                    currentGenerator->generateCyclicBase(currentTicks);
-                    if(currentGenerator->isFrameFinished()){
+                    if(currentGenerator->generateCyclicBase(currentTicks)){
+                        currentGenerator->setFrameFinished();
                         frameGenerationState = FrameSequenceState::eFrameFinished;
                     }
                     break;

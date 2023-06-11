@@ -37,13 +37,13 @@ class LedWalkerAnimation : public FrameGenerator {
             cycleCount = 0;
         }
 
-        void generateCyclicBase(uint32_t const currentTicks){
+        bool generateCyclicBase(uint32_t const currentTicks){
             FrameGenerator::generateCyclicBase(currentTicks);
 
             tmpBuffer.setLed(ledIndex, true);
             tmpBuffer.copyToBuffer(frame);
 
-            setFrameFinished();    
+            return true; 
         }
 
         void endFrame(uint32_t const currentTicks){

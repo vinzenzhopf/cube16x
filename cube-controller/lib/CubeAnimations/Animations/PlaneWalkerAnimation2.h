@@ -40,7 +40,7 @@ class PlaneWalkerAnimation2 : public FrameGenerator {
             cycleCount = 0;
         }
 
-        void generateCyclicBase(uint32_t const currentTicks){
+        bool generateCyclicBase(uint32_t const currentTicks){
             FrameGenerator::generateCyclicBase(currentTicks);
 
             switch(cycleCount){
@@ -71,10 +71,11 @@ class PlaneWalkerAnimation2 : public FrameGenerator {
                     break;
                 case 2:  
                     tmpBuffer.copyToBuffer(frame);
-                    setFrameFinished();
+                    return true;
                     break;
             }
             cycleCount++;
+            return false;
         }
 
         bool walkPlanes(ECubeDirection dir, bool reverse){

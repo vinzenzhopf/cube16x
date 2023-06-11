@@ -33,7 +33,8 @@ void FrameGenerator::endFrame(uint32_t const currentTicks){
     this->frameCounter++;
 }
 
-void FrameGenerator::generateCyclicBase(uint32_t const currentTicks){
+bool FrameGenerator::generateCyclicBase(uint32_t const currentTicks){
+    return true;
 }
 
 bool FrameGenerator::isSequenceFinished(){

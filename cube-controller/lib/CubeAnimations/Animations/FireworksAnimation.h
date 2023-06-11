@@ -72,7 +72,7 @@ class FireworksAnimation : public FrameGenerator {
 
         void initializeFrameSequence(uint32_t currentTicks) override;
         void startFrame(buffer_t *nextFrame, uint32_t const currentTicks) override;
-        void generateCyclicBase(uint32_t const currentTicks) override;
+        bool generateCyclicBase(uint32_t const currentTicks) override;
         void endFrame(uint32_t const currentTicks) override;
 
     protected:

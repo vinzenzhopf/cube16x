@@ -37,7 +37,7 @@ class FullOnAnimation : public FrameGenerator {
             planeIndex = 0;
         }
 
-        void generateCyclicBase(uint32_t const currentTicks){
+        bool generateCyclicBase(uint32_t const currentTicks){
             FrameGenerator::generateCyclicBase(currentTicks);
             // for(rowIndex = 0; rowIndex < CUBE_EDGE_SIZE; rowIndex++){
             //     frame->asPlanes[planeIndex].asRows[rowIndex] = 0xFFFF;
@@ -49,7 +49,7 @@ class FullOnAnimation : public FrameGenerator {
             // }
             // WriteTestBuffer(frame);
             tmpBuffer.copyToBuffer(frame);
-            setFrameFinished();
+            return true;
         }
 
         void endFrame(uint32_t const currentTicks){

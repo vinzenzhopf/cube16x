@@ -39,7 +39,7 @@ class FallingLedsAnimation : public FrameGenerator {
             fallingMode = (frameCounter < 2000);
         }
 
-        void generateCyclicBase(uint32_t const currentTicks){
+        bool generateCyclicBase(uint32_t const currentTicks){
             FrameGenerator::generateCyclicBase(currentTicks);
             switch(cycleCount){
                 case 0:
@@ -67,9 +67,10 @@ class FallingLedsAnimation : public FrameGenerator {
                     tmpBuffer.copyToBuffer(frame);
                     break;
                 case 3:
-                    setFrameFinished();
+                    return true;
             }
             cycleCount++;
+            return false;
         }
 
         void endFrame(uint32_t const currentTicks){
