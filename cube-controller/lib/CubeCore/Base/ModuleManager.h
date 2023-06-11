@@ -40,6 +40,17 @@ class ModuleManager {
         }
 
         /**
+         * Calls every startup method on its registered modules.
+         * Startup initializsations. Initialization order must be resprected here. 
+         * Should only be used for code, that is blocking and cannot be spreaded over cycles.
+         */
+        void setup(){
+            for(uint8_t i = 0; i < nModuleCount; i++){
+                arrModules[i]->setup();
+            }
+        }
+
+        /**
          * Method that should be called cyclic and contain the main procedure logic of this module.
          */
         void cyclic(){

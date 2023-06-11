@@ -23,6 +23,13 @@ class CyclicModule {
 	    ~CyclicModule() = default;
 
         /**
+         * Startup initializsations. Initialization order must be resprected here. 
+         * Should only be used for code, that is blocking and cannot be spreaded over cycles.
+         */
+        virtual void setup() {
+        }
+
+        /**
          * Method for Module initialization, if the module is depending on other stuff to be initialized. 
          * Once all initialize calls are finished (returning true) then cyclic starts to get called.
          * @returns bool When the initialize method is finished.

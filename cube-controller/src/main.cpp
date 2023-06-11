@@ -90,14 +90,19 @@ enum class EAnimationType{
     eRainDrops
 };
 
-FrameBuffer bufferFull;
-
 void setup() {
     BoardInitIOPorts();
     BoardInitDataDirections();
 
     //Set ErrorLED to HIGH during initializaton
     digitalWriteFast(PIN_INFO_ERR_LED, HIGH);
+
+    //Serial communication to serial monitor via USB
+    Serial.begin(9600); // USB is always 12 or 480 Mbit/sec
+    while (!Serial) {
+        ; // wait for Arduino Serial Monitor to be ready
+    }
+    Serial.println("Serial monitor initialized");
 
     moduleManager.registerModule(&watchdog);
     moduleManager.registerModule(&frameBufferController);
@@ -119,14 +124,10 @@ void setup() {
     playlistManager.addAnimation(&randomOnOffAnimation);
     playlistManager.addAnimation(&fallingLedsAnimation);
 
-    bufferFull.setBuffer();
+    //Call setup on all Modules
+    moduleManager.setup();
 
     Entropy.Initialize();
-    Serial.begin(9600); // USB is always 12 or 480 Mbit/sec
-    // while (!Serial) {
-    //     // wait for Arduino Serial Monitor to be ready
-    // }
-    Serial.println("Serial monitor initialized");
 }
 
 int16_t cycleCount = 0;
