@@ -130,21 +130,12 @@ void setup() {
     Entropy.Initialize();
 }
 
-int16_t cycleCount = 0;
-bool debugOutput = false;
-
 void loop() {
 
     watchdog.initCycle();
 
     moduleManager.cyclic();
 
-    cycleCount++;
-    debugOutput = false;
-    if(cycleCount >= 1000){
-        cycleCount = 0;
-        debugOutput = true;
-    }
-    watchdog.adjustCycleTime(debugOutput);
+    watchdog.adjustCycleTime();
     
 }

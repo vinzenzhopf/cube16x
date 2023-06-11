@@ -77,7 +77,7 @@ class Watchdog final : public CyclicModule, public IOutputEnableGuard {
             writeOutputEnable();
 
             //System is Ready if first cycle has been executed.
-            this->bSystemOk = true;
+            this->bSystemOk = false;
 
             //Reset CycleTimeExceeded marker
             this->bCycleTimeExceeded = false;
@@ -88,7 +88,7 @@ class Watchdog final : public CyclicModule, public IOutputEnableGuard {
             this->cycleStartTicks = micros();
         }
 
-        inline void adjustCycleTime(bool serialDebug) {
+        inline void adjustCycleTime() {
             digitalWriteFast(INFO_CYCLE_PIN, LOW);
             uint32_t cycleTimeCurrent = micros() - cycleStartTicks;
             this->lastCycleTime = cycleTimeCurrent;
