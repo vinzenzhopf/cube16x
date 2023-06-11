@@ -19,7 +19,8 @@
 #include "LedCube16x.h"
 
 #define MAX_MODULE_COUNT 10
-#define MAX_PLAYLIST_ENTRIES 16
+#define MAX_PLAYLIST_ENTRIES 32
+#define MAX_PRIORITY_ANIMATION_ENTRIES 4
 
 
 

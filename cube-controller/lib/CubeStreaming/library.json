@@ -1,0 +1,17 @@
+{
+    "name": "CubeStreaming",
+    "version": "0.0.1",
+    "description": "LED Cube Streaming Library",
+    "authors": {
+        "name": "Vinzenz Hopf",
+        "email": "vinzenz.hopf@hopf-hof.de",
+        "url": "https://github.com/vinzenzhopf/cube16x"
+    },
+    "license": "MIT",
+    "dependencies": [
+        {
+            "name": "native-ethernet",
+            "version": "https://github.com/vjmuzik/NativeEthernet"
+        }
+    ]
+}

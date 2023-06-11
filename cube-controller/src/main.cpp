@@ -23,6 +23,9 @@
 #include "Animations/FallingLedsAnimation.h"
 #include "Animations/BouncingCubeAnimation.h"
 #include "Animations/PlaneWalkerAnimation2.h"
+#include "Animations/NetworkStream/NetworkStreamAnimation.h"
+
+#include "NetworkStreaming.h"
 
 #include "Entropy.h"
 
@@ -77,6 +80,19 @@ RandomOnOffAnimation randomOnOffAnimation;
 RaindropsAnimation raindropsAnimation;
 FallingLedsAnimation fallingLedsAnimation;
 BouncingCubeAnimation bouncingCubeAnimation;
+NetworkStreamAnimation networkStreamAnimation(
+    30000 //networkTimeoutMs
+);
+
+NetworkStreaming networkStreaming(
+    &networkStreamAnimation,
+    MacAddress,
+    DefaultIp,
+    DefaultDns,
+    DefaultGateway,
+    DefaultSubnet,
+    ServerPort
+);
 
 enum class EAnimationType{
     eFullOn,
@@ -111,6 +127,7 @@ void setup() {
     moduleManager.registerModule(&drawController);
     moduleManager.registerModule(&animationController);
     moduleManager.registerModule(&frameStatistics);
+    moduleManager.registerModule(&networkStreaming);
 
     playlistManager.addAnimation(&fullOnAnimation);
     // playlistManager.addAnimation(&testAnimation);
@@ -119,10 +136,12 @@ void setup() {
     playlistManager.addAnimation(&planeWalkerAnimation);
     // // playlistManager.addAnimation(&planeWalkerAnimation2);
     playlistManager.addAnimation(&bouncingCubeAnimation);
-    playlistManager.addAnimation(&randomToggleAnimation);
+    // playlistManager.addAnimation(&randomToggleAnimation);
     playlistManager.addAnimation(&ledWalkerAnimation);
-    playlistManager.addAnimation(&randomOnOffAnimation);
+    // playlistManager.addAnimation(&randomOnOffAnimation);
     playlistManager.addAnimation(&fallingLedsAnimation);
+
+    playlistManager.addPriorityAnimation(&networkStreamAnimation);
 
     //Call setup on all Modules
     moduleManager.setup();

@@ -10,6 +10,7 @@
 #include "CubeCore.h"
 
 #include "TeensyUtils.h"
+#include "IPAddress.h"
 
 /* Pin Definitions */	
 //0-7 		Plane Data Pins
@@ -39,6 +40,13 @@
 #define CYCLE_TIME_US			5	
 #define ANIMATION_FRAMERATE    	60
 #define ANIMATION_FRAME_TIME_US	( 1 / ANIMATION_FRAMERATE )*1000*1000
+
+byte MacAddress[] = { 0x02, 0xBE, 0xFD, 0xF6, 0x7C, 0xCD };
+IPAddress DefaultIp(192, 168, 1, 177);
+IPAddress DefaultDns(192, 168, 1, 1);
+IPAddress DefaultGateway(192, 168, 1, 1);
+IPAddress DefaultSubnet(255, 255, 255, 0);
+int ServerPort = 4242;
 
 inline void BoardInitDataDirections(){
 	//Columns

@@ -13,10 +13,11 @@
 class IPlaylistManager {
     public:
         virtual void addAnimation(ICyclicFrameGeneration *frameGenerator) = 0;
+        virtual void addPriorityAnimation(IPriorityCyclicFrameGeneration *frameGenerator) = 0;
+
         virtual ICyclicFrameGeneration* getNextAnimation() = 0;
         virtual ICyclicFrameGeneration* getCurrentAnimation() = 0;
 
-        virtual uint8_t getEntryCount() = 0;
-        virtual uint8_t getCurrentIndex() = 0;
+        virtual bool hasPriorityRequest() = 0;
 };
 

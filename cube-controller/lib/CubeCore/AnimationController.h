@@ -65,7 +65,7 @@ class AnimationController final : public CyclicModule {
             switch (frameGenerationState){
                 case FrameSequenceState::eStart:
                     currentGenerator = playlistManager->getNextAnimation();
-                    if(currentGenerator){
+                    if(currentGenerator != nullptr && currentGenerator != NULL){
                         frameGenerationState = FrameSequenceState::eSequenceInitialize;
                     }
                     break;
@@ -108,7 +108,8 @@ class AnimationController final : public CyclicModule {
                         
                         bufferController->setBackBufferReady();
 
-                        if(currentGenerator->isSequenceFinished()){
+                        if(currentGenerator->isSequenceFinished() ||
+                                playlistManager->hasPriorityRequest()){
                             frameGenerationState = FrameSequenceState::eSequenceFinished;
                         }else{
                             frameGenerationState = FrameSequenceState::eWaitForFrameRequired;
