@@ -91,18 +91,22 @@ class BufferUtil {
          * Copys the given buffer to this buffer.
          */
         void copyFromBuffer(buffer_t *pBuffer){
-            for(uint16_t i = 0; i < BUFFER_ROW_SIZE; i++){
-                buffer->asRows[i] = pBuffer->asRows[i];
-            }
+            // for(uint16_t i = 0; i < BUFFER_ROW_SIZE; i++){
+            //     buffer->asRows[i] = pBuffer->asRows[i];
+            // }
+            //memcpy(dest, src, len)
+            memcpy(&buffer->asBytes, pBuffer->asBytes, BUFFER_BYTE_SIZE);
         }
 
         /**
          * Copys the this buffer to the given buffer.
          */
         void copyToBuffer(buffer_t *pBuffer){
-            for(uint16_t i = 0; i < BUFFER_ROW_SIZE; i++){
-                pBuffer->asRows[i] = buffer->asRows[i];
-            }
+            // for(uint16_t i = 0; i < BUFFER_ROW_SIZE; i++){
+            //     pBuffer->asRows[i] = buffer->asRows[i];
+            // }
+            //memcpy(dest, src, len)
+            memcpy(pBuffer->asBytes, &buffer->asBytes, BUFFER_BYTE_SIZE);
         }
 
         /**

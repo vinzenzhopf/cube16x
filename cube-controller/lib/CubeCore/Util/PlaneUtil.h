@@ -57,8 +57,7 @@ public:
      * Gets the value of the led on the given coordinates.
      */
     bool constexpr getLed(plane_t *plane, uint8_t x, uint8_t y){
-        uint16_t rowIndex = (uint16_t)y * CUBE_EDGE_SIZE;
-        return (plane->asRows[rowIndex] >> x) & 1;
+        return (plane->asRows[ ((uint16_t)y * CUBE_EDGE_SIZE) ] >> x) & 1;
     }
 
     /**
