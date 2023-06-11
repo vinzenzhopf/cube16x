@@ -48,9 +48,9 @@ class AnimationMock : public ICyclicFrameGeneration {
         bool isSequenceFinished() override{
             return false;
         }
-        bool isFrameFinished() override{
-            return false;
-        }
+        // bool isFrameFinished() override{
+        //     return false;
+        // }
         uint32_t getFrameCounter() override{
             return 0;
         }

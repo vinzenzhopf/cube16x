@@ -77,7 +77,7 @@ class Watchdog final : public CyclicModule, public IOutputEnableGuard {
             writeOutputEnable();
 
             //System is Ready if first cycle has been executed.
-            this->bSystemOk = false;
+            this->bSystemOk = true;
 
             //Reset CycleTimeExceeded marker
             this->bCycleTimeExceeded = false;

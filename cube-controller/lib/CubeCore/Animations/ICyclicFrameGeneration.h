@@ -18,15 +18,10 @@ class ICyclicFrameGeneration
         virtual void endFrame(uint32_t currentTicks) = 0;
         
         virtual bool isSequenceFinished() = 0;
-        virtual bool isFrameFinished() = 0;
-        virtual void setFrameFinished() = 0;
         
         virtual uint32_t getFrameCounter() = 0;
 
-        virtual uint32_t getFrameTimeUs() = 0;
-        virtual bool isFreeRunning() = 0;
-
-        virtual void setFrameStartTicks(uint32_t const startTicks) = 0;
+        virtual uint32_t getTargetFrameTimeUs() = 0;
 
         virtual uint32_t getElapsedSequenceTime(uint32_t const currentTicks) = 0;
         virtual uint32_t getElapsedFrameTime(uint32_t const currentTicks) = 0;

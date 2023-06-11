@@ -92,7 +92,6 @@ class AnimationController final : public CyclicModule {
 
                 case FrameSequenceState::eGenerateFrame:
                     if(currentGenerator->generateCyclicBase(currentTicks)){
-                        currentGenerator->setFrameFinished();
                         frameGenerationState = FrameSequenceState::eFrameFinished;
                     }
                     break;
@@ -104,11 +103,10 @@ class AnimationController final : public CyclicModule {
                     frameGenerationState = FrameSequenceState::eAdjustFrameTime;
 
                 case FrameSequenceState::eAdjustFrameTime:
-                    if(currentGenerator->isFreeRunning() ||
-                        currentGenerator->getElapsedFrameTime(currentTicks) >= currentGenerator->getFrameTimeUs()){
+                    if(currentGenerator->getElapsedFrameTime(currentTicks) >= 
+                            currentGenerator->getTargetFrameTimeUs()){
                         
                         bufferController->setBackBufferReady();
-                        currentGenerator->setFrameStartTicks(currentTicks);
 
                         if(currentGenerator->isSequenceFinished()){
                             frameGenerationState = FrameSequenceState::eSequenceFinished;
@@ -119,14 +117,7 @@ class AnimationController final : public CyclicModule {
                     break;
 
                 case FrameSequenceState::eSequenceFinished:
-                    // if(currentGenerator->getRepeatUntilTimeExceeded && 
-                    //         elapsedFrameTimeUs < currentGenerator->getAnimationFrameTimeUs){
-                    //     //Repeat Animation
-                    //     frameGenerationState = FrameSequenceState::eSequenceInitialize;
-                    // }else{
-                        //Start with new Animation
-                        frameGenerationState = FrameSequenceState::eStart;
-                    // }
+                    frameGenerationState = FrameSequenceState::eStart;
                     break;
 
                 default:
