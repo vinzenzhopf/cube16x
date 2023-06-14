@@ -31,9 +31,15 @@ class NetworkStreaming final : public CyclicModule {
         // EthernetClient client;
         EthernetUDP Udp;
         IPAddress remote;
-        datagram_buffer_t receiveBuffer;  // buffer to hold incoming packet,
-        datagram_buffer_t replyBuffer;    // message to send back
+        request_datagram_buffer_t receiveBuffer;  // buffer to hold incoming packet,
+        response_datagram_buffer_t replyBuffer;    // message to send back
         uint16_t replyBufferSize;
+
+        uint32_t lastPackageCount;
+        uint32_t lastFrameCount;
+        uint32_t lastFrameTicksLocal;
+        uint32_t lastFrameTicksSender;
+        bool packageCountValid;
     protected:
     private:
 
@@ -107,6 +113,7 @@ class NetworkStreaming final : public CyclicModule {
                     }    
                     break;
                 case 1: 
+                    Serial.println(1);
                     // read the packet into packetBufffer
                     Udp.read(receiveBuffer.asBuffer, DATAGRAM_BUFFER_SIZE);
                     // Serial.print(Udp.remoteIP());
@@ -119,66 +126,13 @@ class NetworkStreaming final : public CyclicModule {
                     step++;
                     break;
                 case 2:
+                    Serial.println(2);
                     clearReplyBuffer();
-                    
-                    switch (receiveBuffer.asDatagram.header.PayloadType)
-                    {
-                        case CubeDatagramType::Discovery:
-                        case CubeDatagramType::Info:
-                            Serial.println("[UDP] Reply to Info Request");
-                            replyBufferSize = sizeof(CubeDatagramHeader)+sizeof(InfoResponsePayload);
-                            replyBuffer.asDatagram.header.PayloadType = CubeDatagramType::InfoResponse;
-                            replyBuffer.asDatagram.header.PacketCount = receiveBuffer.asDatagram.header.PacketCount;
-                            replyBuffer.asDatagram.payload.asInfoResponse.ErrorCode = CubeErrorCode::Ok;
-                            replyBuffer.asDatagram.payload.asInfoResponse.RuntimeMs = millis();
-                            strcpy(replyBuffer.asDatagram.payload.asInfoResponse.Version, CUBE_DATAGRAM_VERSION);
-                            break;
-                        
-                        case CubeDatagramType::AnimationStart:
-                            Serial.printf("[UDP] Starting Animation: %d\n", receiveBuffer.asDatagram.payload.asAnimationStartPayload.AnimationName);
-
-                            networkStreamAnimation->startAnimation(receiveBuffer.asDatagram.payload.asAnimationStartPayload.FrameTimeUs);
-                            
-                            replyBufferSize = sizeof(CubeDatagramHeader);
-                            replyBuffer.asDatagram.header.PayloadType = CubeDatagramType::AnimationStartAck;
-                            replyBuffer.asDatagram.header.PacketCount = receiveBuffer.asDatagram.header.PacketCount;
-                            break;
-                        case CubeDatagramType::AnimationEnd:
-                            Serial.println("[UDP] Ending Animation");
-
-                            networkStreamAnimation->endAnimation();
-                            
-                            replyBufferSize = sizeof(CubeDatagramHeader);
-                            replyBuffer.asDatagram.header.PayloadType = CubeDatagramType::AnimationEndAck;
-                            replyBuffer.asDatagram.header.PacketCount = receiveBuffer.asDatagram.header.PacketCount;
-                            break;
-                        case CubeDatagramType::FrameData:
-                            Serial.printf("[UDP] Processing Frame Number: %d\n", receiveBuffer.asDatagram.payload.asFramePayload.FrameNumber);
-
-                            networkStreamAnimation->updateFrame(
-                                    &receiveBuffer.asDatagram.payload.asFramePayload.Data, 
-                                    receiveBuffer.asDatagram.payload.asFramePayload.FrameTimeUs
-                            );
-
-                            replyBufferSize = sizeof(CubeDatagramHeader);
-                            replyBuffer.asDatagram.header.PayloadType = CubeDatagramType::FrameDataAck;
-                            replyBuffer.asDatagram.header.PacketCount = receiveBuffer.asDatagram.header.PacketCount;
-                            break;
-                        
-                    default:
-                        case CubeDatagramType::ErrorResponse:
-                            Serial.println("[UDP] Unknown UDP packet received. Responding with Error.");
-                            replyBufferSize = sizeof(CubeDatagramHeader)+sizeof(InfoResponsePayload);
-                            replyBuffer.asDatagram.header.PayloadType = CubeDatagramType::InfoResponse;
-                            replyBuffer.asDatagram.header.PacketCount = receiveBuffer.asDatagram.header.PacketCount;
-                            replyBuffer.asDatagram.payload.asInfoResponse.ErrorCode = CubeErrorCode::UnknownPackage;
-                            replyBuffer.asDatagram.payload.asInfoResponse.RuntimeMs = millis();
-                            strcpy(replyBuffer.asDatagram.payload.asInfoResponse.Version, CUBE_DATAGRAM_VERSION);
-                            break;
-                    }
+                    processDatagram();
                     step++;
                     break;
                 case 3:
+                    Serial.println(3);
                     // send a reply to the IP address and port that sent us the packet we received
                     // Serial.println("Sending answer");
                     Udp.beginPacket(Udp.remoteIP(), Udp.remotePort());
@@ -217,8 +171,111 @@ class NetworkStreaming final : public CyclicModule {
     protected:   
 
         void clearReplyBuffer(){
-            memset(replyBuffer.asBuffer, 0, DATAGRAM_BUFFER_SIZE);
+            memset(replyBuffer.asBuffer, 0, RESPONSE_DATAGRAM_BUFFER_SIZE);
         }     
+
+        void processDatagram(){
+
+            packageCountValid = (lastPackageCount+1) != receiveBuffer.asDatagram.header.PacketCount;
+
+            switch (receiveBuffer.asDatagram.header.PayloadType)
+            {
+                case CubeDatagramType::Discovery:
+                case CubeDatagramType::Info:
+                    processInfoDatagram();
+                    break;
+                
+                case CubeDatagramType::AnimationStart:
+                    processAnimationStartDatagram();
+                    break;
+                case CubeDatagramType::AnimationEnd:
+                    processAnimationEndDatagram();
+                    break;
+                case CubeDatagramType::FrameData:
+                    processFrameDatagram();
+                    break;
+                
+            default:
+                case CubeDatagramType::ErrorResponse:
+                    processErrorDatagram();
+                    break;
+            }
+
+            lastPackageCount = receiveBuffer.asDatagram.header.PacketCount;
+        }
+
+        void processInfoDatagram(){
+            Serial.println("[UDP] Reply to Info Request");
+
+            replyBufferSize = sizeof(CubeDatagramHeader)+sizeof(InfoResponsePayload);
+            replyBuffer.asDatagram.header.PayloadType = CubeDatagramType::InfoResponse;
+            replyBuffer.asDatagram.header.PacketCount = receiveBuffer.asDatagram.header.PacketCount;
+            replyBuffer.asDatagram.payload.asInfoResponse.ErrorCode = CubeErrorCode::Ok;
+            replyBuffer.asDatagram.payload.asInfoResponse.CurrentTicks = millis();
+            strcpy(replyBuffer.asDatagram.payload.asInfoResponse.Version, CUBE_DATAGRAM_VERSION);
+        }
+
+        void processErrorDatagram(){
+            Serial.println("[UDP] Unknown UDP packet received. Responding with Error.");
+
+            replyBufferSize = sizeof(CubeDatagramHeader)+sizeof(InfoResponsePayload);
+            replyBuffer.asDatagram.header.PayloadType = CubeDatagramType::InfoResponse;
+            replyBuffer.asDatagram.header.PacketCount = receiveBuffer.asDatagram.header.PacketCount;
+            replyBuffer.asDatagram.payload.asInfoResponse.ErrorCode = CubeErrorCode::UnknownPackage;
+            replyBuffer.asDatagram.payload.asInfoResponse.CurrentTicks = millis();
+            strcpy(replyBuffer.asDatagram.payload.asInfoResponse.Version, CUBE_DATAGRAM_VERSION);
+        }
+
+        void processAnimationStartDatagram(){
+            Serial.printf("[UDP] Starting Animation: %d\n", receiveBuffer.asDatagram.payload.asAnimationStartPayload.AnimationName);
+
+            networkStreamAnimation->startAnimation(receiveBuffer.asDatagram.payload.asAnimationStartPayload.FrameTimeUs);
+            
+            replyBufferSize = sizeof(CubeDatagramHeader)+sizeof(AnimationStartResponsePayload);
+            replyBuffer.asDatagram.header.PayloadType = CubeDatagramType::AnimationStartAck;
+            replyBuffer.asDatagram.header.PacketCount = receiveBuffer.asDatagram.header.PacketCount;
+            replyBuffer.asDatagram.payload.asAnimationStartResponse.CurrentTicks = millis();
+        }
+
+        void processAnimationEndDatagram(){
+            Serial.println("[UDP] Ending Animation");
+
+            networkStreamAnimation->endAnimation();
+            
+            replyBufferSize = sizeof(CubeDatagramHeader)+sizeof(AnimationEndResponsePayload);
+            replyBuffer.asDatagram.header.PayloadType = CubeDatagramType::AnimationEndAck;
+            replyBuffer.asDatagram.header.PacketCount = receiveBuffer.asDatagram.header.PacketCount;
+            replyBuffer.asDatagram.payload.asAnimationEndResponse.CurrentTicks = millis();
+        }
+
+        void processFrameDatagram(){
+            Serial.printf("[UDP] Processing Frame Number: %d\n", receiveBuffer.asDatagram.payload.asFramePayload.FrameNumber);
+
+            networkStreamAnimation->updateFrame(
+                    &receiveBuffer.asDatagram.payload.asFramePayload.Data, 
+                    receiveBuffer.asDatagram.payload.asFramePayload.FrameTimeUs,
+                    receiveBuffer.asDatagram.payload.asFramePayload.FrameNumber
+            );
+
+            replyBufferSize = sizeof(CubeDatagramHeader)+sizeof(FrameResponsePayload);
+            replyBuffer.asDatagram.header.PayloadType = CubeDatagramType::FrameDataAck;
+            replyBuffer.asDatagram.header.PacketCount = receiveBuffer.asDatagram.header.PacketCount;
+            replyBuffer.asDatagram.payload.asFrameResponse.CurrentTicks = millis();
+            replyBuffer.asDatagram.payload.asFrameResponse.FrameNumber = 
+                                    receiveBuffer.asDatagram.payload.asFramePayload.FrameNumber;
+            replyBuffer.asDatagram.payload.asFrameResponse.ReceivedTicks = 
+                                    receiveBuffer.asDatagram.payload.asFramePayload.CurrentTicks;
+            replyBuffer.asDatagram.payload.asFrameResponse.Status = networkStreamAnimation->getAnimationStatus();
+            
+            if(packageCountValid){
+                replyBuffer.asDatagram.payload.asFrameResponse.Status |= NetworkStreamAnimationStatus::PackageLost;
+            }
+            
+            lastFrameCount = receiveBuffer.asDatagram.payload.asFramePayload.FrameNumber;
+            lastFrameTicksLocal = replyBuffer.asDatagram.payload.asFrameResponse.CurrentTicks;
+            lastFrameTicksSender = receiveBuffer.asDatagram.payload.asFramePayload.CurrentTicks;
+        }
+
     private:  
 };
 

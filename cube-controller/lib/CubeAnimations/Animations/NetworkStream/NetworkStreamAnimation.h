@@ -22,19 +22,25 @@ class NetworkStreamAnimation : public PriorityFrameGenerator, public INetworkStr
         bool requestPriorityStart;
         FrameBuffer networkBuffer;
         uint32_t nextTargetFrameTimeUs;
+
+        bool active;
+        uint32_t nextFrameNumber;
+        uint32_t activeFrameNumber;
 	public:
         NetworkStreamAnimation(const uint32_t networkTimeoutMs) :
                 PriorityFrameGenerator(),
                 networkTimeoutMs(networkTimeoutMs), 
                 lastNetworkUpdateMs(0),
                 requestPriorityStart(false),
-                nextTargetFrameTimeUs(0) {
+                nextTargetFrameTimeUs(0),
+                active(false) {
             networkBuffer.clearBuffer();
         }
         virtual ~NetworkStreamAnimation() = default;
 
         void initializeFrameSequence(uint32_t currentTicks) override{
             FrameGenerator::initializeFrameSequence(currentTicks);
+            active = true;
         }
 
         void startFrame(buffer_t *nextFrame, uint32_t const currentTicks){
@@ -44,6 +50,7 @@ class NetworkStreamAnimation : public PriorityFrameGenerator, public INetworkStr
         bool generateCyclicBase(uint32_t const currentTicks){
             FrameGenerator::generateCyclicBase(currentTicks);
             targetFrameTimeUs = nextTargetFrameTimeUs;
+            activeFrameNumber = nextFrameNumber;
             networkBuffer.copyToBuffer(frame);
             return true;
         }
@@ -66,9 +73,10 @@ class NetworkStreamAnimation : public PriorityFrameGenerator, public INetworkStr
             endAnimationInternally();
         }
 
-        virtual void updateFrame(buffer_t *nextFrame, uint32_t targetFrameTimeUs) override{
+        virtual void updateFrame(buffer_t *nextFrame, uint32_t targetFrameTimeUs, uint32_t frameNumber) override{
             networkBuffer.copyFromBuffer(nextFrame);
             this->nextTargetFrameTimeUs = targetFrameTimeUs;
+            this->nextFrameNumber = frameNumber;
             this->lastNetworkUpdateMs = millis();
         }
 
@@ -80,11 +88,25 @@ class NetworkStreamAnimation : public PriorityFrameGenerator, public INetworkStr
             return requestPriorityStart;
         }
 
+        virtual NetworkStreamAnimationStatus getAnimationStatus() override{
+            NetworkStreamAnimationStatus status = NetworkStreamAnimationStatus::NotActive;
+            if(active){
+                status = NetworkStreamAnimationStatus::Running;
+            }
+            if(nextFrameNumber == activeFrameNumber){
+                status |= NetworkStreamAnimationStatus::FrameRedrawn;
+            }else if(nextFrameNumber > (activeFrameNumber+1)){
+                status |= NetworkStreamAnimationStatus::FrameDropped;
+            }
+            return status;
+        }
+
     protected:
 
         void endAnimationInternally(){
             this->setSequenceFinished();
             requestPriorityStart = false;
+            active = false;
         }
     private:  
 };

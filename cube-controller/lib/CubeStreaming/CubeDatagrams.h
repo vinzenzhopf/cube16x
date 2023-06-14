@@ -40,48 +40,95 @@ struct CubeDatagramHeader
     uint16_t PacketCount;
 };
 
+//Request Datagrams
 struct InfoPayload
 {
     char Version[32];
-};
-
-struct InfoResponsePayload
-{
-    char Version[32];
-    uint32_t MaxFrameTimeUs;
-    uint32_t RuntimeMs;
-    CubeErrorCode ErrorCode;
 };
 
 struct AnimationStartPayload
 {
     uint32_t FrameTimeUs;
     char AnimationName[64];
+    uint32_t CurrentTicks;
+};
+
+struct AnimationEndPayload
+{
+    uint32_t CurrentTicks;
 };
 
 struct FramePayload
 {
     uint32_t FrameNumber;
     uint32_t FrameTimeUs;
+    uint32_t CurrentTicks;
     buffer_t Data;
 };
 
 typedef union {
 	InfoPayload asInfoPayload;
-	InfoResponsePayload asInfoResponse;
 	AnimationStartPayload asAnimationStartPayload;
+    AnimationEndPayload asAnimationEndPayload;
     FramePayload asFramePayload;
-} payload_t;
+} request_payload_t;
 
-struct datagram_t{
+struct request_datagram_t{
     CubeDatagramHeader header;
-    payload_t payload;
+    request_payload_t payload;
 };
 
-const int DATAGRAM_BUFFER_SIZE = sizeof(datagram_t); 
+const int DATAGRAM_BUFFER_SIZE = sizeof(request_datagram_t); 
 
 typedef union {
-    datagram_t asDatagram;
+    request_datagram_t asDatagram;
     char asBuffer[DATAGRAM_BUFFER_SIZE];
-} datagram_buffer_t;
+} request_datagram_buffer_t;
 
+//Response Datagrams
+struct InfoResponsePayload
+{
+    char Version[32];
+    uint32_t LastFrameTimeUs;
+    uint32_t CurrentTicks;
+    CubeErrorCode ErrorCode;
+    NetworkStreamAnimationStatus Status;
+};
+
+struct AnimationStartResponsePayload
+{
+    uint32_t CurrentTicks;
+};
+
+struct AnimationEndResponsePayload
+{
+    uint32_t CurrentTicks;
+};
+
+struct FrameResponsePayload
+{
+    uint32_t FrameNumber;
+    uint32_t LastFrameTimeUs;
+    uint32_t CurrentTicks;
+    uint32_t ReceivedTicks;
+    NetworkStreamAnimationStatus Status;
+};
+
+typedef union {
+    InfoResponsePayload asInfoResponse;
+    AnimationStartResponsePayload asAnimationStartResponse;
+    AnimationEndResponsePayload asAnimationEndResponse;
+    FrameResponsePayload asFrameResponse;
+} response_payload_t;
+
+struct response_datagram_t{
+    CubeDatagramHeader header;
+    response_payload_t payload;
+};
+
+const int RESPONSE_DATAGRAM_BUFFER_SIZE = sizeof(response_datagram_t); 
+
+typedef union {
+    response_datagram_t asDatagram;
+    char asBuffer[RESPONSE_DATAGRAM_BUFFER_SIZE];
+} response_datagram_buffer_t;
