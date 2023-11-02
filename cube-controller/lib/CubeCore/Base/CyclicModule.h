@@ -23,6 +23,11 @@ class CyclicModule {
 	    ~CyclicModule() = default;
 
         /**
+         * Public variable to forward error states or other unsafe states to the watchdog.
+         */
+        bool bModuleOk = true;
+
+        /**
          * Startup initializsations. Initialization order must be resprected here. 
          * Should only be used for code, that is blocking and cannot be spreaded over cycles.
          */

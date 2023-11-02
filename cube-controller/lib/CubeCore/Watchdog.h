@@ -10,9 +10,10 @@
 #include <LedCube16x.h>
 #include <Base/CyclicModule.h>
 #include <Base/IOutputEnableGuard.h>
+#include <Base/IModuleWatchdog.h>
 
 
-class Watchdog final : public CyclicModule, public IOutputEnableGuard {
+class Watchdog final : public CyclicModule, public IOutputEnableGuard, public IModuleWatchdog {
     protected:
         const uint8_t INFO_CYCLE_PIN;
         const uint8_t INFO_SYSOK_PIN;
@@ -21,9 +22,10 @@ class Watchdog final : public CyclicModule, public IOutputEnableGuard {
         const uint8_t OE_PIN;
         const uint32_t TARGET_CYCLE_TIME_US;
 
+        bool bInitializeDone;
         bool bDataReady;
-        bool bOutputActive;
         bool bSystemOk;
+        bool bOutputActive;
         bool bCycleTimeExceeded;
 
         uint32_t cycleStartTicks;
@@ -43,15 +45,20 @@ class Watchdog final : public CyclicModule, public IOutputEnableGuard {
                     INFO_DBG_PIN(INFO_DBG_PIN),
                     OE_PIN(OE_PIN),
                     TARGET_CYCLE_TIME_US(TARGET_CYCLE_TIME_US),
+                    bInitializeDone(false),
                     bDataReady(false),
-                    bOutputActive(false),
                     bSystemOk(false),
+                    bOutputActive(false),
                     bCycleTimeExceeded(false) {
         }
         ~Watchdog() = default;
 
         void setDataReady(bool bDataReady) override{
             this->bDataReady = bDataReady;
+        }
+
+        void setModulesOk(bool bModulesOk) override{
+            this->bSystemOk = bModulesOk;
         }
 
         bool isOutputActive(){
@@ -71,13 +78,13 @@ class Watchdog final : public CyclicModule, public IOutputEnableGuard {
         void cyclic() override{
             //For Test-Purposes:
 
-            bOutputActive = bDataReady && bSystemOk;
+            bOutputActive = bDataReady && bSystemOk && bInitializeDone;
 
             writeInfoLeds();
             writeOutputEnable();
 
             //System is Ready if first cycle has been executed.
-            this->bSystemOk = true;
+            this->bInitializeDone = true;
 
             //Reset CycleTimeExceeded marker
             this->bCycleTimeExceeded = false;
@@ -113,7 +120,7 @@ class Watchdog final : public CyclicModule, public IOutputEnableGuard {
     protected:
         void writeInfoLeds() {
             //digitalToggleFast(INFO_CYCLE_PIN);
-            digitalWriteFast(INFO_SYSOK_PIN, bSystemOk);
+            digitalWriteFast(INFO_SYSOK_PIN, bSystemOk && bInitializeDone);
             //digitalWriteFast(INFO_SYSERR_PIN, bCycleTimeExceeded);
             digitalWriteFast(INFO_DBG_PIN, bDataReady);
         }

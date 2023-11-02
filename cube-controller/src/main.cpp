@@ -31,7 +31,6 @@
 
 #include <EEPROM.h>
 
-ModuleManager moduleManager;
 Watchdog watchdog(
     PIN_INFO_CYCL_LED,          //INFO_CYCLE_PIN
     PIN_INFO_PWR_SIG,           //INFO_SYSOK_PIN
@@ -39,6 +38,9 @@ Watchdog watchdog(
     PIN_INFO_DBG_LED,           //INFO_DBG_PIN
     PIN_OE,                     //PLANE_OE_PIN
     CYCLE_TIME_US               //TARGET_CYCLE_TIME_US
+);
+ModuleManager moduleManager(
+    &watchdog
 );
 FrameBufferController frameBufferController;
 PlaneOutputWriter planeOutputWriter(

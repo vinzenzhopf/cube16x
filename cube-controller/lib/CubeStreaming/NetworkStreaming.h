@@ -12,6 +12,25 @@
 #include "NativeEthernet.h"
 #include "CubeDatagrams.h"
 #include "Animations/NetworkStream/INetworkStreamAnimation.h"
+#include "Util/ToC.h"
+
+enum NetworkStreamingStep : uint8_t
+{
+    OFFNoHardware       = 0,
+    NoLink              = 1,
+    SetupIP             = 2,
+    SetupIPReset        = 3,
+    SetupIPRunning      = 4,
+    
+
+    CheckLink           = 5,
+
+    ConnectedIdle       = 10,
+    ReadFrame           = 11,
+    ProcessDatagram     = 12,
+    SendReply           = 13
+};
+
 
 class NetworkStreaming final : public CyclicModule {
     public:
@@ -22,10 +41,12 @@ class NetworkStreaming final : public CyclicModule {
         IPAddress gateway;
         IPAddress subnet;
         unsigned long timeout = 10000UL;
-        unsigned long responseTime = 4000UL;
+        unsigned long responseTime = 3000UL;
         uint32_t cycle;
-        uint8_t step;
+        NetworkStreamingStep step;
+        ToC<NetworkStreamingStep> stepEntry;
         int packetSize;
+        uint32_t noMessageCounter;
 
         // EthernetServer server;
         // EthernetClient client;
@@ -61,17 +82,27 @@ class NetworkStreaming final : public CyclicModule {
             // Check for Ethernet hardware present
             if (Ethernet.hardwareStatus() == EthernetNoHardware) {
                 Serial.println("Ethernet hardware not detected.  Sorry, can't run without hardware. :(");
-                while (true) {
-                    delay(1); // do nothing, no point running without Ethernet hardware
-                }
+                // while (true) {
+                //     delay(1); // do nothing, no point running without Ethernet hardware
+                // }
+                step = NetworkStreamingStep::OFFNoHardware;
+                return;
             }
 
+            if(setupNetwork()){
+                step = NetworkStreamingStep::ConnectedIdle;
+            }else{
+                step = NetworkStreamingStep::NoLink;
+            }
+        }
+
+        bool setupNetwork() {
             Serial.println("Trying to get an IP address using DHCP");
             Serial.printf("MAC: %02X:%02X:%02X:%02X:%02X:%02X\n", mac[0], mac[1], mac[2], mac[3], mac[4], mac[5]);
             if (Ethernet.begin(mac, timeout, responseTime) == 0) {
                 Serial.println("Failed to configure Ethernet using DHCP");
 
-                if (Ethernet.linkStatus() == LinkOFF) {
+                if (Ethernet.linkStatus() == EthernetLinkStatus::LinkOFF) {
                     Serial.println("Ethernet cable is not connected.");
                 }
                 
@@ -80,8 +111,9 @@ class NetworkStreaming final : public CyclicModule {
                 // Ethernet.begin(mac, ip, dns, gateway, subnet);
 
                 // Skip default Ethernet initialization.
-                return;
+                return false;
             }
+
             // print your local IP address:
             Serial.println("Local IP:");
             Serial.println(Ethernet.localIP());
@@ -91,28 +123,89 @@ class NetworkStreaming final : public CyclicModule {
             // start listening for clients
             // server.begin();
             Udp.begin(ServerPort);
-            Serial.println("Server running...");
+            Serial.printf("Server running on Port %d...\n", ServerPort);
+            return true;
         }
 
         bool initialize() override{
             return true;
-            step = 0;
         }
         
         void cyclic()  override{
             cycle = (cycle+1) % 1000;
+            stepEntry.call(step);
+            if(stepEntry.Q && step < NetworkStreamingStep::CheckLink){
+                Serial.printf("NetworkStreamingStep: %d\n");
+            }
 
             //UDP Communication
             switch(step){
-                case 0:
+                case NetworkStreamingStep::OFFNoHardware:
+                    Serial.println("NetworkStreamingStep: OFFNoHardware");
+                    //No Network hardware. Do nothing.
+                    break;
+
+                case NetworkStreamingStep::NoLink:
+                    // Serial.println("NetworkStreamingStep: No Link");
+                    if (Ethernet.linkStatus() == EthernetLinkStatus::LinkON) {
+                        Serial.println("Ethernet cable is connected.");
+                        step = NetworkStreamingStep::SetupIP;
+                    }
+                    break;
+
+                case NetworkStreamingStep::SetupIP:
+                    Serial.println("NetworkStreamingStep: Setup IP");
+                    //Disable output via watchdog
+                    bModuleOk = false;
+                    step = NetworkStreamingStep::SetupIPReset;
+                    break;
+
+                case NetworkStreamingStep::SetupIPReset:
+                    Serial.println("NetworkStreamingStep: Setup IP Reset");
+                    if(setupNetwork()){
+                        step = NetworkStreamingStep::SetupIPRunning;
+                        bModuleOk = true;
+                    }else{
+                        step = NetworkStreamingStep::NoLink;
+                        bModuleOk = true;
+                    }
+                    break;
+
+                case NetworkStreamingStep::SetupIPRunning:
+                    Serial.println("NetworkStreamingStep: Setup IP Running");
+                    Ethernet.maintain();
+                    step = NetworkStreamingStep::ConnectedIdle;
+                    break;
+
+                case NetworkStreamingStep::ConnectedIdle:
+                    // Serial.println("NetworkStreamingStep: ConnectedIdle");
                     packetSize = Udp.parsePacket();
                     if(packetSize){
-                        // Serial.print("Received packet of size ");
-                        // Serial.println(packetSize);
-                        step++;
-                    }    
+                        Serial.print("Received packet of size ");
+                        Serial.println(packetSize);
+                        step = NetworkStreamingStep::ReadFrame;
+                    }else{
+                        if(stepEntry.Q){
+                            noMessageCounter = 0;
+                        }
+                        noMessageCounter++;
+                        if(++noMessageCounter > 100000){ // ca. 4x die sekunde.
+                            step = NetworkStreamingStep::CheckLink;
+                        }
+                    }
                     break;
-                case 1: 
+
+                case NetworkStreamingStep::CheckLink:
+                    // Serial.println("NetworkStreamingStep: CheckLink");
+                    if (Ethernet.linkStatus() == EthernetLinkStatus::LinkOFF) {
+                        Serial.println("Ethernet cable is not connected.");
+                        step = NetworkStreamingStep::NoLink;
+                    }else{
+                        step = NetworkStreamingStep::ConnectedIdle;
+                    }
+                    break;
+
+                case NetworkStreamingStep::ReadFrame: 
                     Serial.println(1);
                     // read the packet into packetBufffer
                     Udp.read(receiveBuffer.asBuffer, DATAGRAM_BUFFER_SIZE);
@@ -123,15 +216,17 @@ class NetworkStreaming final : public CyclicModule {
                         Udp.remotePort(), packetSize,
                         receiveBuffer.asDatagram.header.PacketCount,
                         receiveBuffer.asDatagram.header.PayloadType);
-                    step++;
+                    step = NetworkStreamingStep::ProcessDatagram;
                     break;
-                case 2:
+
+                case NetworkStreamingStep::ProcessDatagram:
                     Serial.println(2);
                     clearReplyBuffer();
                     processDatagram();
-                    step++;
+                    step = NetworkStreamingStep::SendReply;
                     break;
-                case 3:
+
+                case NetworkStreamingStep::SendReply:
                     Serial.println(3);
                     // send a reply to the IP address and port that sent us the packet we received
                     // Serial.println("Sending answer");
@@ -140,7 +235,7 @@ class NetworkStreaming final : public CyclicModule {
                     Udp.write(replyBuffer.asBuffer, replyBufferSize);
                     Udp.endPacket();
 
-                    step = 0;
+                    step = NetworkStreamingStep::ConnectedIdle;
                     break;
             }
 

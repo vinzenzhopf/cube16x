@@ -8,6 +8,7 @@
 #pragma once
 
 #include "CyclicModule.h"
+#include "IModuleWatchdog.h"
 
 enum class EModuleManagerState{
     None,
@@ -17,7 +18,9 @@ enum class EModuleManagerState{
 
 class ModuleManager {
     //Variables
-    private:	
+    private:
+        IModuleWatchdog * const pModuleWatchdog;
+
         CyclicModule* arrModules[MAX_MODULE_COUNT];
         uint8_t nModuleCount;
 
@@ -25,9 +28,11 @@ class ModuleManager {
 
     //Methods
     public:
-        ModuleManager() :
-            nModuleCount(0),
-            eState(EModuleManagerState::Initialize) {
+        ModuleManager(
+            IModuleWatchdog *pModuleWatchdog) :
+                pModuleWatchdog(pModuleWatchdog), 
+                nModuleCount(0),
+                eState(EModuleManagerState::Initialize) {
         }
 	    virtual ~ModuleManager() = default;
 
@@ -76,9 +81,12 @@ class ModuleManager {
 
             case EModuleManagerState::Running:
                 {
+                    bool bAllModulesOk = true;
                     for(uint8_t i = 0; i < nModuleCount; i++){
                         arrModules[i]->cyclic();
+                        bAllModulesOk = bAllModulesOk && arrModules[i]->bModuleOk;
                     }
+                    pModuleWatchdog->setModulesOk(bAllModulesOk);
                 }
                 break;
 
