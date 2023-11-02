@@ -117,10 +117,13 @@ void setup() {
 
     //Serial communication to serial monitor via USB
     Serial.begin(9600); // USB is always 12 or 480 Mbit/sec
-    while (!Serial) {
-        ; // wait for Arduino Serial Monitor to be ready
+    if(digitalReadFast(PIN_DEBUG_SWITCH) != 0){
+        //If Debug is enabled, Wait for Serial
+        while (!Serial && digitalReadFast(PIN_DEBUG_SWITCH) != 0) {
+            ; // wait for Arduino Serial Monitor to be ready
+        }
+        Serial.println("Serial monitor initialized");
     }
-    Serial.println("Serial monitor initialized");
 
     moduleManager.registerModule(&watchdog);
     moduleManager.registerModule(&frameBufferController);

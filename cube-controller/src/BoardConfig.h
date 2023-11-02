@@ -37,6 +37,11 @@
 #define PIN_INFO_PWR_SIG		32		//PIN 5
 #define PIN_INFO_ERR_LED		40		//PIN 8 - SCK - LED RED
 
+#define PIN_DEBUG_SWITCH		23		
+#define PIN_STATUS_LED_R		14
+#define PIN_STATUS_LED_G		15
+#define PIN_STATUS_LED_B		18
+
 #define CYCLE_TIME_US			5	
 #define ANIMATION_FRAMERATE    	60
 #define ANIMATION_FRAME_TIME_US	( 1 / ANIMATION_FRAMERATE )*1000*1000
@@ -63,10 +68,15 @@ inline void BoardInitDataDirections(){
 	pinMode(PIN_PLANE_STO, OUTPUT);
 
 	//LEDs
-	pinMode(PIN_INFO_CYCL_LED, OUTPUT);
+	pinMode(PIN_DEBUG_SWITCH, INPUT);
 	pinMode(PIN_INFO_DBG_LED, OUTPUT);
 	pinMode(PIN_INFO_PWR_SIG, OUTPUT);
 	pinMode(PIN_INFO_ERR_LED, OUTPUT);
+
+	pinMode(PIN_INFO_CYCL_LED, OUTPUT);
+	pinMode(PIN_STATUS_LED_R, OUTPUT);
+	pinMode(PIN_STATUS_LED_G, OUTPUT);
+	pinMode(PIN_STATUS_LED_B, OUTPUT);
 }
 
 inline void BoardInitIOPorts(){
@@ -86,4 +96,8 @@ inline void BoardInitIOPorts(){
 	digitalWriteFast(PIN_INFO_DBG_LED, 0);
 	digitalWriteFast(PIN_INFO_PWR_SIG, 0);
 	digitalWriteFast(PIN_INFO_ERR_LED, 0);
+
+	analogWrite(PIN_INFO_DBG_LED, 0);
+	analogWrite(PIN_INFO_PWR_SIG, 0);
+	analogWrite(PIN_INFO_ERR_LED, 0);
 }
